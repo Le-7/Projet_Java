@@ -29,3 +29,21 @@ Si vous souhaitez contribuer à ce projet, vous pouvez soumettre des demandes de
 Ce projet est sous aucune license pour le moment. Voir le fichier __LICENSE__ pour plus de détails.
 
 Nous espérons que vous apprécierez notre jeu de taquin et n'hésitez pas à nous contacter si vous avez des questions ou des commentaires. 😊
+
+## Taches à faire :
+
+- [X] Avoir une équipe de BG :grin:
+
+ Cahier des Charges : 
+ - [ ] differents niveaux (au moins 10) 
+ - [ ] chaque niveau : au moins une case vide (ou + selon difficulté)
+ - [ ] des niveaux ont des cases inexistantes ou indestructibles 
+ - [ ] afficher le niveau resolu 
+ - [ ] melange des cases : soit tout aleatoire soit qql case aleatoire (et afficher le type de melange)
+ - [ ] aucune case sur sa position de depart (meme si melangé aleatoirement) sinon afficher un message 
+ - [ ] detecter si le niveau est jouable et afficher une information 
+ - [ ] deplacer les cases une par une, le compteur sera incrémenté 
+ - [ ] sauvegarder les nombres de coup a la fin d'un niveau pour afficher le meilleur score 
+ - [ ] mettre un oeuvre un systeme de deblocage de niveau (finir niveau 1 pour passer au niveau 2) 
+ - [ ] le joueur peut : demander de resoudre le niveau automatiquement et afficher chaque etape de la solution !!! niveau non debloqué !!!
+ - [ ] resolution automatique : faire defiler les étapes automatiquement ou utiliser un bouton pour chaque etape (choisir la vitesse) 
