@@ -16,6 +16,7 @@ java --module-path /path/to/javafx/lib --add-modules=javafx.controls,javafx.fxml
 Exemple : java --module-path "/data/Documents/ING1/Java/javafx-sdk-17.0.6/lib" --add-modules=javafx.controls,javafx.fxml,javafx.swing,javafx.base,javafx.graphics,javafx.media,javafx.web  -jar TaquinFX.jar com.monpackage.TaquinFX
 
 Testé avec :
+
 openjdk version "11.0.18" 2023-01-17
 
 OpenJDK Runtime Environment (build 11.0.18+10-post-Ubuntu-0ubuntu120.04.1)
