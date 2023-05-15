@@ -1,4 +1,3 @@
-package Perso;
 import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -9,7 +8,6 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -36,7 +34,7 @@ public class TaquinFX extends Application {
 
         for (int i = 0; i < boardSize; i++) {
             for (int j = 0; j < boardSize; j++) {
-                Button button = new Button("" + board[i][j]);
+            	Button button = new Button(board[i][j] == 0 ? "" : Integer.toString(board[i][j]));
                 button.setPrefSize(50, 50);
                 button.setOnAction(event -> handleMove(button));
                 grid.add(button, j, i);
@@ -129,7 +127,11 @@ public class TaquinFX extends Application {
         for (int i = 0; i < boardSize; i++) {
             for (int j = 0; j < boardSize; j++) {
                 Button button = (Button) grid.getChildren().get(i* boardSize + j);
-                button.setText("" + board[i][j]);
+                if (board[i][j] != 0) {
+                	button.setText("" + board[i][j]);
+				}else {
+					button.setText("");
+				}
                 button.setOnAction(event -> handleMove(button));
                 grid.getChildren().set(i * boardSize + j, button);
             }
