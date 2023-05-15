@@ -1,0 +1,34 @@
+﻿AVANCÉES
+
+
+
+
+Lundi 15 mai : 
+
+
+11h : Réunion teams avec le professeur pour poser les bases (avoir les attendus, poser nos questions, etc.)
+
+
+11h45 : Mise en place de notre environnement de travail (vérifier que tout le monde a bien JavaFX sur son ordinateur, les bonnes librairies incluses etc).
+
+
+* Création de notre premier exécutable (Mathéo le 15/05)
+* Relecture du sujet pour être sûrs d’avoir bien compris les attendus (Mathéo, Anissa, Sara et Sarah, estimation : 30 minutes)
+* Réfléchir à comment faire quoi, comment s’organiser, par quoi commencer ?
+* Trouver le type de fichier pour les niveaux
+* Faire une méthode qui permet de mélanger “manuellement” les cases
+* Faire une méthode qui permet d’attribuer des chiffres aux cases
+* Faire une méthode et une classe exception pour déterminer si les cases ne sont pas sur les cases initiales
+* Afficher le niveau résolu avant qu’il joue
+* Faire un algo qui permet de détecter si c’est jouable ou non, si non afficher un texte (de type alert)
+* Compteur incrémenter dès qu’un coup est joué (Anissa 15/05 estimation : 30min, réel : )
+* Mettre dans un fichier les meilleurs scores (Anissa -> 16/05)
+* Déblocage des niveaux 
+* Faire un algo qui résout le niveau et affiche étape par étape la résolution (niveau pas comptabilisé)
+* Pour cet algo, proposée soit faire défiler automatiquement les étapes soit cliquer sur un bouton pour voir étape par étape
+* BONUS : temps de résolution (+ pause qui empêche l'accès au jeu + classement)
+
+
+Liste fichiers : 
+* Minimum 10 fichiers de niveaux + 1 fichier de sauvegarde avec meilleur score, avancement, pseudo, etc.
+*
