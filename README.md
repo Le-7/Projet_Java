@@ -11,7 +11,10 @@ Pour exécuter le jeu, vous aurez besoin des éléments suivants :
 Java 8 ou supérieur
 Pour exécuter le jeu, vous pouvez télécharger le fichier JAR exécutable à partir de la page des versions du projet sur GitHub. Une fois le fichier téléchargé, vous pouvez exécuter le jeu en ouvrant un terminal et en exécutant la commande suivante :
 
-java -jar taquin.jar
+java --module-path /path/to/javafx/lib --add-modules=javafx.controls,javafx.fxml,javafx.swing,javafx.base,javafx.graphics,javafx.media,javafx.web  -jar TaquinFX.jar com.monpackage.TaquinFX
+
+Exemple : java --module-path "/data/Documents/ING1/Java/javafx-sdk-17.0.6/lib" --add-modules=javafx.controls,javafx.fxml,javafx.swing,javafx.base,javafx.graphics,javafx.media,javafx.web  -jar TaquinFX.jar com.monpackage.TaquinFX
+
 
 ## 🎮 Utilisation
 
