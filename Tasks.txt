@@ -1,19 +1,14 @@
 ﻿AVANCÉES
 
-
-
-
 Lundi 15 mai : 
 
-
 11h : Réunion teams avec le professeur pour poser les bases (avoir les attendus, poser nos questions, etc.)
-
 
 11h45 : Mise en place de notre environnement de travail (vérifier que tout le monde a bien JavaFX sur son ordinateur, les bonnes librairies incluses etc).
 
 
-* Création de notre premier exécutable (Mathéo le 15/05)
-* Relecture du sujet pour être sûrs d’avoir bien compris les attendus (Mathéo, Anissa, Sara et Sarah, estimation : 30 minutes)
+[ ] Création de notre premier exécutable (Mathéo le 15/05)
+[ ] Relecture du sujet pour être sûrs d’avoir bien compris les attendus (Mathéo, Anissa, Sara et Sarah, estimation : 30 minutes)
 * Réfléchir à comment faire quoi, comment s’organiser, par quoi commencer ?
 * Trouver le type de fichier pour les niveaux
 * Faire une méthode qui permet de mélanger “manuellement” les cases
