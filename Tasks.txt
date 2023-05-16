@@ -4,7 +4,8 @@ Fait :
 Attribut booléen pour savoir si une case est déplaçable
 Une méthode pour initialiser le plateau
 Une méthode pour afficher le plateau
-Une méthode pour mélanger les cases et vérifier aucune des cases sur sa position initiale. 
+Une méthode pour mélanger les cases et vérifier aucune des cases sur sa position initiale.
+Booléen pour savoir si le jeu est résolu ou non
 
 
 EN COURS : 
@@ -14,7 +15,6 @@ Créer une classe Board (plateau) qui est une matrice de Box [un attribut boxes 
 
 A FAIRE : 
 Une méthode pour échanger les cases (attention quand plusieurs cases vides)
-Booléen pour savoir si le jeu est résolu ou non
 Créer une classe Taquin pour lancer une partie
 Faire une méthode et une classe exception pour déterminer si les cases sont à leur place initiale
 Afficher le niveau qui va être joué avant que la personne joue
