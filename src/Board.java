@@ -16,22 +16,27 @@ public class Board {
 	}
 	// Méthode pour initialiser le plateau de jeu
 	private void initializeBoard() {
-	    try (BufferedReader reader = new BufferedReader(new FileReader(CSV_PATH))) { // On tente d'ouvrir le fichier CSV pour lecture
-	        String line; // Variable pour stocker chaque ligne du fichier
-	        int row = 0; // Variable pour suivre la ligne courante dans la grille
-	        while ((line = reader.readLine()) != null) {  // Boucle qui lit chaque ligne du fichier jusqu'à ce qu'il n'y en ait plus
-	            String[] values = line.split(",");// On sépare la ligne en plusieurs valeurs en utilisant la virgule comme séparateur
-	            for (int col = 0; col < values.length; col++) { // Boucle sur chaque valeur de la ligne
-	                int num = Integer.parseInt(values[col].trim()); // On convertit la valeur en nombre entier
-	                grid[row][col] = new Box(num, num == 0, num == 0 ? "" : Integer.toString(num));  // On crée une nouvelle case (Box) avec cette valeur et on l'ajoute à la grille
+		 try (BufferedReader reader = new BufferedReader(new FileReader(CSV_PATH))) {
+	            String line;
+	            int row = 0;
+	            while ((line = reader.readLine()) != null) {
+	                String[] values = line.split(",");
+	                for (int col = 0; col < values.length; col++) {
+	                    int num = Integer.parseInt(values[col].trim());
+	                    if(num > 0) {
+	                    	grid[row][col] = new Box(num, true, ""+num+"");
+	                    }else if(num == 0) {
+	                    	grid[row][col] = new Empty(num, true, "");
+	                    }else {
+	                    	grid[row][col] = new Block(num, false, "");
+	                    }
+	                }
+	                row++;
 	            }
-	            row++;  // On incrémente le compteur de ligne pour passer à la ligne suivante
+	        } catch (IOException e) {
+	            e.printStackTrace();
 	        }
-	    // Si une exception d'entrée/sortie se produit (par exemple si le fichier n'est pas trouvé), on l'affiche
-	    } catch (IOException e) {
-	        e.printStackTrace();
-	    }
-	}   
+	   }
 	
 //méthode pour melanger les cases
 	public void  mixBoard() {
