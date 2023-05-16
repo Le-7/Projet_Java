@@ -6,6 +6,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
@@ -14,32 +16,33 @@ import java.util.*;
 
 public class TaquinFX extends Application {
 
-    private int[][] board;
-    private int boardSize;
-    private int emptyRow;
+    private int[][] board; // Plateau du jeu de Taquin
+    private int boardSize; // Taille du tableau     
+    private int emptyRow; // Indices de l'emplacement vide 
     private int emptyCol;
-    private GridPane grid;
-    
+    private GridPane grid; // Grille d'affichage du jeu 
+    private static final String IMAGE_PATH = "file:images/noel1.jpg"; // Chemin de l'image
     private int var_score = 0;
     private Label score;
 
     @Override
     public void start(Stage primaryStage) {
-        boardSize = 3;
-        board = new int[boardSize][boardSize];
-
-        shuffleBoard();
+        boardSize = 3; // Initialisation de la taille du plateau à 3
+        board = new int[boardSize][boardSize]; // Initialisation du tableau du plateau à une taille de 3x3
+       
+        shuffleBoard(); // Mélange du tableau 
 
         grid = new GridPane();
         grid.setAlignment(Pos.CENTER);
-        grid.setHgap(10);
-        grid.setVgap(10);
+        grid.setHgap(10); // Espacement horizontal entre les boutons
+        grid.setVgap(10); // Espacement vertical entre les boutons
 
+        // Création des boutons sur le plateau
         for (int i = 0; i < boardSize; i++) {
             for (int j = 0; j < boardSize; j++) {
                 Button button = new Button(board[i][j] == 0 ? "" : Integer.toString(board[i][j]));
                 button.setPrefSize(100, 100);
-                button.setStyle("-fx-background-color: rgba(135, 206, 250, 0.7);");
+                button.setStyle("-fx-background-color: rgba(0, 255, 250, 0.7);");
                 button.setOnAction(event -> handleMove(button));
                 grid.add(button, j, i);
             }
@@ -53,17 +56,18 @@ public class TaquinFX extends Application {
         
         GridPane root = new GridPane();
         root.setAlignment(Pos.CENTER);
-        root.setHgap(10);
-        root.setVgap(10);
-        root.setStyle("-fx-background-color: lightblue;");
-        root.add(grid, 0, 0);
-        root.add(score, 1, 0);
-        GridPane.setHalignment(score, HPos.LEFT);
-        root.add(solveButton, 0, 1);
+        root.setHgap(10); // Espacement horizontal entre les éléments 
+        root.setVgap(10); // Espacement vertical entre les éléments
+        root.setStyle("-fx-background-image: url('" + IMAGE_PATH + "'); -fx-background-size: cover;"); // Image de fond
+        //root.setStyle("-fx-background-color: lightblue;"); // Couleur de fond du root
+        root.add(grid, 0, 0); // Ajout de la grille à la première colonne et première ligne 
+        root.add(score, 1, 0); // Ajout du label score à la deuxième colonne et première ligne 
+        GridPane.setHalignment(score, HPos.LEFT); // Alignement à gauche du label score
+        root.add(solveButton, 0, 1); // Ajout du bouton résoudre à la première colonne et deuxième ligne 
 
-        updateButtonStates();
+        updateButtonStates(); // Mise à jour des états des boutons
 
-        Scene scene = new Scene(root, 600, 600);
+        Scene scene = new Scene(root, 600, 600); // Création de la scène avec une largeur et hauteur de 600
         primaryStage.setTitle("Taquin");
         primaryStage.setScene(scene);
         primaryStage.show();
