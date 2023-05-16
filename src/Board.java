@@ -1,11 +1,12 @@
 import java.io.IOException;
+import java.util.Random;
 import java.io.BufferedReader;
 import java.io.FileReader;
 
 public class Board {
 	private Box[][] grid;
 	private int boardSize;
-	private static final String CSV_PATH = "mettre le lien.csv";
+	private static final String CSV_PATH = "levels/lvl2.csv";
 	
 	//constructeur 
 	public Board(int boardSize) {
@@ -31,7 +32,21 @@ public class Board {
 	        e.printStackTrace();
 	    }
 	}   
+	
+//méthode pour melanger les cases
+	public void  mixBoard() {
+		Random rand = new Random(); //genere des nombres aleatoires
+		 for (int i = 0; i < boardSize; i++) { //parcours toutes les lignes et colonnes du plateau
+	            for (int j = 0; j < boardSize; j++) {
+	                int newRow = rand.nextInt(boardSize);
+	                int newCol = rand.nextInt(boardSize);
 
+	                Box temp = grid[i][j]; //stock tmp la case actuelle dans une variable 
+	                grid[i][j] = grid[newRow][newCol]; 
+	                grid[newRow][newCol] = temp;
+	            }
+	        }
+	    }
 	// Méthode pour afficher le plateau de jeu
 	public void displayBoard() {
 	    for (int i = 0; i < boardSize; i++) {  // On boucle sur chaque ligne de la grille
