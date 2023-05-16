@@ -1,5 +1,7 @@
 
 import javafx.application.Application;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.geometry.HPos;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -22,10 +24,13 @@ public class TaquinFX extends Application {
     private int emptyRow; //indices de l'emplacement vide 
     private int emptyCol;
     private GridPane grid; // grille d'affichage du jeu dans l'interface utilisateur
+    
+    private int compteur = 0;
+    private Label score;
 
     @Override
     public void start(Stage primaryStage) {
-        boardSize = 3; //initialisation de la taille du plateau à 3
+        boardSize = 2; //initialisation de la taille du plateau à 3
         board = new int[boardSize][boardSize]; //initialisation du tableau du plateau à une taille de 3x3
 
         shuffleBoard(); // melange du tableau 
@@ -49,15 +54,20 @@ public class TaquinFX extends Application {
         //ajout du bouton resoudre
         Button solveButton = new Button("Résoudre");
         solveButton.setOnAction(event -> solveWithRandomWalk());
-        grid.add(solveButton, 0, boardSize);
+        
+        //ajout du score
+        score = new Label("Votre score est de : "+ Integer.toString(compteur));
+     
         
 // ATTENTION A CHANGER 
-        //creation de la racine de la scene et ajout de la grille et du bouton "resoudre"
+        //creation de la racine de la scene et ajout de la grille et du bouton "resoudre" + score
         GridPane root = new GridPane();
         root.setAlignment(Pos.CENTER);
         root.setHgap(10);
         root.setVgap(10);
         root.add(grid, 0, 0);
+        root.add(score,0,2);
+        GridPane.setHalignment(score, HPos.CENTER);
         root.add(solveButton, 0, 1);
         updateButtonStates(); // Mise a jours des etats
         //creation de l'interface (c'est a dire dimension de l'ecran ect)
@@ -111,13 +121,15 @@ public class TaquinFX extends Application {
             int col = GridPane.getColumnIndex(button);
             if (isValidMove(row, col)) {
                 button.setDisable(false);
-                //button.setStyle("-fx-opacity: 1; -fx-color: lightgreen;");
+               
+                button.setStyle("-fx-opacity: 1; -fx-color: lightgreen;");
                 
             } else {
                 button.setDisable(true);
                 button.setStyle("-fx-opacity: 0.7;");
 
             }
+            
         }
     }
 //le mouvement est valide si le bouton est adjacent à l'emplacement vide 
@@ -133,6 +145,8 @@ public class TaquinFX extends Application {
         board[emptyRow][emptyCol] = temp;
         emptyRow = row;
         emptyCol = col;
+        compteur ++;
+        score.setText("Votre score est de : "+ Integer.toString(compteur));
     }
     
 //mettre a jours le  de tous les boutons pour refleter l'etat actuel du plateau
@@ -170,7 +184,7 @@ public class TaquinFX extends Application {
         dialog.setHeaderText("Félicitations ! Vous avez terminé le jeu !");
         Button okButton = new Button("OK");
         okButton.setOnAction(event -> dialog.close());
-        dialog.getDialogPane().setContent(new StackPane(new Label("Vous êtes un génie !")));
+        dialog.getDialogPane().setContent(new StackPane(new Label("Vous êtes un génie !\n\nVous avez résussi la partie en " + Integer.toString(compteur) + " coups.")));
         dialog.getDialogPane().getButtonTypes().add(ButtonType.OK);
         dialog.showAndWait();
     }
@@ -212,4 +226,3 @@ public class TaquinFX extends Application {
         launch(args);
     }
 }
-
