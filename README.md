@@ -8,7 +8,7 @@ Ce projet est un jeu de taquin implémenté en Java. Le jeu consiste en un plate
 
 Pour exécuter le jeu, vous aurez besoin des éléments suivants :
 
-!!!! Nous avons tous recommencer pour l'instant la commande __java -jar TaquinFX.jar__ suffit !!!!!!
+### !!!! Nous avons tous recommencer pour l'instant la commande __java -jar TaquinFX.jar__ suffit !!!!!!
 
 
 
