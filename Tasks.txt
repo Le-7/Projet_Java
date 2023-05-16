@@ -1,11 +1,3 @@
-﻿AVANCÉES
-
-Lundi 15 mai : 
-11h : Réunion teams avec le professeur pour poser les bases (avoir les attendus, poser nos questions, etc.)
-11h45 : Mise en place de notre environnement de travail (vérifier que tout le monde a bien JavaFX sur son ordinateur, les bonnes librairies incluses etc)
-13h : Mise en place de la liste des tâches ainsi que brainstorming sur l'aspect de notre jeu
-
-
 Pas commencé : 
 
 - Réfléchir à comment faire quoi, comment s’organiser, par quoi commencer ?
