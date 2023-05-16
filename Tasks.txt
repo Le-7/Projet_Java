@@ -53,7 +53,4 @@ Pour cet algo, proposer de soit faire défiler automatiquement les étapes soit 
 BONUS : temps de résolution (+ pause qui empêche l'accès au jeu + classement)
 
 
-Partie IHM : 
-
-
 
