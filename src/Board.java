@@ -6,7 +6,7 @@ import java.io.FileReader;
 public class Board {
 	private Box[][] grid;
 	private int boardSize;
-	private static final String CSV_PATH = "levels/lvl2.csv";
+	private static final String CSV_PATH = "levels/test_cas.csv";
 	
 	//constructeur 
 	public Board(int boardSize) {
@@ -47,6 +47,18 @@ public class Board {
 	            }
 	        }
 	    }
+// on va verifier si le plateau est dans sa position initiale 
+	boolean InitialPosition() {
+	    for (int i=0; i< boardSize; i++) {
+	        for (int j=0; j< boardSize; j++) {
+	            if(grid[i][j].getValue() != i*boardSize + j + 1) {
+	                return false;
+	            }
+	        }
+	    }
+	    return true;
+	}
+
 	// Méthode pour afficher le plateau de jeu
 	public void displayBoard() {
 	    for (int i = 0; i < boardSize; i++) {  // On boucle sur chaque ligne de la grille
