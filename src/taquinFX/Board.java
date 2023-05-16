@@ -47,6 +47,7 @@ public class Board {
 	                }
 	                row++;
 	            }
+	            reader.close();// on ferme 
 	        } catch (IOException e) {
 	            e.printStackTrace();
 	        }
@@ -137,9 +138,8 @@ public class Board {
 	public void swap(int row, int col, int row2, int col2) {
 		Box box1 = grid[row][col];
 		Box box2 = grid[row2][col2];
-		System.out.println(row2);
 
-		if (box1 instanceof Empty && box2 instanceof Box) {
+		if (box1 instanceof Empty && box2.isMovable()) {
 		    if (isAdjacent(row, col, row2, col2)) {
 			grid[row][col] = box2;
 			grid[row2][col2] = box1;
@@ -157,6 +157,9 @@ public class Board {
 	
 // on va verifier si le plateau est dans sa position initiale 
 	boolean InitialPosition() {
+		if (grid[boardSize-1][boardSize-1].getValue()==0) {
+			return true;
+		}
 	    for (int i=0; i< boardSize; i++) {
 	        for (int j=0; j< boardSize; j++) {
 	            if(grid[i][j].getValue() != i*boardSize + j + 1) {
@@ -170,7 +173,7 @@ public class Board {
     public boolean gameSolved() {
         try {
         	//creer un bufferedReader pour lire le fichier 
-            BufferedReader reader = new BufferedReader(new FileReader("levels/lvl1.csv"));
+            BufferedReader reader = new BufferedReader(new FileReader(Csv_path));
             String line;
             int i = 0;
             //lire le fichier ligne par ligne 

@@ -4,7 +4,7 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        Board board = new Board("levels/lvl1.csv"); // créer un nouveau tableau de taille n
+        Board board = new Board("levels/block.csv"); // créer un nouveau tableau de taille n
         int maxCompteur = 5; // on définit le nombre maximum de tentatives
         int compteur = 0; // initialisation du compteur
 
@@ -12,7 +12,7 @@ public class Main {
         System.out.println();
 
         do {
-            board.mixBoard(100); // Mélanger le plateau
+            board.mixBoard(10); // Mélanger le plateau
             compteur++;
             System.out.println("Tentative mélange n°" + compteur); // Afficher le compteur de tentatives
             if (compteur == maxCompteur) {
@@ -46,5 +46,6 @@ public class Main {
 
         // Fermer le scanner
         scanner.close();
+        System.out.println("\n\nBravo vous avez gagné !");
     }
 }
