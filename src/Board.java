@@ -6,7 +6,7 @@ import java.io.FileReader;
 public class Board {
 	private Box[][] grid;
 	private int boardSize;
-	private static final String CSV_PATH = "levels/test_cas.csv";
+	private static final String CSV_PATH = "levels/lvl1.csv";
 	
 	//constructeur 
 	public Board(int boardSize) {
@@ -16,27 +16,22 @@ public class Board {
 	}
 	// Méthode pour initialiser le plateau de jeu
 	private void initializeBoard() {
-		 try (BufferedReader reader = new BufferedReader(new FileReader(CSV_PATH))) {
-	            String line;
-	            int row = 0;
-	            while ((line = reader.readLine()) != null) {
-	                String[] values = line.split(",");
-	                for (int col = 0; col < values.length; col++) {
-	                    int num = Integer.parseInt(values[col].trim());
-	                    if(num > 0) {
-	                    	grid[row][col] = new Box(num, true, ""+num+"");
-	                    }else if(num == 0) {
-	                    	grid[row][col] = new Empty(num, true, "");
-	                    }else {
-	                    	grid[row][col] = new Block(num, false, "");
-	                    }
-	                }
-	                row++;
+	    try (BufferedReader reader = new BufferedReader(new FileReader(CSV_PATH))) { // On tente d'ouvrir le fichier CSV pour lecture
+	        String line; // Variable pour stocker chaque ligne du fichier
+	        int row = 0; // Variable pour suivre la ligne courante dans la grille
+	        while ((line = reader.readLine()) != null) {  // Boucle qui lit chaque ligne du fichier jusqu'à ce qu'il n'y en ait plus
+	            String[] values = line.split(",");// On sépare la ligne en plusieurs valeurs en utilisant la virgule comme séparateur
+	            for (int col = 0; col < values.length; col++) { // Boucle sur chaque valeur de la ligne
+	                int num = Integer.parseInt(values[col].trim()); // On convertit la valeur en nombre entier
+	                grid[row][col] = new Box(num, num == 0, num == 0 ? "" : Integer.toString(num));  // On crée une nouvelle case (Box) avec cette valeur et on l'ajoute à la grille
 	            }
-	        } catch (IOException e) {
-	            e.printStackTrace();
+	            row++;  // On incrémente le compteur de ligne pour passer à la ligne suivante
 	        }
-	   }
+	    // Si une exception d'entrée/sortie se produit (par exemple si le fichier n'est pas trouvé), on l'affiche
+	    } catch (IOException e) {
+	        e.printStackTrace();
+	    }
+	}   
 	
 //méthode pour melanger les cases
 	public void  mixBoard() {
@@ -49,7 +44,7 @@ public class Board {
 	                Box temp = grid[i][j]; //stock tmp la case actuelle dans une variable 
 	                grid[i][j] = grid[newRow][newCol]; 
 	                grid[newRow][newCol] = temp;
-	            }
+	           }
 	        }
 	    }
 // on va verifier si le plateau est dans sa position initiale 
@@ -64,29 +59,49 @@ public class Board {
 	    return true;
 	}
 
-	// Méthode pour afficher le plateau de jeu
+    public boolean gameSolved() {
+        try {
+        	//creer un bufferedReader pour lire le fichier 
+            BufferedReader reader = new BufferedReader(new FileReader("levels/lvl1.csv"));
+            String line;
+            int i = 0;
+            //lire le fichier ligne par ligne 
+            while ((line = reader.readLine()) != null) {
+                String[] values = line.split(","); // Séparer la ligne en valeurs en utilisant la virgule comme délimiteur.
+                for (int j = 0; j < values.length; j++) {
+                    // Si la valeur est -1, nous l'ignorons.
+                    if(grid[i][j].getValue() == -1) {
+                        continue;
+                    }
+                    // Convertir le string en int et comparer avec la valeur dans le tableau
+                    if (grid[i][j].getValue() != Integer.parseInt(values[j])) {
+                        reader.close();
+                        return false;
+                    }
+                }
+                i++; //augmenter l'index apres verification
+            }
+            reader.close();// on ferme 
+            //si probleme une exception est levée (si le fichiner n'existe pas ou si il est vide)
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+
+// Méthode pour afficher le plateau de jeu
 	public void displayBoard() {
-		int maxLength = getMaxValueLength();
-		for (int i = 0; i < boardSize; i++) {
-			for (int j = 0; j < boardSize; j++) {
-				String formattedValue = String.format("%-" + maxLength + "s", grid[i][j].getDisplay());
-				System.out.print(formattedValue + " ");
-			}
-			System.out.println();
-		}
-		System.out.println();
+	    for (int i = 0; i < boardSize; i++) {  // On boucle sur chaque ligne de la grille
+	        for (int j = 0; j < boardSize; j++) { // On boucle sur chaque colonne de la ligne
+	            System.out.print(grid[i][j].getDisplay() + " ");  // On affiche la représentation de la case
+	        }
+	        System.out.println(); // On passe à la ligne suivante dans la console
+	    }
 	}
 	
-	private int getMaxValueLength() {
-		int maxLength = 0;
-		for (int i = 0; i < boardSize; i++) {
-			for (int j = 0; j < boardSize; j++) {
-				int value = grid[i][j].getValue();
-				int valueLength = String.valueOf(value).length();
-				maxLength = Math.max(maxLength, valueLength);
-			}
-		}
-		return maxLength;
-	   }
+
+	
+	
 	
 }
