@@ -1,9 +1,8 @@
 public class Main {
     public static void main(String[] args) {
-        // Créer un nouveau plateau de taille 3
-        Board board = new Board(3);
-
-        // Afficher le plateau
-        board.displayBoard();
+        Board board = new Board(4); // créer un nouveau tableau de taille n
+        
+        board.mixBoard();//afficher le tableau dans un ordre aleatoire 
+        board.displayBoard(); // Afficher le plateau
     }
 }
