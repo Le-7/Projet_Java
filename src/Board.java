@@ -1,3 +1,5 @@
+package taquinFX;
+
 import java.io.IOException;
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -6,7 +8,7 @@ import java.io.FileReader;
 public class Board {
 	private Box[][] grid;
 	private int boardSize;
-	private static final String CSV_PATH = "mettre le lien.csv";
+	private static final String CSV_PATH = "levels/lvl1.csv";
 	
 	//constructeur 
 	public Board(int boardSize) {
@@ -40,6 +42,14 @@ public void displayBoard() {
         }
         System.out.println();
     }
+}
+
+public static void main(String[] args) {
+    // Créer un nouveau plateau de taille 3
+    Board board = new Board(3);
+
+    // Afficher le plateau
+    board.displayBoard();
 }
 
 }
