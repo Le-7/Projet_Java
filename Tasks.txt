@@ -23,3 +23,37 @@ Terminé :
 - Relecture du sujet pour être sûrs d’avoir bien compris les attendus => Mathéo, Anissa, Sara et Sarah, estimation : 1 heure
 - Création de level map contenant tous les niveaux (bouton avec cadenas si le niveau n'est pas débloqué) => le 16/05 estimation : 2h30
 - Compteur incrémenter dès qu’un coup est joué => Anissa 15/05 estimation : 30min
+
+Partie fonctionnelle/console : 
+
+Fait : 
+Attribut booléen pour savoir si une case est déplaçable
+Une méthode pour initialiser le plateau
+Une méthode pour afficher le plateau
+Une méthode pour mélanger les cases et vérifier aucune des cases sur sa position initiale. 
+
+
+EN COURS : 
+
+Créer une classe Box (case) [attributs : valeur (int), movable (booléen), affichage (String)] 
+Créer les “sous-classes” de Box (classique -> déplaçable, vide, bloc -> pas déplaçable+affichage particulier)
+Créer une classe Board (plateau) qui est une matrice de Box [un attribut boxes pour la matrice]
+A FAIRE : 
+Une méthode pour échanger les cases (attention quand plusieurs cases vides)
+Booléen pour savoir si le jeu est résolu ou non
+Créer une classe Taquin pour lancer une partie
+Faire une méthode et une classe exception pour déterminer si les cases sont à leur place initiale
+Afficher le niveau qui va être joué avant que la personne joue
+Faire une méthode qui permet de détecter si le niveau jouable ou non, et si non, afficher un texte (de type alert)
+Compteur de coups (= dès qu’une case est déplacée, le compteur augmente de 1)
+Mettre dans un fichier les meilleurs scores 
+Déblocage des niveaux -> rendre les niveaux pas atteints infaisable
+Faire un algo qui résout le niveau et affiche étape par étape la résolution (niveau pas comptabilisé)
+Pour cet algo, proposer de soit faire défiler automatiquement les étapes soit cliquer sur un bouton pour voir étape par étape
+BONUS : temps de résolution (+ pause qui empêche l'accès au jeu + classement)
+
+
+Partie IHM : 
+
+
+
