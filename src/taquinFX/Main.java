@@ -4,7 +4,7 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        Board board = new Board("../levels/block.csv"); // créer un nouveau tableau de taille n
+        Board board = new Board("levels/block.csv"); // créer un nouveau tableau de taille n
         int maxCompteur = 5; // on définit le nombre maximum de tentatives
         int compteur = 0; // initialisation du compteur
 
@@ -37,7 +37,7 @@ public class Main {
             int col = scanner.nextInt();
 
             // Effectuer l'échange si les coordonnées sont valides
-            if (row >= 0 && row <= board.getBoardSize() && col >= 0 && col <= board.getBoardSize()) {
+            if (row >= 1 && row <= board.getBoardSize() && col >= 1 && col <= board.getBoardSize()) {
                 board.swap(rowEmpty, colEmpty, row-1, col-1);
             } else {
                 System.out.println("Coordonnées invalides. Veuillez réessayer.");
