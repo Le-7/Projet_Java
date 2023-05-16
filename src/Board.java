@@ -14,39 +14,93 @@ public class Board {
 		grid = new Box [boardSize][boardSize];
 		initializeBoard();	
 	}
-	// Méthode pour initialiser le plateau de jeu
-	private void initializeBoard() {
-	    try (BufferedReader reader = new BufferedReader(new FileReader(CSV_PATH))) { // On tente d'ouvrir le fichier CSV pour lecture
-	        String line; // Variable pour stocker chaque ligne du fichier
-	        int row = 0; // Variable pour suivre la ligne courante dans la grille
-	        while ((line = reader.readLine()) != null) {  // Boucle qui lit chaque ligne du fichier jusqu'à ce qu'il n'y en ait plus
-	            String[] values = line.split(",");// On sépare la ligne en plusieurs valeurs en utilisant la virgule comme séparateur
-	            for (int col = 0; col < values.length; col++) { // Boucle sur chaque valeur de la ligne
-	                int num = Integer.parseInt(values[col].trim()); // On convertit la valeur en nombre entier
-	                grid[row][col] = new Box(num, num == 0, num == 0 ? "" : Integer.toString(num));  // On crée une nouvelle case (Box) avec cette valeur et on l'ajoute à la grille
-	            }
-	            row++;  // On incrémente le compteur de ligne pour passer à la ligne suivante
-	        }
-	    // Si une exception d'entrée/sortie se produit (par exemple si le fichier n'est pas trouvé), on l'affiche
-	    } catch (IOException e) {
-	        e.printStackTrace();
-	    }
-	}   
 	
-//méthode pour melanger les cases
+	//nous allons initialiser le plateau
+	private void initializeBoard() {
+		 try (BufferedReader reader = new BufferedReader(new FileReader(CSV_PATH))) {
+	            String line;
+	            int row = 0;
+	            while ((line = reader.readLine()) != null) {
+	                String[] values = line.split(",");
+	                for (int col = 0; col < values.length; col++) {
+	                    int num = Integer.parseInt(values[col].trim());
+	                    if(num > 0) {
+	                    	grid[row][col] = new Box(num, true, ""+num+"");
+	                    }else if(num == 0) {
+	                    	grid[row][col] = new Empty(num, true, "");
+	                    }else {
+	                    	grid[row][col] = new Block(num, false, "");
+	                    }
+	                }
+	                row++;
+	            }
+	        } catch (IOException e) {
+	            e.printStackTrace();
+	        }
+	}
+	
+	//Méthode pour afficher le plateau
+	public void displayBoard() {
+        int maxLength = getMaxValueLength();
+	    for (int i = 0; i < boardSize; i++) {
+	        for (int j = 0; j < boardSize; j++) {
+	        	String formattedValue = String.format("%-" + maxLength + "s", grid[i][j].getDisplay());
+                System.out.print(formattedValue + " ");
+	        }
+	        System.out.println();
+	    }
+	    System.out.println();
+	}
+	
 	public void  mixBoard() {
 		Random rand = new Random(); //genere des nombres aleatoires
-		 for (int i = 0; i < boardSize; i++) { //parcours toutes les lignes et colonnes du plateau
-	            for (int j = 0; j < boardSize; j++) {
-	                int newRow = rand.nextInt(boardSize);
-	                int newCol = rand.nextInt(boardSize);
+		for (int i = 0; i < boardSize; i++) { //parcours toutes les lignes et colonnes du plateau
+		    for (int j = 0; j < boardSize; j++) {
+			int newRow = rand.nextInt(boardSize);
+			int newCol = rand.nextInt(boardSize);
 
-	                Box temp = grid[i][j]; //stock tmp la case actuelle dans une variable 
-	                grid[i][j] = grid[newRow][newCol]; 
-	                grid[newRow][newCol] = temp;
-	           }
-	        }
-	    }
+			Box temp = grid[i][j]; //stock tmp la case actuelle dans une variable 
+			if(temp.getValue() >= 0) {
+				grid[i][j] = grid[newRow][newCol]; 
+				grid[newRow][newCol] = temp;
+			}
+		    }
+	    	}
+	 }
+	
+	private int getMaxValueLength() {
+		int maxLength = 0;
+
+		for (int i = 0; i < boardSize; i++) {
+			for (int j = 0; j < boardSize; j++) {
+				int value = grid[i][j].getValue();
+				int valueLength = String.valueOf(value).length();
+				maxLength = Math.max(maxLength, valueLength);
+			}
+		}
+		return maxLength;
+	}
+	
+	public void swap(int row, int row2, int col, int col2) {
+		Box box1 = grid[row][col];
+		Box box2 = grid[row2][col2];
+
+		if (box1 instanceof Empty && box2 instanceof Box) {
+		    if (isAdjacent(row, col, row2, col2)) {
+			grid[row][col] = box2;
+			grid[row2][col2] = box1;
+		    } else {
+			System.out.println("Échange invalide : les cases ne sont pas adjacentes.");
+		    }
+		} else {
+		    System.out.println("Échange invalide : les cases ne satisfont pas les règles.");
+		}
+    	}
+
+    private boolean isAdjacent(int row1, int col1, int row2, int col2) {
+        return Math.abs(row1 - row2) + Math.abs(col1 - col2) == 1;
+    }
+	
 // on va verifier si le plateau est dans sa position initiale 
 	boolean InitialPosition() {
 	    for (int i=0; i< boardSize; i++) {
@@ -90,18 +144,4 @@ public class Board {
         return true;
     }
 
-// Méthode pour afficher le plateau de jeu
-	public void displayBoard() {
-	    for (int i = 0; i < boardSize; i++) {  // On boucle sur chaque ligne de la grille
-	        for (int j = 0; j < boardSize; j++) { // On boucle sur chaque colonne de la ligne
-	            System.out.print(grid[i][j].getDisplay() + " ");  // On affiche la représentation de la case
-	        }
-	        System.out.println(); // On passe à la ligne suivante dans la console
-	    }
-	}
-	
-
-	
-	
-	
 }
