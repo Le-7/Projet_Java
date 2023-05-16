@@ -1,6 +1,5 @@
 
 import javafx.application.Application;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.geometry.HPos;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -25,7 +24,7 @@ public class TaquinFX extends Application {
     private int emptyCol;
     private GridPane grid; // grille d'affichage du jeu dans l'interface utilisateur
     
-    private int compteur = 0;
+    private int var_score = 0;
     private Label score;
 
     @Override
@@ -56,7 +55,7 @@ public class TaquinFX extends Application {
         solveButton.setOnAction(event -> solveWithRandomWalk());
         
         //ajout du score
-        score = new Label("Votre score est de : "+ Integer.toString(compteur));
+        score = new Label("Votre score est de : "+ Integer.toString(var_score));
      
         
 // ATTENTION A CHANGER 
@@ -145,8 +144,8 @@ public class TaquinFX extends Application {
         board[emptyRow][emptyCol] = temp;
         emptyRow = row;
         emptyCol = col;
-        compteur ++;
-        score.setText("Votre score est de : "+ Integer.toString(compteur));
+        var_score ++;
+        score.setText("Votre score est de : "+ Integer.toString(var_score));
     }
     
 //mettre a jours le  de tous les boutons pour refleter l'etat actuel du plateau
@@ -184,7 +183,7 @@ public class TaquinFX extends Application {
         dialog.setHeaderText("Félicitations ! Vous avez terminé le jeu !");
         Button okButton = new Button("OK");
         okButton.setOnAction(event -> dialog.close());
-        dialog.getDialogPane().setContent(new StackPane(new Label("Vous êtes un génie !\n\nVous avez résussi la partie en " + Integer.toString(compteur) + " coups.")));
+        dialog.getDialogPane().setContent(new StackPane(new Label("Vous êtes un génie !\n\nVous avez résussi la partie en " + Integer.toString(var_score) + " coups.")));
         dialog.getDialogPane().getButtonTypes().add(ButtonType.OK);
         dialog.showAndWait();
     }
