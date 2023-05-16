@@ -61,15 +61,27 @@ public class Board {
 
 	// Méthode pour afficher le plateau de jeu
 	public void displayBoard() {
-        int maxLength = getMaxValueLength();
-	    for (int i = 0; i < boardSize; i++) {
-	        for (int j = 0; j < boardSize; j++) {
-	        	String formattedValue = String.format("%-" + maxLength + "s", grid[i][j].getDisplay());
-                System.out.print(formattedValue + " ");
-	        }
-	        System.out.println();
-	    }
-	    System.out.println();
+		int maxLength = getMaxValueLength();
+		for (int i = 0; i < boardSize; i++) {
+			for (int j = 0; j < boardSize; j++) {
+				String formattedValue = String.format("%-" + maxLength + "s", grid[i][j].getDisplay());
+				System.out.print(formattedValue + " ");
+			}
+			System.out.println();
+		}
+		System.out.println();
 	}
+	
+	private int getMaxValueLength() {
+		int maxLength = 0;
+		for (int i = 0; i < boardSize; i++) {
+			for (int j = 0; j < boardSize; j++) {
+				int value = grid[i][j].getValue();
+				int valueLength = String.valueOf(value).length();
+				maxLength = Math.max(maxLength, valueLength);
+			}
+		}
+		return maxLength;
+	   }
 	
 }
