@@ -61,11 +61,15 @@ public class Board {
 
 	// Méthode pour afficher le plateau de jeu
 	public void displayBoard() {
-	    for (int i = 0; i < boardSize; i++) {  // On boucle sur chaque ligne de la grille
-	        for (int j = 0; j < boardSize; j++) { // On boucle sur chaque colonne de la ligne
-	            System.out.print(grid[i][j].getDisplay() + " ");  // On affiche la représentation de la case
+        int maxLength = getMaxValueLength();
+	    for (int i = 0; i < boardSize; i++) {
+	        for (int j = 0; j < boardSize; j++) {
+	        	String formattedValue = String.format("%-" + maxLength + "s", grid[i][j].getDisplay());
+                System.out.print(formattedValue + " ");
 	        }
-	        System.out.println(); // On passe à la ligne suivante dans la console
+	        System.out.println();
 	    }
+	    System.out.println();
 	}
+	
 }
