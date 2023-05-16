@@ -33,7 +33,7 @@ public class level_map extends Application {
 
      // Ajout d'un gestionnaire d'événements au bouton
      button1.setOnAction(new EventHandler<ActionEvent>() {
-         @Override
+                  @Override
          public void handle(ActionEvent event) {
              Platform.runLater(new Runnable() {
                  @Override
@@ -45,84 +45,84 @@ public class level_map extends Application {
      });
 
      AnchorPane anchorPane1 = new AnchorPane(button1);
-     GridPane.setConstraints(anchorPane1, 0, 10); // 1ère colonne, 10ème ligne
+     GridPane.setConstraints(anchorPane1, 0, 10); // 1ère colonnes, 9ème lignes
      gridPane.getChildren().add(anchorPane1);
 
         // Bouton 2
         Button button2 = createButton("2",2);
         AnchorPane anchorPane2 = new AnchorPane(button2);
         AnchorPane.setRightAnchor(button2, 0.0); // Positionné à droite
-        GridPane.setConstraints(anchorPane2, 1, 9); // 1ère colonne, 3ème ligne
+        GridPane.setConstraints(anchorPane2, 1, 9); // 2eme colonnes, 8 lignes
         gridPane.getChildren().add(anchorPane2);
 
         // Bouton 3
         Button button3 = createButton("3",3);
         AnchorPane anchorPane3 = new AnchorPane(button3);
-        GridPane.setConstraints(anchorPane3, 3, 10); // 2ème colonne, 4ème ligne
+        GridPane.setConstraints(anchorPane3, 3, 10); // 3ème colonnes, 9ème lignes
         gridPane.getChildren().add(anchorPane3);
 
         // Bouton 4
         Button button4 = createButton("4",4);
         AnchorPane anchorPane4 = new AnchorPane(button4);
-        GridPane.setConstraints(anchorPane4, 4, 12); // 2ème colonne, 5ème ligne
+        GridPane.setConstraints(anchorPane4, 4, 12); // 4ème colonnes, 11ème lignes
         gridPane.getChildren().add(anchorPane4);
 
         // Bouton 5
         Button button5 = createButton("5",5);
         AnchorPane anchorPane5 = new AnchorPane(button5);
-        GridPane.setConstraints(anchorPane5, 5, 14); // 2ème colonne, 6ème ligne
+        GridPane.setConstraints(anchorPane5, 5, 14); // 4ème colonnes, 13ème lignes
         gridPane.getChildren().add(anchorPane5);
 
      // Bouton 6
         Button button6 = createButton("6",6);
         AnchorPane anchorPane6 = new AnchorPane(button6);
-        GridPane.setConstraints(anchorPane6, 7, 14); // 3ème colonne, 6ème ligne
+        GridPane.setConstraints(anchorPane6, 7, 14); // 6ème colonnes, 13ème lignes
         gridPane.getChildren().add(anchorPane6);
 
      // Bouton 7
         Button button7 = createButton("7",7);
         AnchorPane anchorPane7 = new AnchorPane(button7);
         AnchorPane.setRightAnchor(button7, 0.0); // Positionné à droite
-        GridPane.setConstraints(anchorPane7, 8,12); // 2ème colonne, 6ème ligne
+        GridPane.setConstraints(anchorPane7, 8,12); // 7ème colonne, 11ème lignes
         gridPane.getChildren().add(anchorPane7);
 
      // Bouton 8
         Button button8 = createButton("8",8);
         AnchorPane anchorPane8 = new AnchorPane(button8);
         AnchorPane.setRightAnchor(button8, 0.0); // Positionné à droite
-        GridPane.setConstraints(anchorPane8, 9, 10); // 2ème colonne, 4ème ligne
+        GridPane.setConstraints(anchorPane8, 9, 10); // 8ème colonne, 9ème lignes
         gridPane.getChildren().add(anchorPane8);
 
      // Bouton 9
         Button button9 = createButton("9",9);
         AnchorPane anchorPane9 = new AnchorPane(button9);
         AnchorPane.setRightAnchor(button9, 0.0); // Positionné à droite
-        GridPane.setConstraints(anchorPane9, 11, 9); // 1ère colonne, 3ème ligne
+        GridPane.setConstraints(anchorPane9, 11, 9); // 10ème colonne, 8ème lignes
         gridPane.getChildren().add(anchorPane9);
 
         // Bouton 10
         Button button10 = createButton("10",10);
         AnchorPane anchorPane10 = new AnchorPane(button10);
-        GridPane.setConstraints(anchorPane10, 13, 10); // 2ème colonne, 4ème ligne
+        GridPane.setConstraints(anchorPane10, 13, 10); // 12ème colonne, 9ème lignes
         gridPane.getChildren().add(anchorPane10);
         
      // Bouton 11
         Button button11 = createButton("11",11);
         AnchorPane anchorPane11 = new AnchorPane(button11);
-        GridPane.setConstraints(anchorPane11, 15, 9); // 1ère colonne, 3ème ligne
+        GridPane.setConstraints(anchorPane11, 15, 9); // 14eme colonne, 8ème ligne
         gridPane.getChildren().add(anchorPane11);
 
      // Bouton 12
         Button button12 = createButton("12",12);
         AnchorPane anchorPane12 = new AnchorPane(button12);
-        GridPane.setConstraints(anchorPane12, 17, 8); // 1ère colonne, 3ème ligne
+        GridPane.setConstraints(anchorPane12, 17, 8); // 16ème colonne, 7ème ligne
         gridPane.getChildren().add(anchorPane12);
 
      // Bouton 13
         Button button13 = createButton("13",13);
         AnchorPane anchorPane13 = new AnchorPane(button13);
         AnchorPane.setRightAnchor(button13, 0.0); // Positionné à droite
-        GridPane.setConstraints(anchorPane13, 19, 10); // 1ère colonne, 3ème ligne
+        GridPane.setConstraints(anchorPane13, 19, 10); // 18eme colonne, 9ème ligne
         gridPane.getChildren().add(anchorPane13);
 
 
