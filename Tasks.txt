@@ -38,6 +38,7 @@ EN COURS :
 Créer une classe Box (case) [attributs : valeur (int), movable (booléen), affichage (String)] 
 Créer les “sous-classes” de Box (classique -> déplaçable, vide, bloc -> pas déplaçable+affichage particulier)
 Créer une classe Board (plateau) qui est une matrice de Box [un attribut boxes pour la matrice]
+
 A FAIRE : 
 Une méthode pour échanger les cases (attention quand plusieurs cases vides)
 Booléen pour savoir si le jeu est résolu ou non
