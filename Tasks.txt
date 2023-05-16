@@ -30,4 +30,4 @@ En cours :
 Terminé : 
 - Création de notre premier exécutable => Mathéo le 15/05
 - Relecture du sujet pour être sûrs d’avoir bien compris les attendus => Mathéo, Anissa, Sara et Sarah, estimation : 1 heure
-- Création de la level map contenant tous les niveaux => le 16/05 estimation : 2h30
+- Création de level map contenant tous les niveaux (bouton avec cadenas si le niveau n'est pas débloqué) => le 16/05 estimation : 2h30
