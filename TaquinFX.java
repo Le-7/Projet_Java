@@ -1,4 +1,3 @@
-
 import javafx.application.Application;
 import javafx.geometry.HPos;
 import javafx.geometry.Pos;
@@ -11,70 +10,65 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 public class TaquinFX extends Application {
 
-
-    private int[][] board; //plateau du jeu de Taquin 
-    private int boardSize; //taille du tableau     
-    private int emptyRow; //indices de l'emplacement vide 
+    private int[][] board;
+    private int boardSize;
+    private int emptyRow;
     private int emptyCol;
-    private GridPane grid; // grille d'affichage du jeu dans l'interface utilisateur
+    private GridPane grid;
     
     private int var_score = 0;
     private Label score;
 
     @Override
     public void start(Stage primaryStage) {
-        boardSize = 2; //initialisation de la taille du plateau à 3
-        board = new int[boardSize][boardSize]; //initialisation du tableau du plateau à une taille de 3x3
+        boardSize = 3;
+        board = new int[boardSize][boardSize];
 
-        shuffleBoard(); // melange du tableau 
+        shuffleBoard();
 
-        //initialisation de la grille d'affichage 
         grid = new GridPane();
         grid.setAlignment(Pos.CENTER);
-        grid.setHgap(10); //l'ecart 
-        grid.setVgap(10); // l'ecart
+        grid.setHgap(10);
+        grid.setVgap(10);
 
-        //creation des boutons sur le plateau
         for (int i = 0; i < boardSize; i++) {
             for (int j = 0; j < boardSize; j++) {
-            	Button button = new Button(board[i][j] == 0 ? "" : Integer.toString(board[i][j]));
-                button.setPrefSize(50, 50);
+                Button button = new Button(board[i][j] == 0 ? "" : Integer.toString(board[i][j]));
+                button.setPrefSize(100, 100);
+                button.setStyle("-fx-background-color: rgba(135, 206, 250, 0.7);");
                 button.setOnAction(event -> handleMove(button));
                 grid.add(button, j, i);
             }
         }
-        
-        //ajout du bouton resoudre
+
         Button solveButton = new Button("Résoudre");
         solveButton.setOnAction(event -> solveWithRandomWalk());
         
-        //ajout du score
-        score = new Label("Votre score est de : "+ Integer.toString(var_score));
-     
+        score = new Label("Votre score est de : " + Integer.toString(var_score));
+        score.setStyle("-fx-font-size: 16px;");
         
-// ATTENTION A CHANGER 
-        //creation de la racine de la scene et ajout de la grille et du bouton "resoudre" + score
         GridPane root = new GridPane();
         root.setAlignment(Pos.CENTER);
         root.setHgap(10);
         root.setVgap(10);
+        root.setStyle("-fx-background-color: lightblue;");
         root.add(grid, 0, 0);
-        root.add(score,0,2);
-        GridPane.setHalignment(score, HPos.CENTER);
+        root.add(score, 1, 0);
+        GridPane.setHalignment(score, HPos.LEFT);
         root.add(solveButton, 0, 1);
-        updateButtonStates(); // Mise a jours des etats
-        //creation de l'interface (c'est a dire dimension de l'ecran ect)
-        Scene scene = new Scene(root, 300, 300);
+
+        updateButtonStates();
+
+        Scene scene = new Scene(root, 600, 600);
         primaryStage.setTitle("Taquin");
         primaryStage.setScene(scene);
         primaryStage.show();
     }
+
     //méthode pour melanger le plateau 
     public void shuffleBoard() {
         // Initialise le plateau avec les chiffres 1 à N^2-1, plus un espace vide
@@ -120,8 +114,6 @@ public class TaquinFX extends Application {
             int col = GridPane.getColumnIndex(button);
             if (isValidMove(row, col)) {
                 button.setDisable(false);
-               
-                button.setStyle("-fx-opacity: 1; -fx-color: lightgreen;");
                 
             } else {
                 button.setDisable(true);
