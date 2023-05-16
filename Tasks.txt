@@ -1,29 +1,3 @@
-Pas commencé : 
-
-- Réfléchir à comment faire quoi, comment s’organiser, par quoi commencer ?
-- Faire le format du premier niveau pour avoir un aperçu
-- Faire une méthode qui permet de mélanger “manuellement” les cases
-- Faire une méthode qui permet d’attribuer des chiffres aux cases
-- Faire une méthode et une classe exception pour déterminer si les cases ne sont pas sur les cases initiales
-- Afficher le niveau résolu avant que la personne joue
-- Faire une méthode qui permet de détecter si le niveau jouable ou non, et si non afficher un texte (de type alert)
-- Mettre dans un fichier les meilleurs scores (Anissa -> 16/05)
-- Déblocage des niveaux -> rendre les niveaux pas atteints infaisable
-- Faire un algo qui résout le niveau et affiche étape par étape la résolution (niveau pas comptabilisé)
-- Pour cet algo, proposée de soit faire défiler automatiquement les étapes soit cliquer sur un bouton pour voir étape par étape
-
-- BONUS : temps de résolution (+ pause qui empêche l'accès au jeu + classement)
-
-
-En cours : 
-- Trouver le type de fichier pour les niveaux => Mathéo 15/05 estimation 30min 
-
-Terminé : 
-- Création de notre premier exécutable => Mathéo le 15/05
-- Relecture du sujet pour être sûrs d’avoir bien compris les attendus => Mathéo, Anissa, Sara et Sarah, estimation : 1 heure
-- Création de level map contenant tous les niveaux (bouton avec cadenas si le niveau n'est pas débloqué) => le 16/05 estimation : 2h30
-- Compteur incrémenter dès qu’un coup est joué => Anissa 15/05 estimation : 30min
-
 Partie fonctionnelle/console : 
 
 Fait : 
