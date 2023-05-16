@@ -1,5 +1,4 @@
-package taquinFX;
-
+package tanquinFX
 public class Main {
     public static void main(String[] args) {
         Board board = new Board("levels/lvl1.csv"); // créer un nouveau tableau de taille n
@@ -10,7 +9,7 @@ public class Main {
         System.out.println( );
         
         do {
-            board.mixBoard(10); // Mélanger le plateau
+            board.mixBoardauto(); // Mélanger le plateau
             compteur++;
             System.out.println("Tentative mélange n°" + compteur); // Afficher le compteur de tentatives
             if (compteur == maxCompteur) {
@@ -20,5 +19,11 @@ public class Main {
         } while(board.InitialPosition()); //Vérifier si une ou plusieurs tuiles sont à leur position initiale. Si c'est le cas, mélanger à nouveau.
 
         board.displayBoard(); // Afficher le plateau après le mélange
+        // Vérifier si le jeu est résolu
+        if (board.gameSolved()) {
+            System.out.println("Félicitations, le jeu est résolu!");
+        } else {
+            System.out.println("Le jeu n'est pas encore résolu. Continuez à essayer!");
+        }
     }
 }
