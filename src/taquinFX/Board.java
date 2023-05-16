@@ -15,6 +15,11 @@ public class Board {
 		initializeBoard();	
 	}
 	
+	
+	public int getBoardSize() {
+		return boardSize;
+	}
+
 	//nous allons initialiser le plateau
 	private void initializeBoard() {
 		 try (BufferedReader reader = new BufferedReader(new FileReader(Csv_path))) {
@@ -115,9 +120,24 @@ public class Board {
 		return maxLength;
 	}
 	
-	public void swap(int row, int row2, int col, int col2) {
+	public int[] findEmptyBox() {
+	    int[] emptyBox = new int[2];
+	    for (int i = 0; i < boardSize; i++) {
+	        for (int j = 0; j < boardSize; j++) {
+	            if (grid[i][j].getValue() == 0) {
+	                emptyBox[0] = i;
+	                emptyBox[1] = j;
+	                return emptyBox;
+	            }
+	        }
+	    }
+	    return emptyBox;
+	}
+
+	public void swap(int row, int col, int row2, int col2) {
 		Box box1 = grid[row][col];
 		Box box2 = grid[row2][col2];
+		System.out.println(row2);
 
 		if (box1 instanceof Empty && box2 instanceof Box) {
 		    if (isAdjacent(row, col, row2, col2)) {
