@@ -29,8 +29,7 @@ OpenJDK 64-Bit Server VM (build 11.0.18+10-post-Ubuntu-0ubuntu120.04.1, mixed mo
 
 ## 🎮 Utilisation
 
-
-Une fois le jeu lancé, vous pouvez sélectionner le niveau de difficulté souhaité ou charger une image personnalisée. Pour déplacer les tuiles, cliquez sur la tuile que vous souhaitez déplacer. Si la tuile peut être déplacée, elle se déplacera automatiquement à sa nouvelle position. Continuez à déplacer les tuiles jusqu'à ce que vous ayez remis le puzzle dans l'ordre correct.
+Lorsque vous lancer l'exécutable, vous verrez le niveau de taquin résolu puis mélangé. Le plateau mélangé sera votre point de départ. Si vous désirez jouer au jeu entrez dans un premier temps la ligne puis la colonne de la case que vous souhaitez échangé avec la case vide "@". En cas d'ambiguité, s'il existe plusieurs case vide adjacente à la case que vous avez choisi, le programme vous proposera de choisir entre les différentes possibilités. Si vous avez fait une erreur le programme le détectera et vous invitera à recommencer. Si vous souhaitez voir comment notre programme résoud le jeu de Taquin étape par étape, entrez 0 0 en tout début de partie. (Pour l'instant notre solver résoud seulement les plateaux avec une seul case vide, mais ne vous inquiétez pas il pourra bientôt résoudre tous vos plateaux). 
 
 ## 🤝 Contribution
 
