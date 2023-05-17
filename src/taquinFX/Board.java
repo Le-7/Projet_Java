@@ -1,5 +1,6 @@
 package taquinFX;
 import java.io.IOException;
+import java.util.List;
 import java.util.Random;
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -14,8 +15,34 @@ public class Board {
 		this.Csv_path = Csv_path;
 		initializeBoard();	
 	}
+	public Board(Board other) {
+	    this.boardSize = other.getBoardSize();
+	    this.Csv_path = other.getCsvPath();
+	    this.grid = new Box[boardSize][boardSize];
+
+	    for (int i = 0; i < boardSize; i++) {
+	        for (int j = 0; j < boardSize; j++) {
+	            Box box = other.getGrid()[i][j];
+	            if (box instanceof Empty) {
+	                grid[i][j] = new Empty();
+	            } else if (box instanceof Block) {
+	                grid[i][j] = new Block();
+	            } else if (box instanceof Box) {
+	                Box numberedBox = (Box) box;
+	                grid[i][j] = new Box(numberedBox.getValue(), numberedBox.isMovable(), numberedBox.getDisplay());
+	            }
+	        }
+	    }
+	}
+
 	
 	
+	public Box[][] getGrid() {
+		return grid;
+	}
+	public String getCsvPath() {
+		return Csv_path;
+	}
 	public int getBoardSize() {
 		return boardSize;
 	}
@@ -65,6 +92,8 @@ public class Board {
 	    }
 	    System.out.println();
 	}
+
+
 	
 	public void  mixBoardauto() {
 		Random rand = new Random(); //genere des nombres aleatoires
@@ -150,7 +179,17 @@ public class Board {
 		    System.out.println("Échange invalide : les cases ne satisfont pas les règles.");
 		}
     	}
+	public void swap2(int row, int col, int row2, int col2) {
+		Box box1 = grid[row][col];
+		Box box2 = grid[row2][col2];
 
+		if (box1 instanceof Empty && box2.isMovable()) {
+		    if (isAdjacent(row, col, row2, col2)) {
+			grid[row][col] = box2;
+			grid[row2][col2] = box1;
+		    } 
+		} 
+    }
     private boolean isAdjacent(int row1, int col1, int row2, int col2) {
         return Math.abs(row1 - row2) + Math.abs(col1 - col2) == 1;
     }
@@ -170,6 +209,11 @@ public class Board {
 	    return true;
 	}
 
+	public List<String> solve() {
+        TaquinSolver solver = new TaquinSolver(this);
+        return solver.solve();
+    }
+	
     public boolean gameSolved() {
         try {
         	//creer un bufferedReader pour lire le fichier 
