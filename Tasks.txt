@@ -8,16 +8,16 @@ Une méthode pour mélanger les cases et vérifier aucune des cases sur sa posit
 Booléen pour savoir si le jeu est résolu ou non
 Une méthode pour échanger les cases (attention quand plusieurs cases vides)
 Créer une classe Taquin pour lancer une partie
+Créer une classe Board (plateau) qui est une matrice de Box [un attribut boxes pour la matrice]
 
 
 EN COURS : 
 Créer une classe Box (case) [attributs : valeur (int), movable (booléen), affichage (String)] 
 Créer les “sous-classes” de Box (classique -> déplaçable, vide, bloc -> pas déplaçable+affichage particulier)
-Créer une classe Board (plateau) qui est une matrice de Box [un attribut boxes pour la matrice]
+Faire une méthode et une classe exception pour déterminer si les cases sont à leur place initiale
 
 A FAIRE : 
 
-Faire une méthode et une classe exception pour déterminer si les cases sont à leur place initiale
 Afficher le niveau qui va être joué avant que la personne joue
 Faire une méthode qui permet de détecter si le niveau jouable ou non, et si non, afficher un texte (de type alert)
 Compteur de coups (= dès qu’une case est déplacée, le compteur augmente de 1)
