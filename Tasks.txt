@@ -1,30 +1,108 @@
 Partie fonctionnelle/console : 
 
-Fait : 
-Attribut booléen pour savoir si une case est déplaçable
-Une méthode pour initialiser le plateau
-Une méthode pour afficher le plateau
-Une méthode pour mélanger les cases et vérifier aucune des cases sur sa position initiale.
-Booléen pour savoir si le jeu est résolu ou non
-Une méthode pour échanger les cases (attention quand plusieurs cases vides)
-Créer une classe Taquin pour lancer une partie
-Créer une classe Board (plateau) qui est une matrice de Box [un attribut boxes pour la matrice]
-
-
-EN COURS : 
-Créer une classe Box (case) [attributs : valeur (int), movable (booléen), affichage (String)] 
-Créer les “sous-classes” de Box (classique -> déplaçable, vide, bloc -> pas déplaçable+affichage particulier)
-Faire une méthode et une classe exception pour déterminer si les cases sont à leur place initiale
-
-A FAIRE : 
-Afficher le niveau qui va être joué avant que la personne joue
-Faire une méthode qui permet de détecter si le niveau jouable ou non, et si non, afficher un texte (de type alert)
-Compteur de coups (= dès qu’une case est déplacée, le compteur augmente de 1)
-Mettre dans un fichier les meilleurs scores 
-Déblocage des niveaux -> rendre les niveaux pas atteints infaisable
-Faire un algo qui résout le niveau et affiche étape par étape la résolution (niveau pas comptabilisé)
-Pour cet algo, proposer de soit faire défiler automatiquement les étapes soit cliquer sur un bouton pour voir étape par étape
-BONUS : temps de résolution (+ pause qui empêche l'accès au jeu + classement)
-
-
-
+Créer le plateau :
+    - Créer la classe Box et ses sous classes
+        Statut : FAIT
+        Par : Sara, Sarah
+        Estimation : 30 min
+        Réel : 50 min
+      
+    - Créer la classe Board
+        Statut : FAIT 
+        Par : Sara, Anissa, Sarah, Mathéo
+        Estimation : 40 min 
+        Réel : 1 h
+      
+    - Créer les fichiers csv et les charger
+        Statut : FAIT
+        Par : Sara, Mathéo
+        Estimation : 30 min 
+        Réel : 25 min 
+      
+Interaction utilisateur/console :
+    - Vérifier qu’un plateau est résolu + échanger cases
+        Statut : FAIT 
+        Par : Sarah, Mathéo et Sara
+        Estimation : 25 min
+        Réel : 30 min
+        
+    - Mélanger le plateau 
+        Statut : FAIT
+        Par : Mathéo, Sara
+        Estimation : 1h
+        Réel : 1h20
+        
+    - Récupérer les coordonnées
+        Statut : FAIT
+        Par : Mathéo
+        Estimation : 15 min 
+        Réel : 15 min 
+        
+    - Gérer le cas avec deux possibilités de case vide
+        Statut : FAIT
+        Par : Sarah
+        Estimation : 45 min
+        Réel : 1h20
+        
+    - Faire un compteur de coup 
+        Statut : A FAIRE
+        Par : Anissa
+        Estimation : 15 min
+        Réel : 15 min
+        
+    - Choisir le niveau du plateau 
+        Statut : A FAIRE
+        Par : Anissa
+        Estimation : 35 min 
+        Réel : 
+        
+    - Créer et mettre dans un fichier les meilleurs scores
+        Statut : A FAIRE
+        Par : 
+        Estimation : 
+        Réel : 
+        
+     - Déblocage des niveaux 
+        Statut : A FAIRE 
+        Par : 
+        Estimation : 
+        Réel : 
+        
+     - BONUS : Créer un minuteur 
+        Statut : A FAIRE 
+        Par : 
+        Estimation : 
+        Réel : 
+        
+        
+Résoudre tous les taquins avec l’algorithme A* :
+    - Créer une classe Node 
+        Statut : FAIT
+        Par : Mathéo
+        Estimation : 30 min
+        Réel : 40 min
+        
+    - Créer une classe TaquinSolver
+        Statut : FAIT
+        Par : Mathéo 
+        Estimation : 1h 
+        Réel : 1h
+        
+   - Afficher les étapes de la solution 
+        Statut : FAIT
+        Par : Mathéo
+        Estimation : 20 min
+        Réel : 30 min 
+        
+    - Modifier TaquinSolver pour qu’il résolve les plateaux avec plus d’une case vide
+        Statut : EN COURS
+        Par : Sarah
+        Estimation : 1h
+        Réel : 
+        
+        
+    - Déterminer si un plateau est jouable ou non 
+        Statut : A FAIRE
+        Par : 
+        Estimation : 
+        Réel : 
