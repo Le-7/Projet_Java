@@ -43,9 +43,10 @@ public class TaquinSolver {
 
     private List<Node> getNextNodes(Node currentNode) {
         List<Node> nextNodes = new ArrayList<>();
-        int[] emptyBox = currentNode.getBoard().findEmptyBox();
-        int emptyRow = emptyBox[0];
-        int emptyCol = emptyBox[1];
+        List<int[]> emptyBoxes = currentNode.getBoard().findEmptyBoxes();
+        for(int[] emptyBox : emptyBoxes) {
+        	int emptyRow = emptyBox[0];
+        	int emptyCol = emptyBox[1];
 
         // Essaie de déplacer la case vide vers le haut
         if (emptyRow > 0) {
@@ -78,6 +79,7 @@ public class TaquinSolver {
             Node newNode = new Node(newBoard, currentNode, "RIGHT");
             nextNodes.add(newNode);
         }
+        }
 
         return nextNodes;
 
@@ -93,6 +95,3 @@ public class TaquinSolver {
         return path;
     }
 }
-
-
-  

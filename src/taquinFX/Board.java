@@ -1,5 +1,6 @@
 package taquinFX;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.io.BufferedReader;
@@ -163,21 +164,33 @@ public class Board {
 	    }
 	    return emptyBox;
 	}
+	
+	public List<int[]> findEmptyBoxes() {
+		List<int[]> emptyBoxes = new ArrayList<>();
+	    for (int i = 0; i < boardSize; i++) {
+	        for (int j = 0; j < boardSize; j++) {
+	            if (grid[i][j].getValue() == 0) {
+	                emptyBoxes.add(new int[] {i,j});
+	            }
+	        }
+	    }
+	    return emptyBoxes;
+	}
 
 	public void swap(int row, int col, int row2, int col2) {
 		Box box1 = grid[row][col];
 		Box box2 = grid[row2][col2];
 
-		if (box1 instanceof Empty && box2.isMovable()) {
+		if ((box1 instanceof Empty || box2 instanceof Empty) && box2.isMovable() && box1.isMovable()) {
 		    if (isAdjacent(row, col, row2, col2)) {
-			grid[row][col] = box2;
-			grid[row2][col2] = box1;
-		    } else {
-			System.out.println("Échange invalide : les cases ne sont pas adjacentes.");
-		    }
-		} else {
-		    System.out.println("Échange invalide : les cases ne satisfont pas les règles.");
-		}
+				grid[row][col] = box2;
+				grid[row2][col2] = box1;
+			    } else {
+			    	System.out.println("Échange invalide : les cases ne sont pas adjacentes.");
+			    }
+			} else {
+				System.out.println("Échange invalide : les cases ne satisfont pas les règles.");
+			}
     	}
 	public void swap2(int row, int col, int row2, int col2) {
 		Box box1 = grid[row][col];
@@ -190,7 +203,7 @@ public class Board {
 		    } 
 		} 
     }
-    private boolean isAdjacent(int row1, int col1, int row2, int col2) {
+    protected boolean isAdjacent(int row1, int col1, int row2, int col2) {
         return Math.abs(row1 - row2) + Math.abs(col1 - col2) == 1;
     }
 	
