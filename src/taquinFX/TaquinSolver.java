@@ -44,45 +44,82 @@ public class TaquinSolver {
     private List<Node> getNextNodes(Node currentNode) {
         List<Node> nextNodes = new ArrayList<>();
         List<int[]> emptyBoxes = currentNode.getBoard().findEmptyBoxes();
-        for(int[] emptyBox : emptyBoxes) {
-        	int emptyRow = emptyBox[0];
-        	int emptyCol = emptyBox[1];
+        if (emptyBoxes.size() > 1) {
+            // Si plusieurs cases vides existent, sélectionner une seule case vide pour générer les mouvements
+            int[] emptyBox = emptyBoxes.get(0);
+            int emptyRow = emptyBox[0];
+            int emptyCol = emptyBox[1];
 
-        // Essaie de déplacer la case vide vers le haut
-        if (emptyRow > 0) {
-            Board newBoard = new Board(currentNode.getBoard());
-            newBoard.swap2(emptyRow, emptyCol, emptyRow - 1, emptyCol);
-            Node newNode = new Node(newBoard, currentNode, "UP");
-            nextNodes.add(newNode);
-        }
+            // Essaie de déplacer la case vide vers le haut
+            if (emptyRow > 0) {
+                Board newBoard = new Board(currentNode.getBoard());
+                newBoard.swap2(emptyRow, emptyCol, emptyRow - 1, emptyCol);
+                Node newNode = new Node(newBoard, currentNode, "UP " + emptyRow + "," + emptyCol + " " + (emptyRow - 1) + "," + emptyCol);
+                nextNodes.add(newNode);
+            }
 
-        // Essaie de déplacer la case vide vers le bas
-        if (emptyRow < board.getBoardSize() - 1) {
-            Board newBoard = new Board(currentNode.getBoard());
-            newBoard.swap2(emptyRow, emptyCol, emptyRow + 1, emptyCol);
-            Node newNode = new Node(newBoard, currentNode, "DOWN");
-            nextNodes.add(newNode);
-        }
+            // Essaie de déplacer la case vide vers le bas
+            if (emptyRow < board.getBoardSize() - 1) {
+                Board newBoard = new Board(currentNode.getBoard());
+                newBoard.swap2(emptyRow, emptyCol, emptyRow + 1, emptyCol);
+                Node newNode = new Node(newBoard, currentNode, "DOWN " + emptyRow + "," + emptyCol + " " + (emptyRow + 1) + "," + emptyCol);
+                nextNodes.add(newNode);
+            }
 
-        // Essaie de déplacer la case vide vers la gauche
-        if (emptyCol > 0) {
-            Board newBoard = new Board(currentNode.getBoard());
-            newBoard.swap2(emptyRow, emptyCol, emptyRow, emptyCol - 1);
-            Node newNode = new Node(newBoard, currentNode, "LEFT");
-            nextNodes.add(newNode);
-        }
+            // Essaie de déplacer la case vide vers la gauche
+            if (emptyCol > 0) {
+                Board newBoard = new Board(currentNode.getBoard());
+                newBoard.swap2(emptyRow, emptyCol, emptyRow, emptyCol - 1);
+                Node newNode = new Node(newBoard, currentNode, "LEFT " + emptyRow + "," + emptyCol + " " + emptyRow + "," + (emptyCol - 1));
+                nextNodes.add(newNode);
+            }
 
-        // Essaie de déplacer la case vide vers la droite
-        if (emptyCol < board.getBoardSize() - 1) {
-            Board newBoard = new Board(currentNode.getBoard());
-            newBoard.swap2(emptyRow, emptyCol, emptyRow, emptyCol + 1);
-            Node newNode = new Node(newBoard, currentNode, "RIGHT");
-            nextNodes.add(newNode);
-        }
+            // Essaie de déplacer la case vide vers la droite
+            if (emptyCol < board.getBoardSize() - 1) {
+                Board newBoard = new Board(currentNode.getBoard());
+                newBoard.swap2(emptyRow, emptyCol, emptyRow, emptyCol + 1);
+                Node newNode = new Node(newBoard, currentNode, "RIGHT " + emptyRow + "," + emptyCol + " " + emptyRow + "," + (emptyCol + 1));
+                nextNodes.add(newNode);
+            }
+        } else {
+            // Si une seule case vide existe, générer les mouvements pour cette case
+            int emptyRow = emptyBoxes.get(0)[0];
+            int emptyCol = emptyBoxes.get(0)[1];
+
+            // Essaie de déplacer la case vide vers le haut
+            if (emptyRow > 0) {
+                Board newBoard = new Board(currentNode.getBoard());
+                newBoard.swap2(emptyRow, emptyCol, emptyRow - 1, emptyCol);
+                Node newNode = new Node(newBoard, currentNode, "UP " + emptyRow + "," + emptyCol + " " + (emptyRow - 1) + "," + emptyCol);
+                nextNodes.add(newNode);
+            }
+
+            // Essaie de déplacer la case vide vers le bas
+            if (emptyRow < board.getBoardSize() - 1) {
+                Board newBoard = new Board(currentNode.getBoard());
+                newBoard.swap2(emptyRow, emptyCol, emptyRow + 1, emptyCol);
+                Node newNode = new Node(newBoard, currentNode, "DOWN " + emptyRow + "," + emptyCol + " " + (emptyRow + 1) + "," + emptyCol);
+                nextNodes.add(newNode);
+            }
+
+            // Essaie de déplacer la case vide vers la gauche
+            if (emptyCol > 0) {
+                Board newBoard = new Board(currentNode.getBoard());
+                newBoard.swap2(emptyRow, emptyCol, emptyRow, emptyCol - 1);
+                Node newNode = new Node(newBoard, currentNode, "LEFT " + emptyRow + "," + emptyCol + " " + emptyRow + "," + (emptyCol - 1));
+                nextNodes.add(newNode);
+            }
+
+            // Essaie de déplacer la case vide vers la droite
+            if (emptyCol < board.getBoardSize() - 1) {
+                Board newBoard = new Board(currentNode.getBoard());
+                newBoard.swap2(emptyRow, emptyCol, emptyRow, emptyCol + 1);
+                Node newNode = new Node(newBoard, currentNode, "RIGHT " + emptyRow + "," + emptyCol + " " + emptyRow + "," + (emptyCol + 1));
+                nextNodes.add(newNode);
+            }
         }
 
         return nextNodes;
-
     }
 
     private List<String> getPath(Node node) {

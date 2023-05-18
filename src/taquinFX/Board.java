@@ -177,7 +177,7 @@ public class Board {
 	    return emptyBoxes;
 	}
 
-	public void swap(int row, int col, int row2, int col2) {
+	public boolean swap(int row, int col, int row2, int col2) {
 		Box box1 = grid[row][col];
 		Box box2 = grid[row2][col2];
 
@@ -185,18 +185,21 @@ public class Board {
 		    if (isAdjacent(row, col, row2, col2)) {
 				grid[row][col] = box2;
 				grid[row2][col2] = box1;
-			    } else {
-			    	System.out.println("Échange invalide : les cases ne sont pas adjacentes.");
-			    }
-			} else {
-				System.out.println("Échange invalide : les cases ne satisfont pas les règles.");
-			}
-    	}
+				return true;
+		    } else {
+		    	System.out.println("Échange invalide : les cases ne sont pas adjacentes.");
+		    } 
+		} else {
+			System.out.println("Échange invalide : les cases ne satisfont pas les règles.");
+		}
+		return false;
+		
+    }
 	public void swap2(int row, int col, int row2, int col2) {
 		Box box1 = grid[row][col];
 		Box box2 = grid[row2][col2];
 
-		if (box1 instanceof Empty && box2.isMovable()) {
+		if ((box1 instanceof Empty || box2 instanceof Empty) && box2.isMovable() && box1.isMovable())  {
 		    if (isAdjacent(row, col, row2, col2)) {
 			grid[row][col] = box2;
 			grid[row2][col2] = box1;
