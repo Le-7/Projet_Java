@@ -45,10 +45,10 @@ Interaction utilisateur/console :
         Réel : 1h20
         
     - Faire un compteur de coup 
-        Statut : A FAIRE
+        Statut : EN COURS
         Par : Anissa
-        Estimation : 15 min
-        Réel : 15 min
+        Estimation : 30 min
+        Réel : 
         
     - Choisir le niveau du plateau 
         Statut : A FAIRE
