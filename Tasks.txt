@@ -96,10 +96,11 @@ Résoudre tous les taquins avec l’algorithme A* :
         Réel : 30 min 
         
     - Modifier TaquinSolver pour qu’il résolve les plateaux avec plus d’une case vide
-        Statut : EN COURS
+        Statut : EN COURS (à optimiser)
         Par : Sarah
         Estimation : 1h
-        Réel : 
+        Réel : 2h
+        Limite : Peut manquer de mémoire sur quelque plateau 4*4, et sur des plateaux complexes (ex : 2 blocks, 2 cases vides), sur des mélanges fait mais pas sur d'autres
         
         
     - Déterminer si un plateau est jouable ou non 
