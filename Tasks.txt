@@ -100,7 +100,7 @@ Résoudre tous les taquins avec l’algorithme A* :
         Par : Sarah
         Estimation : 1h
         Réel : 2h
-        Limite : Peut manquer de mémoire sur quelque plateau 4*4, et sur des plateaux complexes (ex : 2 blocks, 2 cases vides), sur des mélanges fait mais pas sur d'autres
+        Limite : Peut manquer de mémoire selon la complexité du plateau (ex : 2 cases vides, 2 blocks en 4*4) et si le nombre de mélange est trop élevé
         
         
     - Déterminer si un plateau est jouable ou non 
