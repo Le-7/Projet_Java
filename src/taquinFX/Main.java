@@ -6,26 +6,27 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        Board board = new Board("levels/lvl3.csv"); // créer un nouveau tableau de taille n
+    	Scanner scanner = new Scanner(System.in);
+    	String levelSelection = LevelSelector.select(scanner);
+        Board board = new Board("../levels/"+ levelSelection); // créer un nouveau tableau de taille n
         int maxCount = 5; // on définit le nombre maximum de tentatives
         int count = 0; // initialisation du compteur
         int shot = 0; // Initialisation du compteur de coups
         boolean useSolver = false; 
-
+       
         board.displayBoard(); // Afficher le plateau avant le mélange
         System.out.println();
 
         do {
             board.mixBoard(100); // Mélanger le plateau
             count++;
-            System.out.println("Tentative mélange n°" + count); // Afficher le compteur de tentatives
+            System.out.println("Tentative mélange n°" + count+"\n"); // Afficher le compteur de tentatives
             if (count == maxCount) {
                 System.out.println("Impossible de mélanger le plateau sans revenir à sa position initiale");
                 return;
             }
         } while (board.InitialPosition()); // Vérifier si une ou plusieurs tuiles sont à leur position initiale. Si c'est le cas, mélanger à nouveau.
 
-        Scanner scanner = new Scanner(System.in);
 
         while (!board.gameSolved()) {
             board.displayBoard(); // Afficher le plateau après le mélange
@@ -40,9 +41,13 @@ public class Main {
             
             // Vérifier si les coordonnées sont égales à 0
             if (row == 0 && col == 0) {
+            	System.out.println("\nVeuillez patientez, le solveur est en marche...\n " );
             	useSolver = true;
+            	long startTime = System.currentTimeMillis();
                 // Appeler le solveur pour résoudre le taquin
                 List<String> solution = board.solve();
+                long endTime = System.currentTimeMillis();
+                long executionTime = endTime - startTime;
                 for (String move : solution) {
                     
                 	int row1, col1, row2, col2;
@@ -69,6 +74,7 @@ public class Main {
                     board.displayBoard();
 	
 	           }
+               System.out.println("Temps d'execution du solveur: " + executionTime + " millisecondes");
 	           break; // Sortir de la boucle while
             }
             
