@@ -41,13 +41,13 @@ public class Main {
             System.out.print("Entrez les coordonnées (deux entiers) de la case à déplacer (ligne colonne, pour le solveur entrez 0 0): ");
             int row = 0;
             int col = 0;
-            boolean entiersValides = false;
-            while (!entiersValides) {
+            boolean ValidsInt = false;
+            while (!ValidsInt) {
                 if (scanner.hasNextInt()) {
                     row = scanner.nextInt();
                     if (scanner.hasNextInt()) {
                         col = scanner.nextInt();
-                        entiersValides = true;
+                        ValidsInt = true;
                     } else {
                         System.out.println("Erreur : deux entiers doivent être saisis.");
                         scanner.next();
