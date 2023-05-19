@@ -8,8 +8,8 @@ public class Main {
     public static void main(String[] args) {
     	Scanner scanner = new Scanner(System.in);
     	String saveSelectionString = Save.select(scanner);
-    	String levelSelection = LevelSelector.select(scanner, "Saves/"+saveSelectionString);
-        Board board = new Board("levels/"+ levelSelection); // créer un nouveau tableau de taille n
+    	String levelSelection = LevelSelector.select(scanner, "../Saves/"+saveSelectionString);
+        Board board = new Board("../levels/"+ levelSelection); // créer un nouveau tableau de taille n
         int maxCount = 5; // on définit le nombre maximum de tentatives
         int count = 0; // initialisation du compteur
         int shot = 0; // Initialisation du compteur de coups
@@ -38,10 +38,25 @@ public class Main {
             
 
             // Demander à l'utilisateur de saisir les coordonnées
-            System.out.print("Entrez les coordonnées de la case à déplacer (ligne colonne, pour le solveur entrez 0 0): ");
-            int row = scanner.nextInt();
-            int col = scanner.nextInt();
-            
+            System.out.print("Entrez les coordonnées (deux entiers) de la case à déplacer (ligne colonne, pour le solveur entrez 0 0): ");
+            int row = 0;
+            int col = 0;
+            boolean entiersValides = false;
+            while (!entiersValides) {
+                if (scanner.hasNextInt()) {
+                    row = scanner.nextInt();
+                    if (scanner.hasNextInt()) {
+                        col = scanner.nextInt();
+                        entiersValides = true;
+                    } else {
+                        System.out.println("Erreur : deux entiers doivent être saisis.");
+                        scanner.next();
+                    }
+                } else {
+                    System.out.println("Erreur : deux entiers doivent être saisis.");
+                    scanner.next();
+                }
+            }
             List<int[]> emptyBoxes = board.findEmptyBoxes(); // on récupère les cases vides
             
             

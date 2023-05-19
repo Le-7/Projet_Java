@@ -9,7 +9,7 @@ import java.util.Scanner;
 
 public class LevelSelector {
     public static String select(Scanner scanner, String saveFile) {
-        String folder = "levels";
+        String folder = "../levels";
 
         // Obtenez tous les fichiers CSV dans le dossier spécifié
         File folderFiles = new File(folder);
@@ -30,7 +30,13 @@ public class LevelSelector {
             while (true) {
                 // Demandez à l'utilisateur de choisir un fichier
                 System.out.print("Choisissez un niveau (entrez le numéro correspondant) : ");
-                int choice = scanner.nextInt();
+                int choice = 0;
+                if (scanner.hasNextInt()) {
+                choice = scanner.nextInt();
+                }else {
+                	  System.out.println("Erreur : vous devez entrer un entier.");
+                	  scanner.next();
+				}
 
                 if (choice >= 1 && choice <= files.length) {
                     // Traitez le fichier sélectionné
