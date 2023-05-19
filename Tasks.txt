@@ -70,9 +70,9 @@ Interaction utilisateur/console :
         Réel : 30 min
         
      - BONUS : Créer un minuteur 
-        Statut : A FAIRE 
-        Par : 
-        Estimation : 
+        Statut : EN COURS 
+        Par : Anissa
+        Estimation : 1h
         Réel : 
         
         
