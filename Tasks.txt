@@ -52,10 +52,10 @@ Interaction utilisateur/console :
         Difficultés rencontrées : Vérification de tous les coups possibles, mauvaise méthode au départ donc perte de temps ++++ 
         
     - Choisir le niveau du plateau 
-        Statut : A FAIRE
-        Par : Anissa
+        Statut : FAIT
+        Par : Anissa, Matheo
         Estimation : 35 min 
-        Réel : 
+        Réel : 40 min
         
     - Créer et mettre dans un fichier les meilleurs scores
         Statut : A FAIRE
