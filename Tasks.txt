@@ -59,9 +59,9 @@ Interaction utilisateur/console :
         
     - Créer et mettre dans un fichier les meilleurs scores
         Statut : FAIT
-        Par : Matheo
+        Par : Matheo, Anissa
         Estimation : 20 min
-        Réel : 40 min
+        Réel : 50 min
         
      - Déblocage des niveaux 
         Statut : FAIT
@@ -73,7 +73,8 @@ Interaction utilisateur/console :
         Statut : EN COURS 
         Par : Anissa
         Estimation : 1h
-        Réel : 
+        Réel : 1h
+        Difficultés rencontrées : Faire commencer le chrono au bon moment
         
         
 Résoudre tous les taquins avec l’algorithme A* :
