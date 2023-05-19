@@ -14,6 +14,8 @@ public class Main {
         int count = 0; // initialisation du compteur
         int shot = 0; // Initialisation du compteur de coups
         boolean useSolver = false; 
+        long start = 0;
+        long end = 0;
        
         System.out.println("Votre meilleur score pour ce niveau est de : "+Save.getBestScore(saveSelectionString, levelSelection.replace(".csv", ""))+"\n");
         board.displayBoard(); // Afficher le plateau avant le mélange
@@ -29,9 +31,11 @@ public class Main {
             }
         } while (board.InitialPosition()); // Vérifier si une ou plusieurs tuiles sont à leur position initiale. Si c'est le cas, mélanger à nouveau.
 
-
+        start = System.currentTimeMillis(); //Debut du chrono dès que le niveau est lancé pour pas tricher
         while (!board.gameSolved()) {
             board.displayBoard(); // Afficher le plateau après le mélange
+           
+            
 
             // Demander à l'utilisateur de saisir les coordonnées
             System.out.print("Entrez les coordonnées de la case à déplacer (ligne colonne, pour le solveur entrez 0 0): ");
@@ -43,7 +47,7 @@ public class Main {
             
             // Vérifier si les coordonnées sont égales à 0
             if (row == 0 && col == 0) {
-            	System.out.println("\nVeuillez patientez, le solveur est en marche...\n " );
+            	System.out.println("\nVeuillez patienter, le solveur est en marche...\n " );
             	useSolver = true;
             	long startTime = System.currentTimeMillis();
                 // Appeler le solveur pour résoudre le taquin
@@ -131,14 +135,20 @@ public class Main {
             }
             System.out.println("\nNombre de coups : " + shot + "\n"); //On affiche a chaque coup, valide ou non
         }
-
+        end = System.currentTimeMillis();
+        long execution = end - start;
         // Fermer le scanner
         scanner.close();
+        
+        
         if(useSolver == false) { //Message de fin selon le type de résolution (utilisateur ou solver)
-        	System.out.println("\n\nBravo vous avez gagné en "+ shot + " coups !");
         	Save.updateScoreAndAccessibility(saveSelectionString, levelSelection.replace(".csv", ""),shot);
+        	System.out.println("\n\nBravo vous avez gagné en "+ shot + " coups !");
+        	System.out.println("Vous avez résolu le taquin en : " + (execution/1000.0) + " secondes"); //Affichage provisoire en secondes
+        	
         }else {
         	System.out.println("\n\nIl a fallu " + shot + " coups pour résoudre le taquin.");
+        	
         }
         
     }

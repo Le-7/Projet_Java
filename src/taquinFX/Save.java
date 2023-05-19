@@ -53,9 +53,12 @@ public class Save {
             for (int i = 0; i < levelInfo.size(); i++) {
                 String[] info = levelInfo.get(i);
                 String bestScore = info[2];        // Meilleur score du niveau (en tant que chaîne de caractères)
-
+                
+                if (info[0].equals(Levelname) && Integer.parseInt(bestScore)==0) { //Initialiser le meilleur score que pour le niveau joué
+                	info[2] = String.valueOf(newScore);
+                }
                 // Mettre à jour le meilleur score si nécessaire
-                if (info[0].equals(Levelname) && Integer.parseInt(bestScore) < newScore) {
+                if (info[0].equals(Levelname) && (Integer.parseInt(bestScore) > newScore)) {
                     info[2] = String.valueOf(newScore);  // Convertir le nouveau score en chaîne de caractères et le mettre à jour
                 }
 
