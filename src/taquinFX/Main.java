@@ -113,10 +113,13 @@ public class Main {
             if (adjacentEmptyBoxes.size() == 1) { // le cas classique où il n'y a qu'une seul case vide adjacente
                 int rowEmpty=adjacentEmptyBoxes.get(0)[0];
                 int colEmpty=adjacentEmptyBoxes.get(0)[1];
-                if( board.swap(rowEmpty,colEmpty,row-1, col-1)) {
-                	shot ++;
+                if (row >= 1 && row <= board.getBoardSize() && col >= 1 && col <= board.getBoardSize()) {
+                	if( board.swap(rowEmpty,colEmpty,row-1, col-1)) {
+                		shot ++;
+                	}
+                }else {
+                    System.out.println("Coordonnées invalides. Veuillez réessayer.");
                 }
-               
             } else if (adjacentEmptyBoxes.size() >1) { // si il y en a plus 
                 System.out.println("Il y a plusieurs cases vides adjacentes. Veuillez choisir une des cases vides suivantes :");
                 for (int i = 0; i < adjacentEmptyBoxes.size(); i++) {
