@@ -58,16 +58,16 @@ Interaction utilisateur/console :
         Réel : 40 min
         
     - Créer et mettre dans un fichier les meilleurs scores
-        Statut : A FAIRE
-        Par : 
-        Estimation : 
-        Réel : 
+        Statut : FAIT
+        Par : Matheo
+        Estimation : 20 min
+        Réel : 40 min
         
      - Déblocage des niveaux 
-        Statut : A FAIRE 
-        Par : 
-        Estimation : 
-        Réel : 
+        Statut : FAIT
+        Par : Matheo
+        Estimation : 10 min
+        Réel : 30 min
         
      - BONUS : Créer un minuteur 
         Statut : A FAIRE 

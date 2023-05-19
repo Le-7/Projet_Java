@@ -7,13 +7,15 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
     	Scanner scanner = new Scanner(System.in);
-    	String levelSelection = LevelSelector.select(scanner);
-        Board board = new Board("../levels/"+ levelSelection); // créer un nouveau tableau de taille n
+    	String saveSelectionString = Save.select(scanner);
+    	String levelSelection = LevelSelector.select(scanner, "Saves/"+saveSelectionString);
+        Board board = new Board("levels/"+ levelSelection); // créer un nouveau tableau de taille n
         int maxCount = 5; // on définit le nombre maximum de tentatives
         int count = 0; // initialisation du compteur
         int shot = 0; // Initialisation du compteur de coups
         boolean useSolver = false; 
        
+        System.out.println("Votre meilleur score pour ce niveau est de : "+Save.getBestScore(saveSelectionString, levelSelection.replace(".csv", ""))+"\n");
         board.displayBoard(); // Afficher le plateau avant le mélange
         System.out.println();
 
@@ -134,6 +136,7 @@ public class Main {
         scanner.close();
         if(useSolver == false) { //Message de fin selon le type de résolution (utilisateur ou solver)
         	System.out.println("\n\nBravo vous avez gagné en "+ shot + " coups !");
+        	Save.updateScoreAndAccessibility(saveSelectionString, levelSelection.replace(".csv", ""),shot);
         }else {
         	System.out.println("\n\nIl a fallu " + shot + " coups pour résoudre le taquin.");
         }
