@@ -235,7 +235,7 @@ public class Board {
 	}
 
 	public List<String> solve() {
-        TaquinSolver solver = new TaquinSolver(this);
+        TaquinSolver solver = new TaquinSolver(this,this.getCsvPath());
         return solver.solve();
     }
 }

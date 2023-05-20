@@ -11,8 +11,8 @@ public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         String saveSelectionString = Save.select(scanner);
-        String levelSelection = LevelSelector.select(scanner, "Saves/" + saveSelectionString);
-        Board board = new Board("levels/" + levelSelection); // créer un nouveau tableau de taille n
+        String levelSelection = LevelSelector.select(scanner, "../Saves/" + saveSelectionString);
+        Board board = new Board("../levels/" + levelSelection); // créer un nouveau tableau de taille n
         int maxCount = 5; // on définit le nombre maximum de tentatives
         int count = 0; // initialisation du compteur
         int shot = 0; // Initialisation du compteur de coups
@@ -25,7 +25,7 @@ public class Main {
         System.out.println();
 
         do {
-            board.mixBoard(100); // Mélanger le plateau
+            board.mixBoard(50); // Mélanger le plateau
             count++;
             System.out.println("Tentative mélange n°" + count + "\n"); // Afficher le compteur de tentatives
             if (count == maxCount) {
@@ -35,7 +35,7 @@ public class Main {
         } while (board.InitialPosition()); // Vérifier si une ou plusieurs tuiles sont à leur position initiale. Si c'est le cas, mélanger à nouveau.
 
         start = System.currentTimeMillis(); //Debut du chrono dès que le niveau est lancé pour pas tricher
-        while (!gameSolved(TaquinSolver.convertBoxArrayToIntArray(board.getGrid()),"levels/" + levelSelection)) {
+        while (!gameSolved(TaquinSolver.convertBoxArrayToShortArray(board.getGrid()),"../levels/" + levelSelection)) {
             board.displayBoard(); // Afficher le plateau après le mélange
 
             // Demander à l'utilisateur de saisir les coordonnées
@@ -164,7 +164,7 @@ public class Main {
 
     }
 
-	 public static boolean gameSolved(int[] grid, String Csv_path) {
+	 public static boolean gameSolved(short[] grid, String Csv_path) {
         try {
             BufferedReader reader = new BufferedReader(new FileReader(Csv_path));
             String line;

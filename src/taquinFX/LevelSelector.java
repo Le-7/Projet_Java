@@ -9,7 +9,7 @@ import java.util.Scanner;
 
 public class LevelSelector {
     public static String select(Scanner scanner, String saveFile) {
-        String folder = "levels";
+        String folder = "../levels";
 
         // Obtenez tous les fichiers CSV dans le dossier spécifié
         File folderFiles = new File(folder);

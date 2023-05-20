@@ -3,13 +3,13 @@ package taquinFX;
 import java.util.Arrays;
 
 class Node implements Comparable<Node> {
-    private int[] grid; // Le plateau du jeu associé à ce nœud
+    private short[] grid; // Le plateau du jeu associé à ce nœud
     private Node parent; // Le nœud parent dans l'arbre de recherche
     private String move; // Le mouvement effectué pour atteindre ce nœud à partir du nœud parent
     private int cost; // Le coût du chemin depuis le nœud initial jusqu'à ce nœud
     private int heuristic; // L'estimation heuristique du coût restant jusqu'à la solution
 
-    public Node(int[] grid, Node parent, String move) {
+    public Node(short[] grid, Node parent, String move) {
         this.grid = grid;
         this.parent = parent;
         this.move = move;
@@ -17,7 +17,7 @@ class Node implements Comparable<Node> {
         this.heuristic = calculateHeuristic(); // Calculer l'estimation heuristique
     }
 
-    public int[] getGrid() {
+    public short[] getGrid() {
         return grid;
     }
 
