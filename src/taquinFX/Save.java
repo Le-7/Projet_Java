@@ -28,12 +28,11 @@ public class Save {
                 System.out.print("Choisissez une sauvegarde (entrez le numéro correspondant) : ");
                 int choice = 0;
                 if (scanner.hasNextInt()) {
-                choice = scanner.nextInt();
+                	choice = scanner.nextInt();
                 }else {
-                	  System.out.println("Erreur : vous devez entrer un entier.");
-                	  scanner.next();
+                	System.out.println("Erreur : vous devez entrer un entier.");
+                	scanner.next();
 				}
-
 
                 if (choice >= 1 && choice <= files.length) {
                     // Traitez le fichier sélectionné
@@ -51,7 +50,7 @@ public class Save {
         return null;
     }
 
-    public static void updateScoreAndAccessibility(String SaveName,String Levelname,int newScore) {
+    public static void updateScoreAndAccessibility(String SaveName,String Levelname,int newScore,int newTime) {
         File file = new File("../Saves/" + SaveName);
 
         // Lire les informations actuelles du fichier CSV
@@ -60,13 +59,19 @@ public class Save {
             for (int i = 0; i < levelInfo.size(); i++) {
                 String[] info = levelInfo.get(i);
                 String bestScore = info[2];        // Meilleur score du niveau (en tant que chaîne de caractères)
-                
+                String bestTime =info[3];
+               
                 if (info[0].equals(Levelname) && Integer.parseInt(bestScore)==0) { //Initialiser le meilleur score que pour le niveau joué
                 	info[2] = String.valueOf(newScore);
+                	info[3]= String.valueOf(newTime);
                 }
                 // Mettre à jour le meilleur score si nécessaire
                 if (info[0].equals(Levelname) && (Integer.parseInt(bestScore) > newScore)) {
                     info[2] = String.valueOf(newScore);  // Convertir le nouveau score en chaîne de caractères et le mettre à jour
+                }
+                // Mettre à jour le meilleur temps si nécessaire
+                if (info[0].equals(Levelname) && (Integer.parseInt(bestTime) > newTime)) {
+                    info[3] = String.valueOf(newTime);  // Convertir le nouveau score en chaîne de caractères et le mettre à jour
                 }
 
                 // Modifier l'accessibilité du niveau suivant
@@ -90,7 +95,7 @@ public class Save {
             String line;
             while ((line = reader.readLine()) != null) {
                 String[] data = line.split(",");
-                if (data.length == 3) {
+                if (data.length == 4) {
                     levelInfo.add(data);
                 }
             }
@@ -132,5 +137,24 @@ public class Save {
 
         // Retourner -1 si le niveau n'a pas été trouvé ou s'il n'y a pas de meilleur score enregistré
         return -1;
+    }
+    public static int getBestTime(String SaveName, String Levelname) {
+        File file = new File("../Saves/" + SaveName);
+
+        // Lire les informations actuelles du fichier CSV
+        List<String[]> levelInfo = readCSV(file);
+        if (levelInfo != null) {
+            for (String[] info : levelInfo) {
+                String level = info[0];
+                String bestTime = info[3];
+
+                if (level.equals(Levelname)) {
+                    return Integer.parseInt(bestTime);
+                }
+            }
+        }
+
+        // Retourner -1 si le niveau n'a pas été trouvé ou s'il n'y a pas de meilleur score enregistré
+        return 0;
     }
 }
