@@ -9,7 +9,7 @@ import java.util.Scanner;
 
 public class LevelSelector {
     public static String select(Scanner scanner, String saveFile) {
-        String folder = "../levels";
+        String folder = "levels";
 
         // Obtenez tous les fichiers CSV dans le dossier spécifié
         File folderFiles = new File(folder);
@@ -61,8 +61,6 @@ public class LevelSelector {
 
     private static boolean isLevelAccessible(String saveFile, String levelFile) {
         // Vérifier la sauvegarde pour voir si le niveau est accessible
-        // Vérifiez le fichier CSV de la sauvegarde et le fichier CSV du niveau pour déterminer l'accessibilité
-
         try {
             // Lire le contenu du fichier de sauvegarde
             List<String> saveLines = Files.readAllLines(Path.of(saveFile));

@@ -40,21 +40,21 @@ class Node implements Comparable<Node> {
     // Calcule l'estimation heuristique du coût restant jusqu'à la solution
     private int calculateHeuristic() {
         int heuristic = 0;
-        int boardSize = board.getBoardSize();
-
-        for (int i = 0; i < boardSize; i++) {
-            for (int j = 0; j < boardSize; j++) {
-                int value = board.getGrid()[i][j].getValue();
-                if (value != 0) {
-                    int targetRow = (value - 1) / boardSize; // La ligne cible pour cette valeur
-                    int targetCol = (value - 1) % boardSize; // La colonne cible pour cette valeur
-                    heuristic += Math.abs(i - targetRow) + Math.abs(j - targetCol); // Calcul de la distance de Manhattan
-                }
+        
+        for (int i = 0; i < board.getGrid().length; i++) {
+            int value = board.getGrid()[i].getValue();
+            if (value != 0) {
+                int targetRow = (value - 1) / board.getBoardSize(); // La ligne cible pour cette valeur
+                int targetCol = (value - 1) % board.getBoardSize(); // La colonne cible pour cette valeur
+                int currentRow = i / board.getBoardSize(); // La ligne actuelle pour cette valeur
+                int currentCol = i % board.getBoardSize(); // La colonne actuelle pour cette valeur
+                heuristic += Math.abs(currentRow - targetRow) + Math.abs(currentCol - targetCol); // Calcul de la distance de Manhattan
             }
         }
 
         return heuristic;
     }
+
 
     // Comparaison des nœuds en fonction de leur priorité (coût + estimation heuristique)
     @Override
