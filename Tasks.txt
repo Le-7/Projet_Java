@@ -57,11 +57,11 @@ Interaction utilisateur/console :
         Estimation : 35 min 
         Réel : 40 min
         
-    - Créer et mettre dans un fichier les meilleurs scores
+    - Créer et mettre dans un fichier les meilleurs scores et les meilleures temps
         Statut : FAIT
-        Par : Matheo, Anissa
-        Estimation : 20 min
-        Réel : 50 min
+        Par : Matheo, Anissa, Sarah
+        Estimation : 40 min
+        Réel : 1h10 min
         
      - Déblocage des niveaux 
         Statut : FAIT
@@ -75,6 +75,12 @@ Interaction utilisateur/console :
         Estimation : 1h
         Réel : 1h
         Difficultés rencontrées : Faire commencer le chrono au bon moment
+        
+     - BONUS : Faire l'affichage en minutes 
+       Statut : Fait
+       Par : Sarah
+       Estimation : 20 min
+       Réel : 20 min
         
         
 Résoudre tous les taquins avec l’algorithme A* :
