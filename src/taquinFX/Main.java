@@ -8,8 +8,8 @@ public class Main {
     public static void main(String[] args) {
     	Scanner scanner = new Scanner(System.in);
     	String saveSelectionString = Save.select(scanner);
-    	String levelSelection = LevelSelector.select(scanner, "Saves/"+saveSelectionString);
-        Board board = new Board("levels/"+ levelSelection); // créer un nouveau tableau de taille n
+    	String levelSelection = LevelSelector.select(scanner, "../Saves/"+saveSelectionString);
+        Board board = new Board("../levels/"+ levelSelection); // créer un nouveau tableau de taille n
         int maxCount = 5; // on définit le nombre maximum de tentatives
         int count = 0; // initialisation du compteur
         int shot = 0; // Initialisation du compteur de coups
