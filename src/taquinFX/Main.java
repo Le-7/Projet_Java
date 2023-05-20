@@ -8,16 +8,28 @@ public class Main {
     public static void main(String[] args) {
     	Scanner scanner = new Scanner(System.in);
     	String saveSelectionString = Save.select(scanner);
-    	String levelSelection = LevelSelector.select(scanner, "../Saves/"+saveSelectionString);
-        Board board = new Board("../levels/"+ levelSelection); // créer un nouveau tableau de taille n
+    	String levelSelection = LevelSelector.select(scanner, "Saves/"+saveSelectionString);
+        Board board = new Board("levels/"+ levelSelection); // créer un nouveau tableau de taille n
         int maxCount = 5; // on définit le nombre maximum de tentatives
         int count = 0; // initialisation du compteur
         int shot = 0; // Initialisation du compteur de coups
         boolean useSolver = false; 
         long start = 0;
         long end = 0;
-       
+        
         System.out.println("Votre meilleur score pour ce niveau est de : "+Save.getBestScore(saveSelectionString, levelSelection.replace(".csv", ""))+"\n");
+        int bestTimeInSeconds= Save.getBestTime(saveSelectionString, levelSelection.replace(".csv", ""));
+        int minutes = bestTimeInSeconds / 60;
+        int seconds = bestTimeInSeconds % 60;
+
+        System.out.print("Votre meilleur temps pour ce niveau est de : ");
+        if (minutes > 0) {
+            System.out.print(minutes + " minute(s) ");
+        }
+        System.out.println(seconds + " seconde(s)\n");
+        
+        
+        
         board.displayBoard(); // Afficher le plateau avant le mélange
         System.out.println();
 
@@ -70,7 +82,6 @@ public class Main {
                 long endTime = System.currentTimeMillis();
                 long executionTime = endTime - startTime;
                 for (String move : solution) {
-                    
                 	int row1, col1, row2, col2;
                     String[] parts = move.split(" ");
 
@@ -120,7 +131,7 @@ public class Main {
                 }else {
                     System.out.println("Coordonnées invalides. Veuillez réessayer.");
                 }
-            } else if (adjacentEmptyBoxes.size() >1) { // si il y en a plus 
+            } else if (adjacentEmptyBoxes.size() > 1) { // si il y en a plus 
                 System.out.println("Il y a plusieurs cases vides adjacentes. Veuillez choisir une des cases vides suivantes :");
                 for (int i = 0; i < adjacentEmptyBoxes.size(); i++) {
                     int[] emptyBox=adjacentEmptyBoxes.get(i);
@@ -129,24 +140,33 @@ public class Main {
                     System.out.println((i +1)+ ") Coordonnées : ("+(rowEmpty + 1)+", "+(colEmpty +1)+")");
                 }
 
-                System.out.print("Entrez le numéro du choix de la case vide adjacente à utiliser : ");
-                int choice = scanner.nextInt();
-
-                // on vérifie si le choix rentré est valide
-                if (choice >= 1 && choice <=adjacentEmptyBoxes.size()) {
-                    int[] emptyBox = adjacentEmptyBoxes.get(choice - 1);
-                    int rowEmpty1 = emptyBox[0];
-                    int colEmpty1 = emptyBox[1];
-
-                    if (row >= 1 && row <= board.getBoardSize() && col >= 1 && col <= board.getBoardSize()) {
-                        if(board.swap(rowEmpty1, colEmpty1, row - 1, col - 1)) {//on fait l'échange 
-                        	shot++; //Incrémentation seulement si le coup est valide
+                boolean validChoice = false;
+                int choice = 0;
+                while (!validChoice) {
+                    System.out.print("\nEntrez le numéro du choix de la case vide adjacente à utiliser : ");
+                    if (scanner.hasNextInt()) {
+                        choice = scanner.nextInt();
+                        if (choice >= 1 && choice <= adjacentEmptyBoxes.size()) {
+                            validChoice = true;
+                        } else {
+                            System.out.println("Choix invalide. Veuillez réessayer.");
                         }
-                    }else {
-                        System.out.println("Coordonnées invalides. Veuillez réessayer.");
+                    } else {
+                        System.out.println("Erreur : vous devez entrer un entier.");
+                        scanner.next();
                     }
-                }else {
-                    System.out.println("Choix invalide. Veuillez réessayer.");
+                }
+
+                int[] emptyBox = adjacentEmptyBoxes.get(choice - 1);
+                int rowEmpty1 = emptyBox[0];
+                int colEmpty1 = emptyBox[1];
+
+                if (row >= 1 && row <= board.getBoardSize() && col >= 1 && col <= board.getBoardSize()) {
+                    if (board.swap(rowEmpty1, colEmpty1, row - 1, col - 1)) {
+                        shot++; // Incrémentation seulement si le coup est valide
+                    }
+                } else {
+                    System.out.println("Coordonnées invalides. Veuillez réessayer.");
                 }
             }else{
                 System.out.println("Aucune case vide adjacente. Veuillez réessayer.");
@@ -158,16 +178,21 @@ public class Main {
         // Fermer le scanner
         scanner.close();
         
-        
+        int execution_sec = (int) (execution / 1000.0);
+        minutes = execution_sec / 60;
+        int secondes = execution_sec % 60;
+       
         if(useSolver == false) { //Message de fin selon le type de résolution (utilisateur ou solver)
-        	Save.updateScoreAndAccessibility(saveSelectionString, levelSelection.replace(".csv", ""),shot);
+        	Save.updateScoreAndAccessibility(saveSelectionString, levelSelection.replace(".csv", ""),shot,execution_sec);
         	System.out.println("\n\nBravo vous avez gagné en "+ shot + " coups !");
-        	System.out.println("Vous avez résolu le taquin en : " + (execution/1000.0) + " secondes"); //Affichage provisoire en secondes
-        	
+        	System.out.print("Vous avez résolu le taquin en : ");
+        	if (minutes > 0) {
+        	    System.out.print(minutes + " minute(s) ");
+        	}
+        	System.out.println(secondes + " seconde(s)");
         }else {
         	System.out.println("\n\nIl a fallu " + shot + " coups pour résoudre le taquin.");
         	
         }
-        
     }
 }
