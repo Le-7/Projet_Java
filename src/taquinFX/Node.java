@@ -1,24 +1,24 @@
 package taquinFX;
 
-import java.util.Objects;
+import java.util.Arrays;
 
 class Node implements Comparable<Node> {
-    private Board board; // Le plateau du jeu associé à ce nœud
+    private int[] grid; // Le plateau du jeu associé à ce nœud
     private Node parent; // Le nœud parent dans l'arbre de recherche
     private String move; // Le mouvement effectué pour atteindre ce nœud à partir du nœud parent
     private int cost; // Le coût du chemin depuis le nœud initial jusqu'à ce nœud
     private int heuristic; // L'estimation heuristique du coût restant jusqu'à la solution
 
-    public Node(Board board, Node parent, String move) {
-        this.board = board;
+    public Node(int[] grid, Node parent, String move) {
+        this.grid = grid;
         this.parent = parent;
         this.move = move;
         this.cost = parent != null ? parent.getCost() + 1 : 0; // Le coût est le coût du parent + 1
         this.heuristic = calculateHeuristic(); // Calculer l'estimation heuristique
     }
 
-    public Board getBoard() {
-        return board;
+    public int[] getGrid() {
+        return grid;
     }
 
     public Node getParent() {
@@ -40,14 +40,14 @@ class Node implements Comparable<Node> {
     // Calcule l'estimation heuristique du coût restant jusqu'à la solution
     private int calculateHeuristic() {
         int heuristic = 0;
-        
-        for (int i = 0; i < board.getGrid().length; i++) {
-            int value = board.getGrid()[i].getValue();
+        int boardSize = (int) Math.sqrt(grid.length);
+        for (int i = 0; i < grid.length; i++) {
+            int value = grid[i];
             if (value != 0) {
-                int targetRow = (value - 1) / board.getBoardSize(); // La ligne cible pour cette valeur
-                int targetCol = (value - 1) % board.getBoardSize(); // La colonne cible pour cette valeur
-                int currentRow = i / board.getBoardSize(); // La ligne actuelle pour cette valeur
-                int currentCol = i % board.getBoardSize(); // La colonne actuelle pour cette valeur
+                int targetRow = (value - 1) / boardSize; // La ligne cible pour cette valeur
+                int targetCol = (value - 1) % boardSize; // La colonne cible pour cette valeur
+                int currentRow = i / boardSize; // La ligne actuelle pour cette valeur
+                int currentCol = i % boardSize; // La colonne actuelle pour cette valeur
                 heuristic += Math.abs(currentRow - targetRow) + Math.abs(currentCol - targetCol); // Calcul de la distance de Manhattan
             }
         }
@@ -74,12 +74,11 @@ class Node implements Comparable<Node> {
             return false;
         }
         Node other = (Node) obj;
-        return board.equals(other.getBoard());
+        return grid.equals(other.getGrid());
     }
 
-    // Calcule le code de hachage en utilisant le plateau de jeu
     @Override
     public int hashCode() {
-        return Objects.hash(board);
+        return Arrays.hashCode(grid);
     }
 }

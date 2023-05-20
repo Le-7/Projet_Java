@@ -1,5 +1,8 @@
 package taquinFX;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -32,7 +35,7 @@ public class Main {
         } while (board.InitialPosition()); // Vérifier si une ou plusieurs tuiles sont à leur position initiale. Si c'est le cas, mélanger à nouveau.
 
         start = System.currentTimeMillis(); //Debut du chrono dès que le niveau est lancé pour pas tricher
-        while (!board.gameSolved()) {
+        while (!gameSolved(TaquinSolver.convertBoxArrayToIntArray(board.getGrid()),"levels/" + levelSelection)) {
             board.displayBoard(); // Afficher le plateau après le mélange
 
             // Demander à l'utilisateur de saisir les coordonnées
@@ -67,27 +70,20 @@ public class Main {
                 long endTime = System.currentTimeMillis();
                 long executionTime = endTime - startTime;
                 for (String move : solution) {
-                    int row1, col1, row2, col2;
                     String[] parts = move.split(" ");
 
-                    // Extraire le mouvement (première partie)
-                    String direction = parts[0];
+                    // Extraire le mouvement (première partie) pour l affichage si quelqun a la force de le faire
+                    //String direction = parts[0];
 
                     // Extraire les coordonnées de la case vide d'origine (deuxième partie)
-                    String[] startCoords = parts[1].split(",");
-                    row1 = Integer.parseInt(startCoords[0]);
-                    col1 = Integer.parseInt(startCoords[1]);
+                    int index1 =  Integer.parseInt(parts[1]);
 
                     // Extraire les coordonnées de la case vide cible (troisième partie)
-                    String[] endCoords = parts[2].split(",");
-                    row2 = Integer.parseInt(endCoords[0]);
-                    col2 = Integer.parseInt(endCoords[1]);
+                    int index2 =  Integer.parseInt(parts[2]);
 
-                    // Analyser le mouvement pour obtenir les coordonnées des cases
-                    System.out.println("\nDéplacement : " + direction + " (" + (row1 + 1) + "," + (col1 + 1) + ") <=> (" + (row2 + 1) + "," + (col2 + 1) + ")\n");
-
+                    
                     // Effectuer le déplacement sur le plateau de jeu en utilisant la méthode swap()
-                    board.swap2(row2, col2, row1, col1);
+                    board.swap2(index1,index2);
                     shot++;
                     board.displayBoard();
                 }
@@ -166,5 +162,34 @@ public class Main {
 
         }
 
+    }
+
+	 public static boolean gameSolved(int[] grid, String Csv_path) {
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader(Csv_path));
+            String line;
+            int i = 0;
+            int boardSize = (int) Math.sqrt(grid.length);
+
+            while ((line = reader.readLine()) != null) {
+                String[] values = line.split(",");
+
+                for (int j = 0; j < values.length; j++) {
+                    if (grid[i * boardSize + j] != Integer.parseInt(values[j])) {
+                        reader.close();
+                        return false;
+                    }
+                }
+
+                i++;
+            }
+
+            reader.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+        
+        return true;
     }
 }

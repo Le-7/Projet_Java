@@ -190,9 +190,7 @@ public class Board {
 		return false;
     }
 	
-	public void swap2(int row, int col, int row2, int col2) {
-		int index1 = row * boardSize + col;
-		int index2 = row2 * boardSize + col2;
+	public void swap2(int index1, int index2) {
 		
 		Box box1 = grid[index1];
 		Box box2 = grid[index2];
@@ -239,33 +237,5 @@ public class Board {
 	public List<String> solve() {
         TaquinSolver solver = new TaquinSolver(this);
         return solver.solve();
-    }
-
-    public boolean gameSolved() {
-        try {
-            BufferedReader reader = new BufferedReader(new FileReader(Csv_path));
-            String line;
-            int i = 0;
-
-            while ((line = reader.readLine()) != null) {
-                String[] values = line.split(",");
-
-                for (int j = 0; j < values.length; j++) {
-                    if (grid[i * boardSize + j].getValue() != Integer.parseInt(values[j])) {
-                        reader.close();
-                        return false;
-                    }
-                }
-
-                i++;
-            }
-
-            reader.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;
-        }
-        
-        return true;
     }
 }
