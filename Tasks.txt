@@ -56,6 +56,11 @@ Interaction utilisateur/console :
         Par : Anissa, Matheo
         Estimation : 35 min 
         Réel : 40 min
+    * Sous tâche : afficher les niveaux dans l'ordre
+        Statut : FAIT
+        Par : Anissa
+        Estimation : 10min
+        Réel : 10min
         
     - Créer et mettre dans un fichier les meilleurs scores et les meilleures temps
         Statut : FAIT
