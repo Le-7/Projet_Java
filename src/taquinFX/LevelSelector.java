@@ -6,6 +6,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Scanner;
+import java.util.Arrays;
 
 public class LevelSelector {
     public static String select(Scanner scanner, String saveFile) {
@@ -14,6 +15,7 @@ public class LevelSelector {
         // Obtenez tous les fichiers CSV dans le dossier spécifié
         File folderFiles = new File(folder);
         File[] files = folderFiles.listFiles((dir, name) -> name.endsWith(".csv"));
+	Arrays.sort(files, (file1, file2) -> file1.getName().compareToIgnoreCase(file2.getName())); //Tri ordre alphabétique
 
         if (files != null && files.length > 0) {
             // Affichez la liste des fichiers disponibles
