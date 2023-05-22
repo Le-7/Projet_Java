@@ -237,7 +237,7 @@ public class Board {
 
             for (int i = 0; i < gridValues.size(); i++) {
                 
-            	if (this.grid[i].getValue() == gridValues.get(i)) {
+            	if (gridValues.get(i) != -1 && this.grid[i].getValue() == gridValues.get(i)) {
 					return true;
 				}
             }
