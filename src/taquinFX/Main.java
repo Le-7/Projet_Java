@@ -25,6 +25,7 @@ public class Main {
         System.out.println();
 
         do {
+        	board = new Board("../levels/" + levelSelection);
             board.mixBoard(100); // Mélanger le plateau
             count++;
             System.out.println("Tentative mélange n°" + count + "\n"); // Afficher le compteur de tentatives

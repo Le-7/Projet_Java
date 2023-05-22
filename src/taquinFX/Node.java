@@ -10,7 +10,7 @@ class Node implements Comparable<Node> {
     private int heuristic; // L'estimation heuristique du coût restant jusqu'à la solution
     private short[] targetGrid;
 
-    public Node(short[] grid, Node parent, String move,short[] targetGrid ) {
+    public Node(short[] grid, Node parent, String move, short[] targetGrid) {
         this.grid = grid;
         this.parent = parent;
         this.move = move;
@@ -46,15 +46,15 @@ class Node implements Comparable<Node> {
         for (int i = 0; i < grid.length; i++) {
             int value = grid[i];
             int targetRow = 0;
-			int targetCol = 0;
+            int targetCol = 0;
             if (value > 0) {
-            	for (int j = 0; j < targetGrid.length; j++) {
-            		if (targetGrid[j]==value) {
-						 targetRow = j/boardSize;
-						 targetCol = j%boardSize;
-					}	
-				}
-            	
+                for (int j = 0; j < targetGrid.length; j++) {
+                    if (targetGrid[j] == value) {
+                        targetRow = j / boardSize;
+                        targetCol = j % boardSize;
+                    }
+                }
+
                 int currentRow = i / boardSize; // La ligne actuelle pour cette valeur
                 int currentCol = i % boardSize; // La colonne actuelle pour cette valeur
                 heuristic += Math.abs(currentRow - targetRow) + Math.abs(currentCol - targetCol); // Calcul de la distance de Manhattan
@@ -64,6 +64,13 @@ class Node implements Comparable<Node> {
         return heuristic;
     }
 
+    // Récupère le chemin de l'initial node à ce nœud
+    public String getPath() {
+        if (parent == null) {
+            return "";
+        }
+        return parent.getPath() + " " + move;
+    }
 
     // Comparaison des nœuds en fonction de leur priorité (coût + estimation heuristique)
     @Override
@@ -83,7 +90,7 @@ class Node implements Comparable<Node> {
             return false;
         }
         Node other = (Node) obj;
-        return grid.equals(other.getGrid());
+        return Arrays.equals(grid, other.getGrid());
     }
 
     @Override
