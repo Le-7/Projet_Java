@@ -220,19 +220,34 @@ public class Board {
 	    return false;
 	}
 
-	boolean InitialPosition() {
-		if (grid[boardSize * boardSize - 1].getValue() == 0) {
-			return true;
-		}
-		
-	    for (int i = 0; i < boardSize * boardSize; i++) {
-	    	if (grid[i].getValue() != i + 1) {
-	    		return false;
-	    	}
-	    }
-	    
-	    return true;
-	}
+	public boolean InitialPosition() {
+        try {
+            List<Short> gridValues = new ArrayList<>();
+            BufferedReader reader = new BufferedReader(new FileReader(this.getCsvPath()));
+            String line;
+
+            while ((line = reader.readLine()) != null) {
+                String[] values = line.split(",");
+                for (String value : values) {
+                    gridValues.add(Short.parseShort(value));
+                }
+            }
+
+            reader.close();
+
+            for (int i = 0; i < gridValues.size(); i++) {
+                
+            	if (this.grid[i].getValue() == gridValues.get(i)) {
+					return true;
+				}
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+		return false;
+    }
 
 	public List<String> solve() {
         TaquinSolver solver = new TaquinSolver(this,this.getCsvPath());
