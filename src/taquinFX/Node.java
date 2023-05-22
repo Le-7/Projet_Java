@@ -2,13 +2,15 @@ package taquinFX;
 
 import java.util.Objects;
 
+//La classe Node représente un nœud dans l'arbre de recherche pour résoudre le jeu
 class Node implements Comparable<Node> {
-    private Board board; // Le plateau du jeu associé à ce nœud
+    private Board board; // Le plateau du jeu actuel
     private Node parent; // Le nœud parent dans l'arbre de recherche
     private String move; // Le mouvement effectué pour atteindre ce nœud à partir du nœud parent
     private int cost; // Le coût du chemin depuis le nœud initial jusqu'à ce nœud
     private int heuristic; // L'estimation heuristique du coût restant jusqu'à la solution
 
+    //constructeur
     public Node(Board board, Node parent, String move) {
         this.board = board;
         this.parent = parent;
@@ -17,6 +19,7 @@ class Node implements Comparable<Node> {
         this.heuristic = calculateHeuristic(); // Calculer l'estimation heuristique
     }
 
+    //getters pour les propriétes de la classe node
     public Board getBoard() {
         return board;
     }
@@ -37,11 +40,12 @@ class Node implements Comparable<Node> {
         return heuristic;
     }
 
-    // Calcule l'estimation heuristique du coût restant jusqu'à la solution
-    private int calculateHeuristic() {
+
+    // Cette méthode calcule une estimation heuristique du coût restant pour atteindre le nœud objectif
+    private int calculateHeuristic() { 
         int heuristic = 0;
         int boardSize = board.getBoardSize();
-
+     // la logique pour calculer l'estimation heuristique
         for (int i = 0; i < boardSize; i++) {
             for (int j = 0; j < boardSize; j++) {
                 int value = board.getGrid()[i][j].getValue();
