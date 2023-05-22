@@ -22,7 +22,7 @@ public class TaquinSolver {
 
     public List<String> solve() {
         // Crée un nœud initial à partir du plateau donné et l'ajoute à la liste ouverte
-    	 Node initialNode = new Node(convertBoxArrayToShortArray(board.getGrid()), null, "");
+    	 Node initialNode = new Node(convertBoxArrayToShortArray(board.getGrid()), null, "", targetGrid);
          openList.add(initialNode);
 
          while (!openList.isEmpty()) {
@@ -35,7 +35,7 @@ public class TaquinSolver {
              }
 
              // Vérifie si le plateau du nœud actuel correspond à un plateau résolu
-             if (gameSolved(currentNode.getGrid())) {
+             if (currentNode.getHeuristic()==0){
                  return getPath(currentNode); // Retourne le chemin jusqu'au nœud actuel
              }
 
@@ -64,7 +64,7 @@ public class TaquinSolver {
             if (emptyBox[0] > 0) {
                 short[] newGrid = currentNode.getGrid().clone();
                 swap(newGrid, emptyIndex, emptyIndex - board.getBoardSize());
-                Node newNode = new Node(newGrid, currentNode, "UP " + emptyIndex + " " + (emptyIndex - board.getBoardSize()));
+                Node newNode = new Node(newGrid, currentNode, "UP " + emptyIndex + " " + (emptyIndex - board.getBoardSize()), targetGrid);
                 nextNodes.add(newNode);
             }
 
@@ -72,7 +72,7 @@ public class TaquinSolver {
             if (emptyBox[0] < board.getBoardSize() - 1) {
                 short[] newGrid = currentNode.getGrid().clone();
                 swap(newGrid, emptyIndex, emptyIndex + board.getBoardSize());
-                Node newNode = new Node(newGrid, currentNode, "DOWN " + emptyIndex + " " + (emptyIndex + board.getBoardSize()));
+                Node newNode = new Node(newGrid, currentNode, "DOWN " + emptyIndex + " " + (emptyIndex + board.getBoardSize()), targetGrid);
                 nextNodes.add(newNode);
             }
 
@@ -80,7 +80,7 @@ public class TaquinSolver {
             if (emptyBox[1] > 0) {
                 short[] newGrid = currentNode.getGrid().clone();
                 swap(newGrid, emptyIndex, emptyIndex - 1);
-                Node newNode = new Node(newGrid, currentNode, "LEFT " + emptyIndex + " " + (emptyIndex - 1));
+                Node newNode = new Node(newGrid, currentNode, "LEFT " + emptyIndex + " " + (emptyIndex - 1), targetGrid);
                 nextNodes.add(newNode);
             }
 
@@ -88,7 +88,7 @@ public class TaquinSolver {
             if (emptyBox[1] < board.getBoardSize() - 1) {
                 short[] newGrid = currentNode.getGrid().clone();
                 swap(newGrid, emptyIndex, emptyIndex + 1);
-                Node newNode = new Node(newGrid, currentNode, "RIGHT " + emptyIndex + " " + (emptyIndex + 1));
+                Node newNode = new Node(newGrid, currentNode, "RIGHT " + emptyIndex + " " + (emptyIndex + 1), targetGrid);
                 nextNodes.add(newNode);
             }
         } else {
@@ -100,7 +100,7 @@ public class TaquinSolver {
             if (emptyBox[0] > 0) {
                 short[] newGrid = currentNode.getGrid().clone();
                 swap(newGrid, emptyIndex, emptyIndex - board.getBoardSize());
-                Node newNode = new Node(newGrid, currentNode, "UP " + emptyIndex + " " + (emptyIndex - board.getBoardSize()));
+                Node newNode = new Node(newGrid, currentNode, "UP " + emptyIndex + " " + (emptyIndex - board.getBoardSize()), targetGrid);
                 nextNodes.add(newNode);
             }
 
@@ -108,7 +108,7 @@ public class TaquinSolver {
             if (emptyBox[0] < board.getBoardSize() - 1) {
                 short[] newGrid = currentNode.getGrid().clone();
                 swap(newGrid, emptyIndex, emptyIndex + board.getBoardSize());
-                Node newNode = new Node(newGrid, currentNode, "DOWN " + emptyIndex + " " + (emptyIndex + board.getBoardSize()));
+                Node newNode = new Node(newGrid, currentNode, "DOWN " + emptyIndex + " " + (emptyIndex + board.getBoardSize()), targetGrid);
                 nextNodes.add(newNode);
             }
 
@@ -116,7 +116,7 @@ public class TaquinSolver {
             if (emptyBox[1] > 0) {
                 short[] newGrid = currentNode.getGrid().clone();
                 swap(newGrid, emptyIndex, emptyIndex - 1);
-                Node newNode = new Node(newGrid, currentNode, "LEFT " + emptyIndex + " " + (emptyIndex - 1));
+                Node newNode = new Node(newGrid, currentNode, "LEFT " + emptyIndex + " " + (emptyIndex - 1), targetGrid);
                 nextNodes.add(newNode);
             }
 
@@ -124,7 +124,7 @@ public class TaquinSolver {
             if (emptyBox[1] < board.getBoardSize() - 1) {
                 short[] newGrid = currentNode.getGrid().clone();
                 swap(newGrid, emptyIndex, emptyIndex + 1);
-                Node newNode = new Node(newGrid, currentNode, "RIGHT " + emptyIndex + " " + (emptyIndex + 1));
+                Node newNode = new Node(newGrid, currentNode, "RIGHT " + emptyIndex + " " + (emptyIndex + 1), targetGrid);
                 nextNodes.add(newNode);
             }
         }
@@ -202,18 +202,5 @@ public class TaquinSolver {
             e.printStackTrace();
             return null;
         }
-    }
-    public boolean gameSolved(short[] grid) {
-        if (targetGrid.length != grid.length) {
-            return false; // Les grilles n'ont pas la même taille
-        }
-
-        for (int i = 0; i < grid.length; i++) {
-            if (targetGrid[i] != grid[i]) {
-                return false; // Les valeurs des cases sont différentes
-            }
-        }
-
-        return true; // Les grilles sont identiques
     }
 }

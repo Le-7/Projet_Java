@@ -8,12 +8,14 @@ class Node implements Comparable<Node> {
     private String move; // Le mouvement effectué pour atteindre ce nœud à partir du nœud parent
     private int cost; // Le coût du chemin depuis le nœud initial jusqu'à ce nœud
     private int heuristic; // L'estimation heuristique du coût restant jusqu'à la solution
+    private short[] targetGrid;
 
-    public Node(short[] grid, Node parent, String move) {
+    public Node(short[] grid, Node parent, String move,short[] targetGrid ) {
         this.grid = grid;
         this.parent = parent;
         this.move = move;
         this.cost = parent != null ? parent.getCost() + 1 : 0; // Le coût est le coût du parent + 1
+        this.targetGrid = targetGrid;
         this.heuristic = calculateHeuristic(); // Calculer l'estimation heuristique
     }
 
@@ -43,9 +45,16 @@ class Node implements Comparable<Node> {
         int boardSize = (int) Math.sqrt(grid.length);
         for (int i = 0; i < grid.length; i++) {
             int value = grid[i];
-            if (value != 0) {
-                int targetRow = (value - 1) / boardSize; // La ligne cible pour cette valeur
-                int targetCol = (value - 1) % boardSize; // La colonne cible pour cette valeur
+            int targetRow = 0;
+			int targetCol = 0;
+            if (value > 0) {
+            	for (int j = 0; j < targetGrid.length; j++) {
+            		if (targetGrid[j]==value) {
+						 targetRow = j/boardSize;
+						 targetCol = j%boardSize;
+					}	
+				}
+            	
                 int currentRow = i / boardSize; // La ligne actuelle pour cette valeur
                 int currentCol = i % boardSize; // La colonne actuelle pour cette valeur
                 heuristic += Math.abs(currentRow - targetRow) + Math.abs(currentCol - targetCol); // Calcul de la distance de Manhattan

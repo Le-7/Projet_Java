@@ -220,6 +220,7 @@ public class Board {
 	    return false;
 	}
 
+	
 	public boolean InitialPosition() {
         try {
             List<Short> gridValues = new ArrayList<>();
@@ -236,7 +237,6 @@ public class Board {
             reader.close();
 
             for (int i = 0; i < gridValues.size(); i++) {
-                
             	if (gridValues.get(i) != -1 && this.grid[i].getValue() == gridValues.get(i)) {
 					return true;
 				}
@@ -248,7 +248,7 @@ public class Board {
         }
 		return false;
     }
-
+	
 	public List<String> solve() {
         TaquinSolver solver = new TaquinSolver(this,this.getCsvPath());
         return solver.solve();
