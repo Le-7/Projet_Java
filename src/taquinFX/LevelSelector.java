@@ -8,56 +8,62 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.Arrays;
 
+//La classe LevelSelector est utilisée pour sélectionner le niveau d'un jeu à partir d'un dossier de niveaux
 public class LevelSelector {
-    public static String select(Scanner scanner, String saveFile) {
-        String folder = "../levels";
+    public static String select(Scanner scanner, String saveFile) { //Cette méthode est utilisée pour sélectionner un niveau à partir d'un dossier
+        String folder = "levels"; // Le dossier contenant les niveaux du jeu
 
-        // Obtenez tous les fichiers CSV dans le dossier spécifié
+        // On obtiens tous les fichiers CSV dans le dossier spécifié
         File folderFiles = new File(folder);
         File[] files = folderFiles.listFiles((dir, name) -> name.endsWith(".csv"));
 	Arrays.sort(files, (file1, file2) -> file1.getName().compareToIgnoreCase(file2.getName())); //Tri ordre alphabétique
 
+	// Vérifie si des fichiers sont disponibles dans le dossier
         if (files != null && files.length > 0) {
-            // Affichez la liste des fichiers disponibles
-            System.out.println("Veuillez sélectionner votre niveau :");
+            System.out.println("Veuillez sélectionner votre niveau :");// Affichez la liste des fichiers disponibles
             for (int i = 0; i < files.length; i++) {
-                String fileName = files[i].getName().replace(".csv", "");
-                boolean accessible = isLevelAccessible(saveFile, fileName);
-                String accessibilityStatus = accessible ? "Oui" : "Non";
-                System.out.println((i + 1) + ". " + fileName + " - Accessible : " + accessibilityStatus);
-                
+                String fileName = files[i].getName().replace(".csv", "");  // Retire l'extension .csv du nom du fichier
+                boolean accessible = isLevelAccessible(saveFile, fileName);  // Vérifie si le niveau est accessible
+                String accessibilityStatus = accessible ? "Oui" : "Non"; // Initialise le statut d'accessibilité du niveau
+                System.out.println((i + 1) + ". " + fileName + " - Accessible : " + accessibilityStatus); // Affiche le numéro du niveau, le nom du niveau et le statut d'accessibilité       
             }
 
             // Boucle pour demander à l'utilisateur de choisir un niveau valide et accessible
             while (true) {
-                // Demandez à l'utilisateur de choisir un fichier
+                // Demande à l'utilisateur de choisir un numero de niveau
                 System.out.print("Choisissez un niveau (entrez le numéro correspondant) : ");
-                int choice = 0;
+                int choice = 0; // Vérifie si l'entrée de l'utilisateur est un entier
                 if (scanner.hasNextInt()) {
                 choice = scanner.nextInt();
                 }else {
+                	// Informe l'utilisateur que l'entrée doit être un entier
                 	  System.out.println("Erreur : vous devez entrer un entier.");
                 	  scanner.next();
 				}
 
+             // Si le choix de l'utilisateur est valide, traitez le fichier sélectionné
                 if (choice >= 1 && choice <= files.length) {
                     // Traitez le fichier sélectionné
-                    File selectedFile = files[choice - 1];
-                    String selectedFileName = selectedFile.getName().replace(".csv", "");
-                    System.out.println("\n\nVous avez choisi le niveau : " + selectedFileName + "\n");
-                    if (isLevelAccessible(saveFile, selectedFileName)) {
+                    File selectedFile = files[choice - 1]; // Sélectionne le fichier correspondant au choix de l'utilisateur
+                    String selectedFileName = selectedFile.getName().replace(".csv", "");  // Retire l'extension .csv du nom du fichier sélectionné
+                    System.out.println("\n\nVous avez choisi le niveau : " + selectedFileName + "\n"); // Informe l'utilisateur du niveau qu'il a sélectionné
+                    if (isLevelAccessible(saveFile, selectedFileName)) {   // Vérifie si le niveau sélectionné est accessible
                     	 return selectedFile.getName();
 					}else {
+						  // Informe l'utilisateur que le niveau sélectionné n'est pas accessible
 						System.out.println("Choix invalide. Veuillez sélectionner un niveau accesible\n.");
 					}
                    
                 } else {
+                	// Informe l'utilisateur que le numéro de niveau qu'il a sélectionné est invalide
                     System.out.println("Choix invalide. Veuillez sélectionner un niveau valide.");
                 }
             }
         } else {
+        	// Informe l'utilisateur qu'aucun niveau n'a été trouvé dans le dossier spécifié
             System.out.println("Aucun niveau trouvé dans le dossier spécifié.");
         }
+     // Renvoie null si aucun fichier n'est trouvé ou si un fichier valide n'est pas sélectionné
         return null;
     }
 
