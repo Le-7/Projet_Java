@@ -6,9 +6,9 @@ import java.io.IOException;
 import java.util.*;
 
 public class IDASolver {
-    private Board board;
-    private short[] targetGrid;
-    private List<String> solution;
+    private Board board;               // Plateau de jeu
+    private short[] targetGrid;        // Configuration cible
+    private List<String> solution;     // Solution trouvée
 
     public IDASolver(Board board, String csvPath) {
         this.board = board;
@@ -17,39 +17,40 @@ public class IDASolver {
     }
 
     public List<String> solve() {
+        // Conversion du tableau de cases en tableau de nombres courts (short)
         Node initialNode = new Node(TaquinSolver.convertBoxArrayToShortArray(board.getGrid()), null, "", targetGrid);
-        int threshold = initialNode.getHeuristic();
+        int threshold = initialNode.getHeuristic();    // Seuil initial déterminé par l'heuristique du nœud initial
 
         while (true) {
-            int nextThreshold = search(initialNode, 0, threshold);
+            int nextThreshold = search(initialNode, 0, threshold);   // Recherche itérative avec augmentation du seuil
             if (nextThreshold == 0) {
-                return solution; // Solution trouvée
+                return solution;     // Solution trouvée
             }
             if (nextThreshold == Integer.MAX_VALUE) {
-                return null; // Aucune solution trouvée
+                return null;        // Aucune solution trouvée
             }
-            threshold = nextThreshold;
+            threshold = nextThreshold;   // Mise à jour du seuil
         }
     }
 
     private int search(Node node, int cost, int threshold) {
-        int f = cost + node.getHeuristic();
+        int f = cost + node.getHeuristic();     // Coût réel du nœud + valeur heuristique du nœud
         if (f > threshold) {
-            return f;
+            return f;       // Le coût total dépasse le seuil, arrêt de la recherche pour cette branche
         }
         if (node.getHeuristic() == 0) {
-            solution = getPath(node);
+            solution = getPath(node);   // Solution trouvée, enregistrement du chemin
             return 0;
         }
 
         int minThreshold = Integer.MAX_VALUE;
-        List<Node> nextNodes = getNextNodes(node);
+        List<Node> nextNodes = getNextNodes(node);     // Génération des nœuds enfants
         for (Node nextNode : nextNodes) {
-            int nextThreshold = search(nextNode, cost + 1, threshold);
+            int nextThreshold = search(nextNode, cost + 1, threshold);    // Recherche récursive avec augmentation du coût
             if (nextThreshold == 0) {
-                return 0; // Solution trouvée
+                return 0;       // Solution trouvée, arrêt de la recherche
             }
-            minThreshold = Math.min(minThreshold, nextThreshold);
+            minThreshold = Math.min(minThreshold, nextThreshold);   // Mise à jour du seuil minimum
         }
         return minThreshold;
     }
@@ -57,6 +58,7 @@ public class IDASolver {
     private List<Node> getNextNodes(Node currentNode) {
         List<Node> nextNodes = new ArrayList<>();
         List<short[]> emptyBoxes = TaquinSolver.findEmptyBoxes(currentNode.getGrid());
+
         if (emptyBoxes.size() > 1) {
             // Si plusieurs cases vides existent, sélectionner une seule case vide pour générer les mouvements
             short[] emptyBox = emptyBoxes.get(0);
@@ -135,12 +137,14 @@ public class IDASolver {
     }
 
     private void swap(short[] grid, int index1, int index2) {
+        // Échange de deux cases dans le tableau
         short temp = grid[index1];
         grid[index1] = grid[index2];
         grid[index2] = temp;
     }
 
     private short[] readTargetGridFromCSV(String csvPath) {
+        // Lecture de la configuration cible à partir d'un fichier CSV
         try {
             List<Short> gridValues = new ArrayList<>();
             BufferedReader reader = new BufferedReader(new FileReader(csvPath));
