@@ -18,7 +18,7 @@ public class IDASolver {
 
     public List<String> solve() {
         // Conversion du tableau de cases en tableau de nombres courts (short)
-        Node initialNode = new Node(TaquinSolver.convertBoxArrayToShortArray(board.getGrid()), null, "", targetGrid);
+        Node initialNode = new Node(convertBoxArrayToShortArray(board.getGrid()), null, "", targetGrid);
         int threshold = initialNode.getHeuristic();    // Seuil initial déterminé par l'heuristique du nœud initial
 
         while (true) {
@@ -57,7 +57,7 @@ public class IDASolver {
 
     private List<Node> getNextNodes(Node currentNode) {
         List<Node> nextNodes = new ArrayList<>();
-        List<short[]> emptyBoxes = TaquinSolver.findEmptyBoxes(currentNode.getGrid());
+        List<short[]> emptyBoxes = Board.findEmptyBoxes(currentNode.getGrid());
 
         if (emptyBoxes.size() > 1) {
             // Si plusieurs cases vides existent, sélectionner une seule case vide pour générer les mouvements
@@ -169,6 +169,14 @@ public class IDASolver {
             e.printStackTrace();
             return null;
         }
+    }
+    
+    public static short[] convertBoxArrayToShortArray(Box[] boxes) {
+        short[] shortArray = new short[boxes.length];
+        for (int i = 0; i < boxes.length; i++) {
+            shortArray[i] = (short) boxes[i].getValue();
+        }
+        return shortArray;
     }
     
     private List<String> getPath(Node node) {

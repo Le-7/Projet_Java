@@ -119,28 +119,54 @@ public class Board {
 		}
 	}
 	
-	public void mixBoard(int maxIterations) {
-	    while (maxIterations != 0) {
-	        Random rand = new Random();
-	        
-	        for (int i = 0; i < boardSize * boardSize; i++) {
-	            int newIndex = rand.nextInt(boardSize * boardSize);
+	public void mixBoard(int numMoves) {
+	    Random rand = new Random();
 
-	            Box temp = grid[i];
-	            
-	            if (temp.getValue() == 0 && grid[newIndex].getValue() == 0) {
-	                continue;
-	            } else if (temp.getValue() == 0 || grid[newIndex].getValue() == 0) {
-	                if (isAdjacent(i, newIndex) && temp.isMovable() && grid[newIndex].isMovable()) {
-	                	grid[i] = grid[newIndex];
-		                grid[newIndex] = temp;
-	                }
-	            }
+	    List<int[]> emptyBoxCoordinates = findEmptyBoxes();
+
+	   while(numMoves != 0) {
+	        // Sélectionner une case vide aléatoire parmi les coordonnées disponibles
+	        int randomIndex = rand.nextInt(emptyBoxCoordinates.size());
+	        int[] emptyBox = emptyBoxCoordinates.get(randomIndex);
+	        int emptyRow = emptyBox[0];
+	        int emptyCol = emptyBox[1];
+	        int emptyIndex = emptyBox[0] * boardSize + emptyBox[1];
+
+	        // Générer un nombre aléatoire pour choisir le mouvement
+	        int move = rand.nextInt(4); // 0: haut, 1: bas, 2: gauche, 3: droite
+
+	        // Vérifier si le mouvement est valide
+	        boolean validMove = false;
+	        int newRow = emptyRow;
+	        int newCol = emptyCol;
+
+	        if (move == 0 && emptyRow > 0) { // Mouvement vers le haut
+	            newRow = emptyRow - 1;
+	            validMove = true;
+	        } else if (move == 1 && emptyRow < boardSize - 1) { // Mouvement vers le bas
+	            newRow = emptyRow + 1;
+	            validMove = true;
+	        } else if (move == 2 && emptyCol > 0) { // Mouvement vers la gauche
+	            newCol = emptyCol - 1;
+	            validMove = true;
+	        } else if (move == 3 && emptyCol < boardSize - 1) { // Mouvement vers la droite
+	            newCol = emptyCol + 1;
+	            validMove = true;
 	        }
-	        
-	        maxIterations--;
+
+	        // Effectuer le mouvement
+	        if (validMove) {
+	            if(swap2(emptyIndex, newRow * boardSize + newCol)) {
+	            	numMoves--;
+	            	emptyBox[0] = newRow;
+	                emptyBox[1] = newCol;
+	            }
+	            
+	        }
 	    }
 	}
+
+
 
 	private int getMaxValueLength() {
 		int maxLength = 0;
@@ -190,7 +216,7 @@ public class Board {
 		return false;
     }
 	
-	public void swap2(int index1, int index2) {
+	public boolean swap2(int index1, int index2) {
 		
 		Box box1 = grid[index1];
 		Box box2 = grid[index2];
@@ -199,8 +225,10 @@ public class Board {
 		    if (isAdjacent(index1, index2)) {
 				grid[index1] = box2;
 				grid[index2] = box1;
+				return true;
 		    } 
-		} 
+		}
+		return false;
     }
 	
 	protected boolean isAdjacent(int index1, int index2) {
@@ -252,5 +280,17 @@ public class Board {
 	public List<String> solve() {
         IDASolver solver = new IDASolver(this,this.getCsvPath());
         return solver.solve();
+    }
+	public static List<short[]> findEmptyBoxes(short[] grid) {
+        List<short[]> emptyBoxes = new ArrayList<>();
+        int boardSize = (int) Math.sqrt(grid.length);
+        for (int i = 0; i < grid.length; i++) {
+            if (grid[i] == 0) {
+                int row = i / boardSize;
+                int col = i % boardSize;
+                emptyBoxes.add(new short[]{(short) row, (short) col});
+            }
+        }
+        return emptyBoxes;
     }
 }

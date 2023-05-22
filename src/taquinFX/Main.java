@@ -13,7 +13,7 @@ public class Main {
         String saveSelectionString = Save.select(scanner);
         String levelSelection = LevelSelector.select(scanner, "../Saves/" + saveSelectionString);
         Board board = new Board("../levels/" + levelSelection); // créer un nouveau tableau de taille n
-        int maxCount = 100; // on définit le nombre maximum de tentatives
+        int maxCount = 1000000; // on définit le nombre maximum de tentatives
         int count = 0; // initialisation du compteur
         int shot = 0; // Initialisation du compteur de coups
         boolean useSolver = false;
@@ -26,7 +26,7 @@ public class Main {
 
         do {
         	board = new Board("../levels/" + levelSelection);
-            board.mixBoard(100); // Mélanger le plateau
+            board.mixBoard(17); // Mélanger le plateau
             count++;
             System.out.println("Tentative mélange n°" + count + "\n"); // Afficher le compteur de tentatives
             if (count == maxCount) {
@@ -36,7 +36,7 @@ public class Main {
         } while (board.InitialPosition()); // Vérifier si une ou plusieurs tuiles sont à leur position initiale. Si c'est le cas, mélanger à nouveau.
 
         start = System.currentTimeMillis(); //Debut du chrono dès que le niveau est lancé pour pas tricher
-        while (!gameSolved(TaquinSolver.convertBoxArrayToShortArray(board.getGrid()),"../levels/" + levelSelection)) {
+        while (!gameSolved(IDASolver.convertBoxArrayToShortArray(board.getGrid()),"../levels/" + levelSelection)) {
             board.displayBoard(); // Afficher le plateau après le mélange
 
             // Demander à l'utilisateur de saisir les coordonnées
