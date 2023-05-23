@@ -13,7 +13,12 @@ public class LevelSelector {
 
         // Obtenez tous les fichiers CSV dans le dossier spécifié
         File folderFiles = new File(folder);
-        File[] files = folderFiles.listFiles((dir, name) -> name.endsWith(".csv"));
+        File[] files = folderFiles.listFiles((dir, name) -> name.matches("lvl\\d+\\.csv")); // Filtre les fichiers qui commencent par "lvl" suivis d'un nombre suivi de ".csv"
+        Arrays.sort(files, (file1, file2) -> {
+            int file1Number = Integer.parseInt(file1.getName().replaceFirst("lvl(\\d+)\\.csv", "$1")); // Extrait le nombre du nom de fichier
+            int file2Number = Integer.parseInt(file2.getName().replaceFirst("lvl(\\d+)\\.csv", "$1"));
+            return Integer.compare(file1Number, file2Number); // Trie les fichiers par ordre numérique
+        });
 
         if (files != null && files.length > 0) {
             // Affichez la liste des fichiers disponibles
