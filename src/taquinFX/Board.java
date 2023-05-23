@@ -298,7 +298,9 @@ public class Board {
 	public boolean isEZ() {
 	    int emptyCount = 0;
 	    int blockCount = 0;
-
+	    if(getBoardSize() % 2 == 0){
+		    return false;
+	    }
 	    for (Box box : grid) {
 	        if (box.getValue() == 0) {
 	            emptyCount++;
