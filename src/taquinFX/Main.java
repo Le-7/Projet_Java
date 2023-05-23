@@ -26,7 +26,16 @@ public class Main {
 
         do {
         	board = new Board("../levels/" + levelSelection);
-            board.mixBoard(17); // Mélanger le plateau
+        	if (board.isEZ()) {
+        		System.out.println("Mélange automatique");
+        		board.mixBoardAuto();
+				while (!board.isSolvable()) {					//si le plateau est "facile" alors on peut utiliser l'algo
+					board.mixBoardAuto();
+				}
+			}else {
+				 board.mixBoard(40); // Sinon on mélange le plateau "manuellement"
+			}
+           
             count++;
             System.out.println("Tentative mélange n°" + count + "\n"); // Afficher le compteur de tentatives
             if (count == maxCount) {
@@ -84,9 +93,11 @@ public class Main {
 
                     
                     // Effectuer le déplacement sur le plateau de jeu en utilisant la méthode swap()
-                    board.swap2(index1,index2);
-                    shot++;
-                    board.displayBoard();
+                    if (board.swap2(index1,index2)) {
+                    	shot++;
+                        board.displayBoard();
+					}
+                    
                 }
                 System.out.println("Temps d'exécution du solveur : " + executionTime + " millisecondes");
                 break; // Sortir de la boucle while

@@ -281,6 +281,7 @@ public class Board {
         IDASolver solver = new IDASolver(this,this.getCsvPath());
         return solver.solve();
     }
+	
 	public static List<short[]> findEmptyBoxes(short[] grid) {
         List<short[]> emptyBoxes = new ArrayList<>();
         int boardSize = (int) Math.sqrt(grid.length);
@@ -293,4 +294,62 @@ public class Board {
         }
         return emptyBoxes;
     }
+	
+	public boolean isEZ() {
+	    int emptyCount = 0;
+	    int blockCount = 0;
+
+	    for (Box box : grid) {
+	        if (box.getValue() == 0) {
+	            emptyCount++;
+	        } else if (box.getValue() == -1) {
+	            blockCount++;
+	        }
+	    }
+
+	    return emptyCount == 1 && blockCount == 0;
+	}
+
+	public boolean isSolvable() {
+	    int inversions = countInversions();
+	    List<int[]> blank= findEmptyBoxes();
+	    int boardSize = getBoardSize();
+	    int blankRow = blank.get(0)[0];
+
+	    if (boardSize % 2 == 1) {
+	        // Pour un taquin de taille impaire, il est résoluble si le nombre d'inversions est pair
+	        return inversions % 2 == 0;
+	    } else {
+	        // Pour un taquin de taille paire, il est résoluble si :
+	        // - le nombre d'inversions est impair et la ligne de la case vide (0) est paire,
+	        // - ou le nombre d'inversions est pair et la ligne de la case vide (0) est impaire.
+	        return (inversions % 2 == 1 && blankRow % 2 == 0) || (inversions % 2 == 0 && blankRow % 2 == 1);
+	    }
+	}
+
+	private int countInversions() {
+	    int inversions = 0;
+	    int[] values = new int[boardSize * boardSize - 1]; // Exclut la case vide (0)
+	    int index = 0;
+
+	    for (Box box : grid) {
+	        int value = box.getValue();
+	        if (value != 0) {
+	            values[index] = value;
+	            index++;
+	        }
+	    }
+
+	    for (int i = 0; i < values.length - 1; i++) {
+	        for (int j = i + 1; j < values.length; j++) {
+	            if (values[i] > values[j]) {
+	                inversions++;
+	            }
+	        }
+	    }
+
+	    return inversions;
+	}
+
+
 }
