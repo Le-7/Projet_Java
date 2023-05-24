@@ -62,81 +62,41 @@ public class IDASolver {
         short[] currentGrid = currentNode.getGrid(); 
         List<short[]> emptyBoxes = Board.findEmptyBoxes(currentGrid);
 
-        if (emptyBoxes.size() > 1) {
-            // Si plusieurs cases vides existent, sélectionner une seule case vide pour générer les mouvements
-            short[] emptyBox = emptyBoxes.get(emptyBoxes.size()-1);
-            int emptyIndex = emptyBox[0] * boardSize + emptyBox[1];
+        for (short[] emptyBox : emptyBoxes) {
+            int emptyIndex = emptyBox[0] * board.getBoardSize() + emptyBox[1];
 
             // Essaie de déplacer la case vide vers le haut
-            if (emptyBox[0] > 0 && currentGrid[emptyIndex - boardSize] != -1) {
-                short[] newGrid = currentGrid.clone();
-                swap(newGrid, emptyIndex, emptyIndex - boardSize);
-                Node newNode = new Node(newGrid, currentNode, "UP " + emptyIndex + " " + (emptyIndex - boardSize), targetGrid);
+            if (emptyBox[0] > 0 && currentNode.getGrid()[emptyIndex - board.getBoardSize()] != -1) {
+                short[] newGrid = currentNode.getGrid().clone();
+                swap(newGrid, emptyIndex, emptyIndex - board.getBoardSize());
+                Node newNode = new Node(newGrid, currentNode, "UP " + emptyIndex + " " + (emptyIndex - board.getBoardSize()), targetGrid);
                 nextNodes.add(newNode);
             }
 
             // Essaie de déplacer la case vide vers le bas
-            if (emptyBox[0] < boardSize - 1 && currentGrid[emptyIndex + boardSize] != -1) {
-                short[] newGrid = currentGrid.clone();
-                swap(newGrid, emptyIndex, emptyIndex + boardSize);
-                Node newNode = new Node(newGrid, currentNode, "DOWN " + emptyIndex + " " + (emptyIndex + boardSize), targetGrid);
+            if (emptyBox[0] < board.getBoardSize() - 1 && currentNode.getGrid()[emptyIndex + board.getBoardSize()] != -1) {
+                short[] newGrid = currentNode.getGrid().clone();
+                swap(newGrid, emptyIndex, emptyIndex + board.getBoardSize());
+                Node newNode = new Node(newGrid, currentNode, "DOWN " + emptyIndex + " " + (emptyIndex + board.getBoardSize()), targetGrid);
                 nextNodes.add(newNode);
             }
 
             // Essaie de déplacer la case vide vers la gauche
-            if (emptyBox[1] > 0 && currentGrid[emptyIndex - 1] != -1) {
-                short[] newGrid = currentGrid.clone();
+            if (emptyBox[1] > 0 && currentNode.getGrid()[emptyIndex - 1] != -1) {
+                short[] newGrid = currentNode.getGrid().clone();
                 swap(newGrid, emptyIndex, emptyIndex - 1);
                 Node newNode = new Node(newGrid, currentNode, "LEFT " + emptyIndex + " " + (emptyIndex - 1), targetGrid);
                 nextNodes.add(newNode);
             }
 
             // Essaie de déplacer la case vide vers la droite
-            if (emptyBox[1] < boardSize - 1 && currentGrid[emptyIndex + 1] != -1) {
-                short[] newGrid = currentGrid.clone();
-                swap(newGrid, emptyIndex, emptyIndex + 1);
-                Node newNode = new Node(newGrid, currentNode, "RIGHT " + emptyIndex + " " + (emptyIndex + 1), targetGrid);
-                nextNodes.add(newNode);
-            }
-        } else {
-            // Si une seule case vide existe, générer tous les mouvements possibles
-            short[] emptyBox = emptyBoxes.get(0);
-            int emptyIndex = emptyBox[0] * boardSize + emptyBox[1];
-
-            // Essaie de déplacer la case vide vers le haut
-            if (emptyBox[0] > 0 && currentGrid[emptyIndex - boardSize] != -1) {
-                short[] newGrid = currentGrid.clone();
-                swap(newGrid, emptyIndex, emptyIndex - boardSize);
-                Node newNode = new Node(newGrid, currentNode, "UP " + emptyIndex + " " + (emptyIndex - boardSize), targetGrid);
-                nextNodes.add(newNode);
-            }
-
-            // Essaie de déplacer la case vide vers le bas
-            if (emptyBox[0] < boardSize - 1 && currentGrid[emptyIndex + boardSize] != -1) {
-                short[] newGrid = currentGrid.clone();
-                swap(newGrid, emptyIndex, emptyIndex + boardSize);
-                Node newNode = new Node(newGrid, currentNode, "DOWN " + emptyIndex + " " + (emptyIndex + boardSize), targetGrid);
-                nextNodes.add(newNode);
-            }
-
-            // Essaie de déplacer la case vide vers la gauche
-            if (emptyBox[1] > 0 && currentGrid[emptyIndex - 1] != -1) {
-                short[] newGrid = currentGrid.clone();
-                swap(newGrid, emptyIndex, emptyIndex - 1);
-                Node newNode = new Node(newGrid, currentNode, "LEFT " + emptyIndex + " " + (emptyIndex - 1), targetGrid);
-                nextNodes.add(newNode);
-            }
-
-            // Essaie de déplacer la case vide vers la droite
-            if (emptyBox[1] < boardSize - 1 && currentGrid[emptyIndex + 1] != -1) {
-                short[] newGrid = currentGrid.clone();
+            if (emptyBox[1] < board.getBoardSize() - 1 && currentNode.getGrid()[emptyIndex + 1] != -1) {
+                short[] newGrid = currentNode.getGrid().clone();
                 swap(newGrid, emptyIndex, emptyIndex + 1);
                 Node newNode = new Node(newGrid, currentNode, "RIGHT " + emptyIndex + " " + (emptyIndex + 1), targetGrid);
                 nextNodes.add(newNode);
             }
         }
-
-
         return nextNodes;
     }
 
