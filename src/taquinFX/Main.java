@@ -12,8 +12,8 @@ public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         String saveSelectionString = Save.select(scanner);
-        String levelSelection = LevelSelector.select(scanner, "Saves/" + saveSelectionString);
-        Board board = new Board("levels/" + levelSelection); // créer un nouveau tableau de taille n
+        String levelSelection = LevelSelector.select(scanner, "../Saves/" + saveSelectionString);
+        Board board = new Board("../levels/" + levelSelection); // créer un nouveau tableau de taille n
         int maxCount = 1000000; // on définit le nombre maximum de tentatives
         int count = 0; // initialisation du compteur
         int shot = 0; // Initialisation du compteur de coups
@@ -25,7 +25,7 @@ public class Main {
         board.displayBoard(); // Afficher le plateau avant le mélange
         System.out.println();
         while(board.InitialPosition() || !board.solveWithinTime(50)) { // Vérifier si une ou plusieurs tuiles sont à leur position initiale. Si c'est le cas, mélanger à nouveau. {
-        	board = new Board("levels/" + levelSelection);
+        	board = new Board("../levels/" + levelSelection);
         	if (board.isEZ()) {
         		Random random = new Random();
         		int randomNumber = random.nextInt(2);
@@ -53,7 +53,7 @@ public class Main {
         } 
 
         start = System.currentTimeMillis(); //Debut du chrono dès que le niveau est lancé pour pas tricher
-        while (!gameSolved(IDASolver.convertBoxArrayToShortArray(board.getGrid()),"levels/" + levelSelection)) {
+        while (!gameSolved(IDASolver.convertBoxArrayToShortArray(board.getGrid()),"../levels/" + levelSelection)) {
             board.displayBoard(); // Afficher le plateau après le mélange
 
             // Demander à l'utilisateur de saisir les coordonnées
