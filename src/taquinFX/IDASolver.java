@@ -9,13 +9,11 @@ public class IDASolver {
     private Board board;               // Plateau de jeu
     private short[] targetGrid;        // Configuration cible
     private List<String> solution;     // Solution trouvée
-    private int boardSize;
 
     public IDASolver(Board board, String csvPath) {
         this.board = board;
         this.targetGrid = readTargetGridFromCSV(csvPath);
         this.solution = null;
-        this.boardSize = board.getBoardSize();
     }
 
     public List<String> solve() {
@@ -59,8 +57,7 @@ public class IDASolver {
 
     private List<Node> getNextNodes(Node currentNode) {
         List<Node> nextNodes = new ArrayList<>();
-        short[] currentGrid = currentNode.getGrid(); 
-        List<short[]> emptyBoxes = Board.findEmptyBoxes(currentGrid);
+        List<short[]> emptyBoxes = Board.findEmptyBoxes(currentNode.getGrid());
 
         for (short[] emptyBox : emptyBoxes) {
             int emptyIndex = emptyBox[0] * board.getBoardSize() + emptyBox[1];
@@ -97,10 +94,9 @@ public class IDASolver {
                 nextNodes.add(newNode);
             }
         }
+
         return nextNodes;
     }
-
-
 
     private void swap(short[] grid, int index1, int index2) {
         // Échange de deux cases dans le tableau
