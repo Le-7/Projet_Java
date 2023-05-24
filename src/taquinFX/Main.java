@@ -6,13 +6,14 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.Random;
 
 public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         String saveSelectionString = Save.select(scanner);
-        String levelSelection = LevelSelector.select(scanner, "../Saves/" + saveSelectionString);
-        Board board = new Board("../levels/" + levelSelection); // créer un nouveau tableau de taille n
+        String levelSelection = LevelSelector.select(scanner, "Saves/" + saveSelectionString);
+        Board board = new Board("levels/" + levelSelection); // créer un nouveau tableau de taille n
         int maxCount = 1000000; // on définit le nombre maximum de tentatives
         int count = 0; // initialisation du compteur
         int shot = 0; // Initialisation du compteur de coups
@@ -23,15 +24,22 @@ public class Main {
         System.out.println("Votre meilleur score pour ce niveau est de : " + Save.getBestScore(saveSelectionString, levelSelection.replace(".csv", "")) + "\n");
         board.displayBoard(); // Afficher le plateau avant le mélange
         System.out.println();
-
-        do {
-        	board = new Board("../levels/" + levelSelection);
+        while(board.InitialPosition() || !board.solveWithinTime(50)) { // Vérifier si une ou plusieurs tuiles sont à leur position initiale. Si c'est le cas, mélanger à nouveau. {
+        	board = new Board("levels/" + levelSelection);
         	if (board.isEZ()) {
-        		System.out.println("Mélange automatique");
-        		board.mixBoardAuto();
-				while (!board.isSolvable()) {					//si le plateau est "facile" alors on peut utiliser l'algo
-					board.mixBoardAuto();
-				}
+        		Random random = new Random();
+        		int randomNumber = random.nextInt(2);
+        		if(randomNumber == 0) {
+        			System.out.println("Mélange automatique");
+	        		board.mixBoardAuto();
+					while (!board.isSolvable()) {					//si le plateau est "facile" alors on peut utiliser l'algo
+						board.mixBoardAuto();
+					}
+        		}else {
+        			System.out.println("Mélange manuel");
+        			board.mixBoard(40);
+        		}
+        		
 			}else {
 				 board.mixBoard(40); // Sinon on mélange le plateau "manuellement"
 			}
@@ -42,10 +50,10 @@ public class Main {
                 System.out.println("Impossible de mélanger le plateau sans revenir à sa position initiale");
                 return;
             }
-        } while (board.InitialPosition()); // Vérifier si une ou plusieurs tuiles sont à leur position initiale. Si c'est le cas, mélanger à nouveau.
+        } 
 
         start = System.currentTimeMillis(); //Debut du chrono dès que le niveau est lancé pour pas tricher
-        while (!gameSolved(IDASolver.convertBoxArrayToShortArray(board.getGrid()),"../levels/" + levelSelection)) {
+        while (!gameSolved(IDASolver.convertBoxArrayToShortArray(board.getGrid()),"levels/" + levelSelection)) {
             board.displayBoard(); // Afficher le plateau après le mélange
 
             // Demander à l'utilisateur de saisir les coordonnées
