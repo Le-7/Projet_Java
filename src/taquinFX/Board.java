@@ -3,6 +3,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import java.io.BufferedReader;
 import java.io.FileReader;
 
@@ -298,9 +303,7 @@ public class Board {
 	public boolean isEZ() {
 	    int emptyCount = 0;
 	    int blockCount = 0;
-	    if(getBoardSize() % 2 == 0){
-		    return false;
-	    }
+
 	    for (Box box : grid) {
 	        if (box.getValue() == 0) {
 	            emptyCount++;
@@ -352,6 +355,32 @@ public class Board {
 
 	    return inversions;
 	}
+	
+	public boolean solveWithinTime(long timeLimitMillis) {
+	    ExecutorService executor = Executors.newSingleThreadExecutor();
+	    Future<List<String>> future = executor.submit(this::solve);
 
+	    try {
+	        List<String> solution = future.get(timeLimitMillis, TimeUnit.MILLISECONDS);
+	        // La solution a été trouvée dans le délai spécifié
+	        for (String move : solution) {
+                String[] parts = move.split(" ");
 
+                // Extraire le mouvement (première partie) pour l affichage si quelqun a la force de le faire
+                String direction = parts[0];
+                System.out.println(direction);
+	        }
+	        return true;
+	    } catch (TimeoutException e) {
+	        // Le délai est écoulé, on annule la tâche
+	        future.cancel(true);
+	        System.out.println("La résolution a pris trop de temps.");
+	        return false;
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return false;
+	    } finally {
+	        executor.shutdownNow();
+	    }
+	}
 }
