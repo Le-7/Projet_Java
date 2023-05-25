@@ -128,3 +128,22 @@ INTERFACE GRAPHIQUE :
         Par : Tout le monde
         Estimation : 20h
         Réel :
+        
+    - Level map
+        Statut : fini
+        Par : sara
+        Estimation : 
+        Réel : 3h
+        Difficultés rencontrées : adapté au maximum, mauvaise methode de depart
+         
+     - Menu du jeu
+        Statut : fini
+        Par : sara
+        Estimation : en cours
+        Réel : 2h
+        autre : finir le css
+         
+         
+        
+        
+     
