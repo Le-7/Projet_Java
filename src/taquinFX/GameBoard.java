@@ -1,15 +1,12 @@
 package taquinFX;
-
-
+//Importations nécessaires pour le fonctionnement du code
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.Scanner;
 import java.util.Random;
-
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -28,93 +25,115 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
+//Classe principale GameBoard qui hérite de l'Application JavaFX
+public class GameBoard extends Application {
+ // Variables de classe
+ private String levelSelection; // Sélection du niveau
+ private String savesString; // String pour les sauvegardes
+ private GridPane boardPane; // Panneau pour le plateau de jeu
+ private Board board; // Le plateau de jeu
+ private static final int TILE_SIZE = 50; // Taille d'une tuile
+ private Label errorLabel; // Label pour afficher les erreurs
+ int score = 0; // Score actuel
+ private Label timerLabel; // Label pour le timer
+ private Timeline timeline; // Chronologie pour le timer
+ private int elapsedTimeInSeconds = 0; // Temps écoulé en secondes
 
+ // Constructeur de GameBoard
+ public GameBoard(String levelSelection, String savesString) {
+     super(); // Appel du constructeur de la superclasse Application
+     this.levelSelection = levelSelection; // Initialisation de la sélection du niveau
+     this.savesString = "Saves/" + savesString; // Initialisation du string pour les sauvegardes
+ }
 
-public class Main extends Application{
-    private GridPane boardPane;
-	private Board board;
-    private static final int TILE_SIZE = 50; // Taille d'une tuile
-    private Label errorLabel; // Label pour afficher les erreurs
-    int score = 0;
-    private Label timerLabel;
-    private Timeline timeline;
-    private int elapsedTimeInSeconds = 0;
+ // Méthode principale pour démarrer l'affichage
+ public void start(Stage primaryStage) {
+     showGame(primaryStage); // Afficher le jeu
+ }
+ 
+ public Scene showGame(Stage primaryStage) {
+	    board = new Board("levels/" + levelSelection); // Initialiser le plateau avec le niveau sélectionné
+	    int maxCount = 1000000;// Maximum d'essais pour le mélange du plateau
+	    int count = 0;// Initialiser un compteur pour les tentatives de mélange
+	    // Label pour afficher les erreurs
+	    errorLabel = new Label();
+	    errorLabel.setVisible(false);
 
-    public void start(Stage primaryStage) {
-        Scanner scanner = new Scanner(System.in);
-        String saveSelectionString = Save.select(scanner);
-        String levelSelection = LevelSelector.select(scanner, "Saves/" + saveSelectionString);
-        board = new Board("levels/" + levelSelection); // créer un nouveau tableau de taille n
-        int maxCount = 1000000; // on définit le nombre maximum de tentatives
-        int count = 0; // initialisation du compteur
-        errorLabel = new Label();
-        errorLabel.setVisible(false);
-        Button solverButton = new Button("Solveur du taquin");
-        solverButton.setOnAction(event -> solver(primaryStage));
-        primaryStage.setTitle("Taquin");
-        // Créer une grille pour afficher le plateau
-        boardPane = new GridPane();
-        boardPane.setAlignment(Pos.CENTER);
-        boardPane.setHgap(10);
-        boardPane.setVgap(10);
-        VBox game = new VBox(); // Utilisation d'un VBox comme conteneur du jeu et du errorLabel
-        game.setAlignment(Pos.CENTER);
-        game.setSpacing(10);
-        game.getChildren().add(errorLabel);
-        game.getChildren().add(boardPane); // Ajouter le boardPane (taquin) au VBox
-        game.getChildren().add(solverButton); // Ajouter le solverButton en dessous du taquin
-        HBox root = new HBox(); //conteneur principal
-        // Création des composants
-        //ImageView clockImage = new ImageView(new Image("clock.png"));
-        Label movesLabel = new Label("Moves: 0");
-        //ImageView customImage = new ImageView(new Image("custom.png"));
-        VBox textPane = new VBox(10);
-        textPane.setPadding(new Insets(10));
-        initTimer();
-        textPane.getChildren().addAll(timerLabel,movesLabel);
-        root.getChildren().addAll(textPane,game);
-        
-        List<String> solution = new ArrayList<>();
-        
-        Random random = new Random();
-        int randomNumber = random.nextInt(2);
-        
-        errorLabel.setText("Votre meilleur score pour ce niveau est de : " + Save.getBestScore(saveSelectionString, levelSelection.replace(".csv", "")) + "\n\n");
-        
-        while(board.InitialPosition() || !board.solveWithinTime(50,solution)) { // Vérifier si une ou plusieurs tuiles sont à leur position initiale. Si c'est le cas, mélanger à nouveau. {
-        	board = new Board("levels/" + levelSelection);
-        	if (board.isEZ()) {
-        		if(randomNumber == 0) {
-        			System.out.println("Mélange automatique");
-	        		board.mixBoardAuto();
-					while (!board.isSolvable()) {					//si le plateau est "facile" alors on peut utiliser l'algo
-						board.mixBoardAuto();
-					}
-        		}else {
-        			System.out.println("Mélange manuel");
-        			board.mixBoard(40);
-        		}
-        		
-			}else {
-				 board.mixBoard(40); // Sinon on mélange le plateau "manuellement"
-			}
-           
-            count++;
-            errorLabel.setText(errorLabel.getText() + "Tentative mélange n°" + count + "\n"); // Afficher le compteur de tentatives
-            if (count == maxCount) {
-            	errorLabel.setText("Impossible de mélanger le plateau sans revenir à sa position initiale");
-                errorLabel.setVisible(true);
-                return;
-            }
-        } 
-        displayBoard(board, primaryStage);
-        // Créer une scène fixe
-        Scene scene = new Scene(root, 968, 544);
-        primaryStage.setScene(scene);
-        //primaryStage.setResizable(false); // Empêcher le redimensionnement de la fenêtre
-        primaryStage.show();
+	    // Bouton pour lancer le solveur
+	    Button solverButton = new Button("Solveur du taquin");
+	    solverButton.setOnAction(event -> solver(primaryStage));
+	    
+	    primaryStage.setTitle("Taquin");// Titre de la fenêtre
+	    // Création de la grille pour afficher le plateau
+	    boardPane = new GridPane();
+	    boardPane.setAlignment(Pos.CENTER);
+	    boardPane.setHgap(10);
+	    boardPane.setVgap(10);
+	    
+	    // Conteneur pour le jeu et le label d'erreur
+	    VBox game = new VBox();
+	    game.setAlignment(Pos.CENTER);
+	    game.setSpacing(10);
+	    game.getChildren().add(errorLabel);
+	    game.getChildren().add(boardPane);
+	    game.getChildren().add(solverButton);
+	    
+	    HBox root = new HBox(); // Conteneur principal
+	    
+	    // Création des labels pour les mouvements et le timer
+	    Label movesLabel = new Label("Moves: 0");
+	    VBox textPane = new VBox(10);
+	    textPane.setPadding(new Insets(10));
+	    initTimer();
+	    textPane.getChildren().addAll(timerLabel,movesLabel);
+	    root.getChildren().addAll(textPane,game);
+	    
+	    List<String> solution = new ArrayList<>(); // Liste pour stocker la solution
+	    
+	    // Générateur de nombres aléatoires pour le mélange du plateau
+	    Random random = new Random();
+	    int randomNumber = random.nextInt(2);
+	    
+	    // Afficher le meilleur score pour ce niveau
+	    errorLabel.setText("Votre meilleur score pour ce niveau est de : " + Menu.getBestScore(savesString, "levels/" + levelSelection)+ "\n\n");
+	    errorLabel.setVisible(true);
 
-    }
+	    // Tenter de mélanger le plateau jusqu'à ce qu'il ne soit plus à sa position initiale
+	    while(board.InitialPosition() || !board.solveWithinTime(50,solution)) {
+	        board = new Board("levels/" + levelSelection);
+	        if (board.isEZ()) {
+	            if(randomNumber == 0) {
+	                System.out.println("Mélange automatique");
+	                board.mixBoardAuto();
+	                while (!board.isSolvable()) {
+	                    board.mixBoardAuto();
+	                }
+	            } else {
+	                System.out.println("Mélange manuel");
+	                board.mixBoard(40);
+	            }
+	        } else {
+	            board.mixBoard(40);
+	        }
+	        
+	        // Augmenter le compteur d'essais
+	        count++;
+	        
+	        // Afficher un message d'erreur si le maximum d'essais est atteint
+	        if (count == maxCount) {
+	            errorLabel.setText("Impossible de mélanger le plateau sans revenir à sa position initiale");
+	            errorLabel.setVisible(true);
+	        }
+	    } 
+	    displayBoard(board, primaryStage);// Afficher le plateau
+	    timeline.play(); // Démarrer le timer
+	    Scene scene = new Scene(root, 968, 544); // Créer une scène fixe
+	    // Appliquer la scène à la fenêtre principale
+	    primaryStage.setScene(scene);
+	    primaryStage.show();
+	    
+	    return scene;
+	}
 
 	 public static boolean gameSolved(short[] grid, String Csv_path) {
         try {
@@ -132,10 +151,8 @@ public class Main extends Application{
                         return false;
                     }
                 }
-
                 i++;
             }
-
             reader.close();
         } catch (IOException e) {
             e.printStackTrace();
@@ -294,8 +311,5 @@ public class Main extends Application{
 	        });
 	        timeline.getKeyFrames().add(keyFrame);
 	 }
-
-	 public static void main(String[] args) {
-	        launch(args);
-	    }
+	  
 }
