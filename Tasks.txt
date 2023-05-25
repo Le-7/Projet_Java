@@ -56,17 +56,12 @@ Interaction utilisateur/console :
         Par : Anissa, Matheo
         Estimation : 35 min 
         Réel : 40 min
-    * Sous tâche : afficher les niveaux dans l'ordre
-        Statut : FAIT
-        Par : Anissa
-        Estimation : 10min
-        Réel : 10min
         
-    - Créer et mettre dans un fichier les meilleurs scores et les meilleures temps
+    - Créer et mettre dans un fichier les meilleurs scores
         Statut : FAIT
-        Par : Matheo, Anissa, Sarah
-        Estimation : 40 min
-        Réel : 1h10 min
+        Par : Matheo, Anissa
+        Estimation : 20 min
+        Réel : 50 min
         
      - Déblocage des niveaux 
         Statut : FAIT
@@ -80,12 +75,6 @@ Interaction utilisateur/console :
         Estimation : 1h
         Réel : 1h
         Difficultés rencontrées : Faire commencer le chrono au bon moment
-        
-     - BONUS : Faire l'affichage en minutes 
-       Statut : Fait
-       Par : Sarah
-       Estimation : 20 min
-       Réel : 20 min
         
         
 Résoudre tous les taquins avec l’algorithme A* :
@@ -107,12 +96,12 @@ Résoudre tous les taquins avec l’algorithme A* :
         Estimation : 20 min
         Réel : 30 min 
         
-    - Modifier TaquinSolver pour qu’il résolve les plateaux avec plus d’une case vide -> représentation en bits 
+    - Modifier TaquinSolver pour qu’il résolve les plateaux avec plus d’une case vide
         Statut : EN COURS (à optimiser)
         Par : Sarah
         Estimation : 1h
         Réel : 2h
-        Limite : Peut manquer de mémoire selon la complexité du plateau (ex : blocks en 4*4) et si le nombre de mélange est trop élevé
+        Limite : Peut manquer de mémoire selon la complexité du plateau (ex : 2 cases vides, 2 blocks en 4*4) et si le nombre de mélange est trop élevé
         
         
     - Déterminer si un plateau est jouable ou non 
@@ -120,30 +109,3 @@ Résoudre tous les taquins avec l’algorithme A* :
         Par : 
         Estimation : 
         Réel : 
-        
-INTERFACE GRAPHIQUE : 
-
-    - Plateau de jeu 
-        Statut : EN COURS
-        Par : Tout le monde
-        Estimation : 20h
-        Réel :
-        
-    - Level map
-        Statut : fini
-        Par : sara
-        Estimation : 
-        Réel : 3h
-        Difficultés rencontrées : adapté au maximum, mauvaise methode de depart
-         
-     - Menu du jeu
-        Statut : fini
-        Par : sara
-        Estimation : en cours
-        Réel : 2h
-        autre : finir le css
-         
-         
-        
-        
-     

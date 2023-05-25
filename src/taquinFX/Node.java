@@ -1,27 +1,26 @@
 package taquinFX;
 
-import java.util.Objects;
+import java.util.Arrays;
 
-//La classe Node représente un nœud dans l'arbre de recherche pour résoudre le jeu
 class Node implements Comparable<Node> {
-    private Board board; // Le plateau du jeu actuel
+    private short[] grid; // Le plateau du jeu associé à ce nœud
     private Node parent; // Le nœud parent dans l'arbre de recherche
     private String move; // Le mouvement effectué pour atteindre ce nœud à partir du nœud parent
     private int cost; // Le coût du chemin depuis le nœud initial jusqu'à ce nœud
     private int heuristic; // L'estimation heuristique du coût restant jusqu'à la solution
+    private short[] targetGrid;
 
-    //constructeur
-    public Node(Board board, Node parent, String move) {
-        this.board = board;
+    public Node(short[] grid, Node parent, String move, short[] targetGrid) {
+        this.grid = grid;
         this.parent = parent;
         this.move = move;
         this.cost = parent != null ? parent.getCost() + 1 : 0; // Le coût est le coût du parent + 1
+        this.targetGrid = targetGrid;
         this.heuristic = calculateHeuristic(); // Calculer l'estimation heuristique
     }
 
-    //getters pour les propriétes de la classe node
-    public Board getBoard() {
-        return board;
+    public short[] getGrid() {
+        return grid;
     }
 
     public Node getParent() {
@@ -40,24 +39,37 @@ class Node implements Comparable<Node> {
         return heuristic;
     }
 
-
-    // Cette méthode calcule une estimation heuristique du coût restant pour atteindre le nœud objectif
-    private int calculateHeuristic() { 
+    // Calcule l'estimation heuristique du coût restant jusqu'à la solution
+    private int calculateHeuristic() {
         int heuristic = 0;
-        int boardSize = board.getBoardSize();
-     // la logique pour calculer l'estimation heuristique
-        for (int i = 0; i < boardSize; i++) {
-            for (int j = 0; j < boardSize; j++) {
-                int value = board.getGrid()[i][j].getValue();
-                if (value != 0) {
-                    int targetRow = (value - 1) / boardSize; // La ligne cible pour cette valeur
-                    int targetCol = (value - 1) % boardSize; // La colonne cible pour cette valeur
-                    heuristic += Math.abs(i - targetRow) + Math.abs(j - targetCol); // Calcul de la distance de Manhattan
+        int boardSize = (int) Math.sqrt(grid.length);
+        for (int i = 0; i < grid.length; i++) {
+            int value = grid[i];
+            int targetRow = 0;
+            int targetCol = 0;
+            if (value > 0) {
+                for (int j = 0; j < targetGrid.length; j++) {
+                    if (targetGrid[j] == value) {
+                        targetRow = j / boardSize;
+                        targetCol = j % boardSize;
+                    }
                 }
+
+                int currentRow = i / boardSize; // La ligne actuelle pour cette valeur
+                int currentCol = i % boardSize; // La colonne actuelle pour cette valeur
+                heuristic += Math.abs(currentRow - targetRow) + Math.abs(currentCol - targetCol); // Calcul de la distance de Manhattan
             }
         }
 
         return heuristic;
+    }
+
+    // Récupère le chemin de l'initial node à ce nœud
+    public String getPath() {
+        if (parent == null) {
+            return "";
+        }
+        return parent.getPath() + " " + move;
     }
 
     // Comparaison des nœuds en fonction de leur priorité (coût + estimation heuristique)
@@ -78,12 +90,11 @@ class Node implements Comparable<Node> {
             return false;
         }
         Node other = (Node) obj;
-        return board.equals(other.getBoard());
+        return Arrays.equals(grid, other.getGrid());
     }
 
-    // Calcule le code de hachage en utilisant le plateau de jeu
     @Override
     public int hashCode() {
-        return Objects.hash(board);
+        return Arrays.hashCode(grid);
     }
 }

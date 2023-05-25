@@ -1,198 +1,227 @@
 package taquinFX;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.Random;
+import javafx.application.Application;
+import javafx.geometry.Pos;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
+import javafx.scene.layout.GridPane;
+import javafx.scene.paint.Color;
+import javafx.stage.Stage;
 
-public class Main {
-    public static void main(String[] args) {
-    	Scanner scanner = new Scanner(System.in);
-    	String saveSelectionString = Save.select(scanner);
-    	String levelSelection = LevelSelector.select(scanner, "../Saves/"+saveSelectionString);
-        Board board = new Board("../levels/"+ levelSelection); // créer un nouveau tableau de taille n
-        int maxCount = 5; // on définit le nombre maximum de tentatives
+
+
+public class Main extends Application{
+    private GridPane boardPane;
+	private Board board;
+    private static final int TILE_SIZE = 50; // Taille d'une tuile
+
+    public void start(Stage primaryStage) {
+        Scanner scanner = new Scanner(System.in);
+        String saveSelectionString = Save.select(scanner);
+        String levelSelection = LevelSelector.select(scanner, "Saves/" + saveSelectionString);
+        board = new Board("levels/" + levelSelection); // créer un nouveau tableau de taille n
+        int maxCount = 1000000; // on définit le nombre maximum de tentatives
         int count = 0; // initialisation du compteur
-        int shot = 0; // Initialisation du compteur de coups
-        boolean useSolver = false; 
-        long start = 0;
-        long end = 0;
-        
-        System.out.println("Votre meilleur score pour ce niveau est de : "+Save.getBestScore(saveSelectionString, levelSelection.replace(".csv", ""))+"\n");
-        int bestTimeInSeconds= Save.getBestTime(saveSelectionString, levelSelection.replace(".csv", ""));
-        int minutes = bestTimeInSeconds / 60;
-        int seconds = bestTimeInSeconds % 60;
-
-        System.out.print("Votre meilleur temps pour ce niveau est de : ");
-        if (minutes > 0) {
-            System.out.print(minutes + " minute(s) ");
-        }
-        System.out.println(seconds + " seconde(s)\n");
+        Button solverButton = new Button("Solveur du taquin");
+        solverButton.setOnAction(event -> solver(primaryStage));
+        primaryStage.setTitle("Taquin");
+        // Créer une grille pour afficher le plateau
+        boardPane = new GridPane();
+        boardPane.setAlignment(Pos.CENTER);
+        boardPane.setHgap(10);
+        boardPane.setVgap(10);
+        //boardPane.getChildren().add(solverButton);
         
         
-        
-        board.displayBoard(); // Afficher le plateau avant le mélange
+        System.out.println("Votre meilleur score pour ce niveau est de : " + Save.getBestScore(saveSelectionString, levelSelection.replace(".csv", "")) + "\n");
         System.out.println();
-
-        do {
-            board.mixBoard(100); // Mélanger le plateau
+        while(board.InitialPosition() || !board.solveWithinTime(50)) { // Vérifier si une ou plusieurs tuiles sont à leur position initiale. Si c'est le cas, mélanger à nouveau. {
+        	board = new Board("levels/" + levelSelection);
+        	if (board.isEZ()) {
+        		Random random = new Random();
+        		int randomNumber = random.nextInt(2);
+        		if(randomNumber == 0) {
+        			System.out.println("Mélange automatique");
+	        		board.mixBoardAuto();
+					while (!board.isSolvable()) {					//si le plateau est "facile" alors on peut utiliser l'algo
+						board.mixBoardAuto();
+					}
+        		}else {
+        			System.out.println("Mélange manuel");
+        			board.mixBoard(40);
+        		}
+        		
+			}else {
+				 board.mixBoard(40); // Sinon on mélange le plateau "manuellement"
+			}
+           
             count++;
-            System.out.println("Tentative mélange n°" + count+"\n"); // Afficher le compteur de tentatives
+            System.out.println("Tentative mélange n°" + count + "\n"); // Afficher le compteur de tentatives
             if (count == maxCount) {
                 System.out.println("Impossible de mélanger le plateau sans revenir à sa position initiale");
                 return;
             }
-        } while (board.InitialPosition()); // Vérifier si une ou plusieurs tuiles sont à leur position initiale. Si c'est le cas, mélanger à nouveau.
+        } 
+        displayBoard(board, primaryStage);
+        // Créer une scène fixe
+        Scene scene = new Scene(boardPane, 968, 544);
+        primaryStage.setScene(scene);
+        //primaryStage.setResizable(false); // Empêcher le redimensionnement de la fenêtre
+        primaryStage.show();
 
-        start = System.currentTimeMillis(); //Debut du chrono dès que le niveau est lancé pour pas tricher
-        while (!board.gameSolved()) {
-            board.displayBoard(); // Afficher le plateau après le mélange
-           
-            
-
-            // Demander à l'utilisateur de saisir les coordonnées
-            System.out.print("Entrez les coordonnées (deux entiers) de la case à déplacer (ligne colonne, pour le solveur entrez 0 0): ");
-            int row = 0;
-            int col = 0;
-            boolean ValidsInt = false;
-            while (!ValidsInt) {
-                if (scanner.hasNextInt()) {
-                    row = scanner.nextInt();
-                    if (scanner.hasNextInt()) {
-                        col = scanner.nextInt();
-                        ValidsInt = true;
-                    } else {
-                        System.out.println("Erreur : deux entiers doivent être saisis.");
-                        scanner.next();
-                    }
-                } else {
-                    System.out.println("Erreur : deux entiers doivent être saisis.");
-                    scanner.next();
-                }
-            }
-            List<int[]> emptyBoxes = board.findEmptyBoxes(); // on récupère les cases vides
-            
-            
-            // Vérifier si les coordonnées sont égales à 0
-            if (row == 0 && col == 0) {
-            	System.out.println("\nVeuillez patienter, le solveur est en marche...\n " );
-            	useSolver = true;
-            	long startTime = System.currentTimeMillis();
-                // Appeler le solveur pour résoudre le taquin
-                List<String> solution = board.solve();
-                long endTime = System.currentTimeMillis();
-                long executionTime = endTime - startTime;
-                for (String move : solution) {
-                	int row1, col1, row2, col2;
-                    String[] parts = move.split(" ");
-
-	                // Extraire le mouvement (première partie)
-	                String direction = parts[0];
-
-	                // Extraire les coordonnées de la case vide d'origine (deuxième partie)
-	                String[] startCoords = parts[1].split(",");
-	                row1 = Integer.parseInt(startCoords[0]);
-	                col1 = Integer.parseInt(startCoords[1]);
-
-	                // Extraire les coordonnées de la case vide cible (troisième partie)
-	                String[] endCoords = parts[2].split(",");
-	                row2 = Integer.parseInt(endCoords[0]);
-	                col2 = Integer.parseInt(endCoords[1]);
-                    // Analyser le mouvement pour obtenir les coordonnées des cases
-	                System.out.println("\nDéplacement : " + direction + " ("+ (row1+1) + "," + (col1+1) +") <=> ("+ (row2+1) + "," + (col2+1) +")\n");
-
-                    // Effectuer le déplacement sur le plateau de jeu en utilisant la méthode swap()
-                    board.swap2(row2, col2, row1, col1);
-                    shot ++;
-                    board.displayBoard();
-	
-	           }
-               System.out.println("Temps d'execution du solveur: " + executionTime + " millisecondes");
-	           break; // Sortir de la boucle while
-            }
-            
-            
-            List<int[]> adjacentEmptyBoxes = new ArrayList<>();
-
-            for (int[] emptyBox : emptyBoxes) {
-                int rowEmpty = emptyBox[0];
-                int colEmpty = emptyBox[1];
-                if (board.isAdjacent(row -1, col-1,rowEmpty,colEmpty)) {
-                    adjacentEmptyBoxes.add(emptyBox); //si la case rentrée est adjacente à une case vide on l'ajoute
-                }
-            }
-
-            if (adjacentEmptyBoxes.size() == 1) { // le cas classique où il n'y a qu'une seul case vide adjacente
-                int rowEmpty=adjacentEmptyBoxes.get(0)[0];
-                int colEmpty=adjacentEmptyBoxes.get(0)[1];
-                if (row >= 1 && row <= board.getBoardSize() && col >= 1 && col <= board.getBoardSize()) {
-                	if( board.swap(rowEmpty,colEmpty,row-1, col-1)) {
-                		shot ++;
-                	}
-                }else {
-                    System.out.println("Coordonnées invalides. Veuillez réessayer.");
-                }
-            } else if (adjacentEmptyBoxes.size() > 1) { // si il y en a plus 
-                System.out.println("Il y a plusieurs cases vides adjacentes. Veuillez choisir une des cases vides suivantes :");
-                for (int i = 0; i < adjacentEmptyBoxes.size(); i++) {
-                    int[] emptyBox=adjacentEmptyBoxes.get(i);
-                    int rowEmpty=emptyBox[0];
-                    int colEmpty=emptyBox[1];
-                    System.out.println((i +1)+ ") Coordonnées : ("+(rowEmpty + 1)+", "+(colEmpty +1)+")");
-                }
-
-                boolean validChoice = false;
-                int choice = 0;
-                while (!validChoice) {
-                    System.out.print("\nEntrez le numéro du choix de la case vide adjacente à utiliser : ");
-                    if (scanner.hasNextInt()) {
-                        choice = scanner.nextInt();
-                        if (choice >= 1 && choice <= adjacentEmptyBoxes.size()) {
-                            validChoice = true;
-                        } else {
-                            System.out.println("Choix invalide. Veuillez réessayer.");
-                        }
-                    } else {
-                        System.out.println("Erreur : vous devez entrer un entier.");
-                        scanner.next();
-                    }
-                }
-
-                int[] emptyBox = adjacentEmptyBoxes.get(choice - 1);
-                int rowEmpty1 = emptyBox[0];
-                int colEmpty1 = emptyBox[1];
-
-                if (row >= 1 && row <= board.getBoardSize() && col >= 1 && col <= board.getBoardSize()) {
-                    if (board.swap(rowEmpty1, colEmpty1, row - 1, col - 1)) {
-                        shot++; // Incrémentation seulement si le coup est valide
-                    }
-                } else {
-                    System.out.println("Coordonnées invalides. Veuillez réessayer.");
-                }
-            }else{
-                System.out.println("Aucune case vide adjacente. Veuillez réessayer.");
-            }
-            System.out.println("\nNombre de coups : " + shot + "\n"); //On affiche a chaque coup, valide ou non
-        }
-        end = System.currentTimeMillis();
-        long execution = end - start;
-        // Fermer le scanner
-        scanner.close();
-        
-        int execution_sec = (int) (execution / 1000.0);
-        minutes = execution_sec / 60;
-        int secondes = execution_sec % 60;
-       
-        if(useSolver == false) { //Message de fin selon le type de résolution (utilisateur ou solver)
-        	Save.updateScoreAndAccessibility(saveSelectionString, levelSelection.replace(".csv", ""),shot,execution_sec);
-        	System.out.println("\n\nBravo vous avez gagné en "+ shot + " coups !");
-        	System.out.print("Vous avez résolu le taquin en : ");
-        	if (minutes > 0) {
-        	    System.out.print(minutes + " minute(s) ");
-        	}
-        	System.out.println(secondes + " seconde(s)");
-        }else {
-        	System.out.println("\n\nIl a fallu " + shot + " coups pour résoudre le taquin.");
-        	
-        }
     }
+
+	 public static boolean gameSolved(short[] grid, String Csv_path) {
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader(Csv_path));
+            String line;
+            int i = 0;
+            int boardSize = (int) Math.sqrt(grid.length);
+
+            while ((line = reader.readLine()) != null) {
+                String[] values = line.split(",");
+
+                for (int j = 0; j < values.length; j++) {
+                    if (grid[i * boardSize + j] != Integer.parseInt(values[j])) {
+                        reader.close();
+                        return false;
+                    }
+                }
+
+                i++;
+            }
+
+            reader.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+        
+        return true;
+    }
+	 
+
+	 private void displayBoard(Board board, Stage primaryStage) {
+	        boardPane.getChildren().clear();
+
+	        
+	            for (int i = 0; i < board.getBoardSize() * board.getBoardSize(); i++) {
+	            	final int currentIndex = i;
+	                Button button = new Button(board.getGrid()[i].getDisplay());
+	                button.setPrefSize(TILE_SIZE, TILE_SIZE);
+	                button.setOnAction(event -> handleButtonClick(currentIndex, primaryStage, board));
+	                GridPane.setRowIndex(button, i/board.getBoardSize());
+	                GridPane.setColumnIndex(button, i%board.getBoardSize());
+	                if (board.getGrid()[i] instanceof Empty) {
+	                    // Case vide
+	                    button.setBackground(new Background(new BackgroundFill(Color.GREEN, CornerRadii.EMPTY, javafx.geometry.Insets.EMPTY)));
+	                }
+	                boardPane.getChildren().add(button);
+	            }
+	        }
+
+	 private void handleButtonClick(int index1, Stage primaryStage, Board board) {
+		    if (!(board.getGrid()[index1] instanceof Empty)) {
+		        // Case non vide
+		        List<int[]> emptyBoxes = board.findEmptyBoxes(); // on récupère les cases vides
+		        List<int[]> adjacentEmptyBoxes = new ArrayList<>();
+
+		        for (int[] emptyBox : emptyBoxes) {
+		            int rowEmpty = emptyBox[0];
+		            int colEmpty = emptyBox[1];
+		            int index2 = rowEmpty * board.getBoardSize() + colEmpty;
+		            if (board.isAdjacent(index1, index2)) {
+		                adjacentEmptyBoxes.add(emptyBox); // si la case rentrée est adjacente à une case vide on l'ajoute
+		            }
+		        }
+
+		        if (adjacentEmptyBoxes.size() > 0) {
+
+		            // Stocker les coordonnées de la case non vide sélectionnée
+		            int rowNonEmpty = index1 / board.getBoardSize();
+		            int colNonEmpty = index1 % board.getBoardSize();
+
+		            // Attente de la sélection du bouton vide par l'utilisateur
+		            for (javafx.scene.Node node : primaryStage.getScene().getRoot().getChildrenUnmodifiable()) {
+		                if (node instanceof Button) {
+		                    Button button = (Button) node;
+		                    button.setOnAction(event -> {
+		                        Button clickedButton = (Button) event.getSource();
+		                        // Vérifier si le bouton cliqué est un bouton vide adjacent
+		                        for (int[] adjacentBox : adjacentEmptyBoxes) {
+		                            int rowAdjacent = adjacentBox[0];
+		                            int colAdjacent = adjacentBox[1];
+		                            Button adjacentButton = getButtonAt(rowAdjacent, colAdjacent, boardPane);
+
+		                            if (clickedButton == adjacentButton) {
+		                                // Effectuer l'échange avec le bouton vide adjacent sélectionné
+		                                if (board.swap(rowNonEmpty, colNonEmpty, rowAdjacent, colAdjacent)) {
+		                                    // Actualiser l'affichage après l'échange
+		                                    displayBoard(board, primaryStage);
+		                                } else {
+		                                    System.out.println("Mouvement invalide. Veuillez choisir une autre case vide adjacente.");
+		                                }
+		                            }
+		                        }
+		                    });
+		                }
+		            }
+		        } else {
+		            System.out.println("Aucune case vide adjacente. Veuillez choisir une autre case non vide.");
+		        }
+		    }
+		}
+
+
+	 private void solver(Stage primaryStage) {
+		  System.out.println("\nVeuillez patienter, le solveur est en marche...\n");
+		  long startTime = System.currentTimeMillis();
+		  // Appeler le solveur pour résoudre le taquin
+		  List<String> solution = this.board.solve();
+		  long endTime = System.currentTimeMillis();
+		  long executionTime = endTime - startTime;
+		  
+		  for (String move : solution) {
+		      String[] parts = move.split(" ");
+
+		      // Extraire le mouvement (première partie) pour l affichage si quelqun a la force de le faire
+		      //String direction = parts[0];
+
+		      // Extraire les coordonnées de la case vide d'origine (deuxième partie)
+		      int index1 =  Integer.parseInt(parts[1]);
+
+		      // Extraire les coordonnées de la case vide cible (troisième partie)
+		      int index2 =  Integer.parseInt(parts[2]);
+		      // Effectuer le déplacement sur le plateau de jeu en utilisant la méthode swap()
+		      if (board.swap2(index1,index2)) {
+		          displayBoard(board,primaryStage);
+				}
+		      
+		  }
+		  System.out.println("Temps d'exécution du solveur : " + executionTime + " millisecondes");
+	}
+	 private Button getButtonAt(int row, int col, GridPane gridPane) {
+		    for (javafx.scene.Node node : gridPane.getChildren()) {
+		        if (GridPane.getRowIndex(node) == row && GridPane.getColumnIndex(node) == col && node instanceof Button) {
+		            return (Button) node;
+		        }
+		    }
+		    return null; // Si aucun bouton ne correspond aux coordonnées spécifiées
+		}
+
+
+	 public static void main(String[] args) {
+	        launch(args);
+	    }
 }
+
