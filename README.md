@@ -48,12 +48,12 @@ Nous espérons que vous apprécierez notre jeu de taquin et n'hésitez pas à no
 - [X] Avoir une équipe de BG :grin:
 
  Cahier des Charges : 
- - [ ] differents niveaux (au moins 10) 
- - [ ] chaque niveau : au moins une case vide (ou + selon difficulté)
- - [ ] des niveaux ont des cases inexistantes ou indestructibles 
+ - [X] differents niveaux (au moins 10) 
+ - [X] chaque niveau : au moins une case vide (ou + selon difficulté)
+ - [X] des niveaux ont des cases inexistantes ou indestructibles 
  - [ ] afficher le niveau resolu 
  - [ ] melange des cases : soit tout aleatoire soit qql case aleatoire (et afficher le type de melange)
- - [ ] aucune case sur sa position de depart (meme si melangé aleatoirement) sinon afficher un message 
+ - [X] aucune case sur sa position de depart (meme si melangé aleatoirement) sinon afficher un message 
  - [ ] detecter si le niveau est jouable et afficher une information 
  - [ ] deplacer les cases une par une, le compteur sera incrémenté 
  - [ ] sauvegarder les nombres de coup a la fin d'un niveau pour afficher le meilleur score 
