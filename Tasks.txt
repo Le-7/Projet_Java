@@ -120,3 +120,11 @@ Résoudre tous les taquins avec l’algorithme A* :
         Par : 
         Estimation : 
         Réel : 
+        
+INTERFACE GRAPHIQUE : 
+
+    - Plateau de jeu 
+        Statut : EN COURS
+        Par : Tout le monde
+        Estimation : 20h
+        Réel :
