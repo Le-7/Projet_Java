@@ -256,7 +256,7 @@ public class Menu extends Application{
             String line;
             while ((line = reader.readLine()) != null) {
                 String[] data = line.split(",");
-                if (data.length == 3) {
+                if (data.length == 4) {
                     levelInfo.add(data);
                 }
             }
@@ -297,7 +297,8 @@ public class Menu extends Application{
             for (String[] info : levelInfo) {
                 String level = info[0];
                 String bestTime = info[3];
-
+                System.out.println(level);
+                System.out.println(Levelname);
                 if (level.equals(Levelname)) {
                     return Integer.parseInt(bestTime);
                 }

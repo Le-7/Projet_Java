@@ -53,7 +53,7 @@ public class GameBoard extends Application {
  }
  
  public Scene showGame(Stage primaryStage) {
-	    board = new Board("levels/" + levelSelection); // Initialiser le plateau avec le niveau sélectionné
+	    board = new Board("levels/" + levelSelection+".csv"); // Initialiser le plateau avec le niveau sélectionné
 	    int maxCount = 1000000;// Maximum d'essais pour le mélange du plateau
 	    int count = 0;// Initialiser un compteur pour les tentatives de mélange
 	    // Label pour afficher les erreurs
@@ -83,10 +83,12 @@ public class GameBoard extends Application {
 	    
 	    // Création des labels pour les mouvements et le timer
 	    movesLabel = new Label("Moves: "+score);
+	    // Afficher le meilleur score pour ce niveau
+	    Label infoLabel = new Label("Votre meilleur score pour ce niveau est de : " + Menu.getBestScore(savesString, levelSelection)+ "\n\nVotre meilleur temps pour ce niveau est de : "+Menu.getBestTime(savesString, levelSelection)+" secondes");
 	    VBox textPane = new VBox(10);
 	    textPane.setPadding(new Insets(10));
 	    initTimer();
-	    textPane.getChildren().addAll(timerLabel,movesLabel);
+	    textPane.getChildren().addAll(timerLabel,movesLabel,infoLabel);
 	    root.getChildren().addAll(textPane,game);
 	    
 	    List<String> solution = new ArrayList<>(); // Liste pour stocker la solution
@@ -94,14 +96,10 @@ public class GameBoard extends Application {
 	    // Générateur de nombres aléatoires pour le mélange du plateau
 	    Random random = new Random();
 	    int randomNumber = random.nextInt(2);
-	    
-	    // Afficher le meilleur score pour ce niveau
-	    errorLabel.setText("Votre meilleur score pour ce niveau est de : " + Menu.getBestScore(savesString, "levels/" + levelSelection)+ "\n\n");
-	    errorLabel.setVisible(true);
 
 	    // Tenter de mélanger le plateau jusqu'à ce qu'il ne soit plus à sa position initiale
 	    while(board.InitialPosition() || !board.solveWithinTime(50,solution)) {
-	        board = new Board("levels/" + levelSelection);
+	        board = new Board("levels/" + levelSelection+".csv");
 	        if (board.isEZ()) {
 	            if(randomNumber == 0) {
 	                System.out.println("Mélange automatique");
@@ -183,7 +181,7 @@ public class GameBoard extends Application {
               
                 boardPane.getChildren().add(button);
             }
-		  if (gameSolved(IDASolver.convertBoxArrayToShortArray(board.getGrid()), "levels/"+levelSelection)) {
+		  if (gameSolved(IDASolver.convertBoxArrayToShortArray(board.getGrid()), "levels/"+levelSelection+".csv")) {
         	 timeline.stop();
         	 for (javafx.scene.Node node : boardPane.getChildren()) {
                  if (node instanceof Button) {
@@ -191,14 +189,14 @@ public class GameBoard extends Application {
                      button.setDisable(true);
                  }
              }
-        	 Menu.updateScoreAndAccessibility(savesString, levelSelection, shot);
+        	 Menu.updateScoreAndAccessibility(savesString, levelSelection, score, elapsedTimeInSeconds);
 
         	 
              // Affichage de l'alerte
              Alert alert = new Alert(AlertType.INFORMATION);
              alert.setTitle("Félicitations !");
              alert.setHeaderText(null);
-             alert.setContentText("Vous avez gagné en :"+elapsedTimeInSeconds+" secondes et en :"+shot+" coups !");
+             alert.setContentText("Vous avez gagné en :"+elapsedTimeInSeconds+" secondes et en :"+score+" coups !");
              alert.getDialogPane().getButtonTypes().clear();
              alert.getDialogPane().getButtonTypes().add(ButtonType.OK);
              alert.setOnCloseRequest(e -> {

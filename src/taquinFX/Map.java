@@ -80,7 +80,7 @@ public class Map {
         for(int i = 0; i <= 10; i++) {
             // Création d'un bouton avec le texte et le niveau correspondant
             Button btn = createButton(String.valueOf(levels[i]), levels[i] + 1);
-            createBtn(btn, gridPane, cols[i], rows[i], primaryStage, String.valueOf(levels[i]));
+           placeBtn(btn, gridPane, cols[i], rows[i], primaryStage, String.valueOf(levels[i]));
         }
 return scene;
     }
@@ -127,12 +127,12 @@ return scene;
    
     // Méthode pour charger un niveau spécifique
     public void loadLevel(int level,Stage primaryStage) {
-		GameBoard gameBoard = new GameBoard("lvl" + level + ".csv",saveString);
+		GameBoard gameBoard = new GameBoard("lvl" + level,saveString);
         gameBoard.showGame(primaryStage);
     }
 
     // Méthode pour créer un bouton sur le GridPane à une position spécifique
-    public void createBtn(Button btn, GridPane gridPane, int columns, int rows, Stage primaryStage, String lvl) {
+    public void placeBtn(Button btn, GridPane gridPane, int columns, int rows, Stage primaryStage, String lvl) {
         AnchorPane anchorPane = new AnchorPane(btn);
         GridPane.setConstraints(anchorPane, columns, rows);
         gridPane.getChildren().add(anchorPane);
