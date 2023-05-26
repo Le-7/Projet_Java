@@ -183,6 +183,31 @@ public class GameBoard extends Application {
               
                 boardPane.getChildren().add(button);
             }
+		  if (gameSolved(IDASolver.convertBoxArrayToShortArray(board.getGrid()), "levels/"+levelSelection)) {
+        	 timeline.stop();
+        	 for (javafx.scene.Node node : boardPane.getChildren()) {
+                 if (node instanceof Button) {
+                     Button button = (Button) node;
+                     button.setDisable(true);
+                 }
+             }
+        	 Menu.updateScoreAndAccessibility(savesString, levelSelection, shot);
+
+        	 
+             // Affichage de l'alerte
+             Alert alert = new Alert(AlertType.INFORMATION);
+             alert.setTitle("Félicitations !");
+             alert.setHeaderText(null);
+             alert.setContentText("Vous avez gagné en :"+elapsedTimeInSeconds+" secondes et en :"+shot+" coups !");
+             alert.getDialogPane().getButtonTypes().clear();
+             alert.getDialogPane().getButtonTypes().add(ButtonType.OK);
+             alert.setOnCloseRequest(e -> {
+                 // Code pour retourner à la carte
+                 System.out.println("Retour à la carte");
+             });
+
+             alert.showAndWait();
+ 		}
 	 }
 
 	 private void handleButtonClick(int index1, Stage primaryStage, Board board) {
