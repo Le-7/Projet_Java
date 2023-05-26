@@ -63,6 +63,16 @@ public class GameBoard extends Application {
 	    // Bouton pour lancer le solveur
 	    Button solverButton = new Button("Solveur du taquin");
 	    solverButton.setOnAction(event -> solver(primaryStage));
+	 
+	 
+        Button quitBtn = new Button("Quitter le jeu");
+        quitBtn.setMinWidth(100);
+        quitBtn.setMaxWidth(200);
+        quitBtn.setStyle("-fx-background-color: rgba(255, 255, 255, 0.5); -fx-background-radius: 15; -fx-font-size: 16px;");
+        quitBtn.setOnAction(e -> {
+            primaryStage.close();
+        });
+
 	    
 	    primaryStage.setTitle("Taquin");// Titre de la fenêtre
 	    // Création de la grille pour afficher le plateau
@@ -70,6 +80,18 @@ public class GameBoard extends Application {
 	    boardPane.setAlignment(Pos.CENTER);
 	    boardPane.setHgap(10);
 	    boardPane.setVgap(10);
+	 
+	    Button returnToMapButton = new Button("Retour à la carte");
+        returnToMapButton.setMinWidth(100);
+        returnToMapButton.setMaxWidth(200);
+        returnToMapButton.setStyle("-fx-background-color: rgba(255, 255, 255, 0.5); -fx-background-radius: 15; -fx-font-size: 16px;");
+        returnToMapButton.setOnAction(e -> {
+        	// Extraire le nom du fichier
+        	String fileName = savesString.substring(savesString.lastIndexOf("/") + 1);
+            Map map = new Map(fileName.replace(".csv", ""));
+            map.showMap(primaryStage);
+        });
+
 	    
 	    // Conteneur pour le jeu et le label d'erreur
 	    VBox game = new VBox();
@@ -78,6 +100,9 @@ public class GameBoard extends Application {
 	    game.getChildren().add(errorLabel);
 	    game.getChildren().add(boardPane);
 	    game.getChildren().add(solverButton);
+	  game.getChildren().add(quitBtn);
+        game.getChildren().add(returnToMapButton);
+
 	    
 	    HBox root = new HBox(); // Conteneur principal
 	    
