@@ -37,6 +37,7 @@ public class GameBoard extends Application {
  int score = 0; // Score actuel
  private Label timerLabel; // Label pour le timer
  private Timeline timeline; // Chronologie pour le timer
+ private Label movesLabel;
  private int elapsedTimeInSeconds = 0; // Temps écoulé en secondes
 
  // Constructeur de GameBoard
@@ -81,7 +82,7 @@ public class GameBoard extends Application {
 	    HBox root = new HBox(); // Conteneur principal
 	    
 	    // Création des labels pour les mouvements et le timer
-	    Label movesLabel = new Label("Moves: 0");
+	    movesLabel = new Label("Moves: "+score);
 	    VBox textPane = new VBox(10);
 	    textPane.setPadding(new Insets(10));
 	    initTimer();
@@ -208,6 +209,8 @@ public class GameBoard extends Application {
 		            if (board.swap(rowNonEmpty, colNonEmpty, rowEmpty, colEmpty)) {
 		                // Actualiser l'affichage après l'échange
 		                displayBoard(board, primaryStage);
+		                score++;
+		                movesLabel.setText("Moves: "+score);
 		                errorLabel.setVisible(false); // Rendre errorLabel non visible
 		            } else {
 		            	errorLabel.setText("Mouvement invalide. Veuillez choisir une autre case vide adjacente.");
@@ -250,6 +253,8 @@ public class GameBoard extends Application {
 		                int colNonEmpty = index1 % board.getBoardSize();
 
 		                if (board.swap(rowNonEmpty, colNonEmpty, rowEmpty1, colEmpty1)) { // on fait l'échange
+		                	score++;
+			                movesLabel.setText("Moves: "+score);
 		                    displayBoard(board, primaryStage); // Actualiser l'affichage après l'échange
 		                } else {
 		                	errorLabel.setText("Mouvement invalide. Veuillez choisir une case vide adjacente.");
