@@ -233,8 +233,9 @@ public class GameBoard extends Application {
 		             alert.getDialogPane().getButtonTypes().clear();
 		             alert.getDialogPane().getButtonTypes().add(ButtonType.OK);
 		             alert.setOnCloseRequest(e -> {
-		                 // Code pour retourner à la carte
-		                 System.out.println("Retour à la carte");
+		            	 String fileName = savesString.substring(savesString.lastIndexOf("/") + 1);
+		                 Map map = new Map(fileName.replace(".csv", ""));
+		                 map.showMap(primaryStage);;
 		             });
 
 		             alert.showAndWait();
