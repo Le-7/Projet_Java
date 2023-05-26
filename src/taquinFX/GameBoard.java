@@ -7,8 +7,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
+import java.util.concurrent.atomic.AtomicInteger;
+
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
+import javafx.animation.PauseTransition;
 import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.geometry.Insets;
@@ -39,7 +42,8 @@ public class GameBoard extends Application {
  private Timeline timeline; // Chronologie pour le timer
  private Label movesLabel;
  private int elapsedTimeInSeconds = 0; // Temps écoulé en secondes
-
+ private boolean initial;
+ private VBox game;
  // Constructeur de GameBoard
  public GameBoard(String levelSelection, String savesString) {
      super(); // Appel du constructeur de la superclasse Application
@@ -53,9 +57,10 @@ public class GameBoard extends Application {
  }
  
  public Scene showGame(Stage primaryStage) {
-	    board = new Board("levels/" + levelSelection+".csv"); // Initialiser le plateau avec le niveau sélectionné
+	 	board = new Board("levels/" + levelSelection+".csv"); // Initialiser le plateau avec le niveau sélectionné
 	    int maxCount = 1000000;// Maximum d'essais pour le mélange du plateau
-	    int count = 0;// Initialiser un compteur pour les tentatives de mélange
+	    AtomicInteger count = new AtomicInteger(0);// Initialiser un compteur pour les tentatives de mélange
+	    initial = true;
 	    // Label pour afficher les erreurs
 	    errorLabel = new Label();
 	    errorLabel.setVisible(false);
@@ -63,8 +68,7 @@ public class GameBoard extends Application {
 	    // Bouton pour lancer le solveur
 	    Button solverButton = new Button("Solveur du taquin");
 	    solverButton.setOnAction(event -> solver(primaryStage));
-	 
-	 
+	    
         Button quitBtn = new Button("Quitter le jeu");
         quitBtn.setMinWidth(100);
         quitBtn.setMaxWidth(200);
@@ -72,15 +76,14 @@ public class GameBoard extends Application {
         quitBtn.setOnAction(e -> {
             primaryStage.close();
         });
-
-	    
+        
 	    primaryStage.setTitle("Taquin");// Titre de la fenêtre
 	    // Création de la grille pour afficher le plateau
 	    boardPane = new GridPane();
 	    boardPane.setAlignment(Pos.CENTER);
 	    boardPane.setHgap(10);
 	    boardPane.setVgap(10);
-	 
+	    
 	    Button returnToMapButton = new Button("Retour à la carte");
         returnToMapButton.setMinWidth(100);
         returnToMapButton.setMaxWidth(200);
@@ -91,24 +94,21 @@ public class GameBoard extends Application {
             Map map = new Map(fileName.replace(".csv", ""));
             map.showMap(primaryStage);
         });
-
-	    
+        
 	    // Conteneur pour le jeu et le label d'erreur
-	    VBox game = new VBox();
+	    game = new VBox();
 	    game.setAlignment(Pos.CENTER);
 	    game.setSpacing(10);
 	    game.getChildren().add(errorLabel);
 	    game.getChildren().add(boardPane);
 	    game.getChildren().add(solverButton);
-	  game.getChildren().add(quitBtn);
+	    game.getChildren().add(quitBtn);
         game.getChildren().add(returnToMapButton);
-
 	    
 	    HBox root = new HBox(); // Conteneur principal
 	    
 	    // Création des labels pour les mouvements et le timer
-	    movesLabel = new Label("Moves: "+score);
-	    // Afficher le meilleur score pour ce niveau
+	    movesLabel = new Label("Moves: "+score); // Afficher le meilleur score pour ce niveau
 	    Label infoLabel = new Label("Votre meilleur score pour ce niveau est de : " + Menu.getBestScore(savesString, levelSelection)+ "\n\nVotre meilleur temps pour ce niveau est de : "+Menu.getBestTime(savesString, levelSelection)+" secondes");
 	    VBox textPane = new VBox(10);
 	    textPane.setPadding(new Insets(10));
@@ -121,36 +121,44 @@ public class GameBoard extends Application {
 	    // Générateur de nombres aléatoires pour le mélange du plateau
 	    Random random = new Random();
 	    int randomNumber = random.nextInt(2);
+	    
+	    displayBoard(board,primaryStage,initial);// Afficher le plateau
+	    errorLabel.setText("En cours de mélange...");
+	  	errorLabel.setVisible(true);
+	    initial = false;
+	    // Pause pendant 5 secondes avant de mélanger 
+	    PauseTransition pause = new PauseTransition(Duration.seconds(5));
+	    pause.setOnFinished(event -> {
+	        // Mélange le plateau
+	    	while(board.InitialPosition() || !board.solveWithinTime(50,solution)) {
+	    		board = new Board("levels/" + levelSelection+".csv");
+		        if (board.isEZ()) {
+		            if(randomNumber == 0) {
+		                System.out.println("Mélange automatique");
+		                board.mixBoardAuto();
+		                while (!board.isSolvable()) {
+		                    board.mixBoardAuto();
+		                }
+		            } else {
+		                System.out.println("Mélange manuel");
+		                board.mixBoard(40);
+		            }
+		        } else {
+		            board.mixBoard(40);
+		        }
+		        count.incrementAndGet();
 
-	    // Tenter de mélanger le plateau jusqu'à ce qu'il ne soit plus à sa position initiale
-	    while(board.InitialPosition() || !board.solveWithinTime(50,solution)) {
-	        board = new Board("levels/" + levelSelection+".csv");
-	        if (board.isEZ()) {
-	            if(randomNumber == 0) {
-	                System.out.println("Mélange automatique");
-	                board.mixBoardAuto();
-	                while (!board.isSolvable()) {
-	                    board.mixBoardAuto();
-	                }
-	            } else {
-	                System.out.println("Mélange manuel");
-	                board.mixBoard(40);
+	            if (count.get() == maxCount) {
+	                errorLabel.setText("Impossible de mélanger le plateau sans revenir à sa position initiale");
+	                errorLabel.setVisible(true);
+	                break;
 	            }
-	        } else {
-	            board.mixBoard(40);
 	        }
-	        
-	        // Augmenter le compteur d'essais
-	        count++;
-	        
-	        // Afficher un message d'erreur si le maximum d'essais est atteint
-	        if (count == maxCount) {
-	            errorLabel.setText("Impossible de mélanger le plateau sans revenir à sa position initiale");
-	            errorLabel.setVisible(true);
-	        }
-	    } 
-	    displayBoard(board, primaryStage);// Afficher le plateau
-	    timeline.play(); // Démarrer le timer
+	    	errorLabel.setVisible(false);
+	        displayBoard(board, primaryStage, initial); 
+	        timeline.play(); // Commence le minuteur 
+	    });
+	    pause.play();
 	    Scene scene = new Scene(root, 968, 544); // Créer une scène fixe
 	    // Appliquer la scène à la fenêtre principale
 	    primaryStage.setScene(scene);
@@ -187,8 +195,15 @@ public class GameBoard extends Application {
     }
 	 
 
-	 private void displayBoard(Board board, Stage primaryStage) {
+	 private void displayBoard(Board board, Stage primaryStage, boolean initial) {
+		 
 		 boardPane.getChildren().clear();
+		 for (javafx.scene.Node node : game.getChildren()) {
+    		 if (node instanceof Button) {
+                 Button button = (Button) node;
+                 button.setDisable(false);
+             }
+    	 }
          for (int i = 0; i < board.getBoardSize() * board.getBoardSize(); i++) {
             	final int currentIndex = i;
                 Button button = new Button(board.getGrid()[i].getDisplay());
@@ -205,34 +220,39 @@ public class GameBoard extends Application {
                 GridPane.setColumnIndex(button, i%board.getBoardSize());
               
                 boardPane.getChildren().add(button);
-            }
+          }
 		  if (gameSolved(IDASolver.convertBoxArrayToShortArray(board.getGrid()), "levels/"+levelSelection+".csv")) {
-        	 timeline.stop();
-        	 for (javafx.scene.Node node : boardPane.getChildren()) {
-                 if (node instanceof Button) {
-                     Button button = (Button) node;
-                     button.setDisable(true);
-                 }
-             }
-        	 Menu.updateScoreAndAccessibility(savesString, levelSelection, score, elapsedTimeInSeconds);
+	        	 if(initial == false) {
+	        		 timeline.stop();
+	        		 Menu.updateScoreAndAccessibility(savesString, levelSelection, score, elapsedTimeInSeconds);
+	        		// Affichage de l'alerte
+		             Alert alert = new Alert(AlertType.INFORMATION);
+		             alert.setTitle("Félicitations !");
+		             alert.setHeaderText(null);
+		             alert.setContentText("Vous avez gagné en :"+elapsedTimeInSeconds+" secondes et en :"+score+" coups !");
+		             alert.getDialogPane().getButtonTypes().clear();
+		             alert.getDialogPane().getButtonTypes().add(ButtonType.OK);
+		             alert.setOnCloseRequest(e -> {
+		                 // Code pour retourner à la carte
+		                 System.out.println("Retour à la carte");
+		             });
 
-        	 
-             // Affichage de l'alerte
-             Alert alert = new Alert(AlertType.INFORMATION);
-             alert.setTitle("Félicitations !");
-             alert.setHeaderText(null);
-             alert.setContentText("Vous avez gagné en :"+elapsedTimeInSeconds+" secondes et en :"+score+" coups !");
-             alert.getDialogPane().getButtonTypes().clear();
-             alert.getDialogPane().getButtonTypes().add(ButtonType.OK);
-             alert.setOnCloseRequest(e -> {
-                 // Code pour retourner à la carte
-                 System.out.println("Retour à la carte");
-             });
-
-             alert.showAndWait();
- 		}
+		             alert.showAndWait();
+	        	 }
+	        	 for (javafx.scene.Node node : boardPane.getChildren()) {
+	                 if (node instanceof Button) {
+	                     Button button = (Button) node;
+	                     button.setDisable(true);
+	                 }
+	             }
+	        	 for (javafx.scene.Node node : game.getChildren()) {
+	        		 if (node instanceof Button) {
+	                     Button button = (Button) node;
+	                     button.setDisable(true);
+	                 }
+	        	 }
+	 		}
 	 }
-
 	 private void handleButtonClick(int index1, Stage primaryStage, Board board) {
 		    if (!(board.getGrid()[index1] instanceof Empty)) {
 		        // Case non vide
@@ -256,7 +276,7 @@ public class GameBoard extends Application {
 		            int colNonEmpty = index1 % board.getBoardSize();
 		            if (board.swap(rowNonEmpty, colNonEmpty, rowEmpty, colEmpty)) {
 		                // Actualiser l'affichage après l'échange
-		                displayBoard(board, primaryStage);
+		                displayBoard(board, primaryStage,initial);
 		                score++;
 		                movesLabel.setText("Moves: "+score);
 		                errorLabel.setVisible(false); // Rendre errorLabel non visible
@@ -303,7 +323,7 @@ public class GameBoard extends Application {
 		                if (board.swap(rowNonEmpty, colNonEmpty, rowEmpty1, colEmpty1)) { // on fait l'échange
 		                	score++;
 			                movesLabel.setText("Moves: "+score);
-		                    displayBoard(board, primaryStage); // Actualiser l'affichage après l'échange
+		                    displayBoard(board, primaryStage,initial); // Actualiser l'affichage après l'échange
 		                } else {
 		                	errorLabel.setText("Mouvement invalide. Veuillez choisir une case vide adjacente.");
 	                        errorLabel.setVisible(true);
@@ -340,7 +360,7 @@ public class GameBoard extends Application {
 		      int index2 =  Integer.parseInt(parts[2]);
 		      // Effectuer le déplacement sur le plateau de jeu en utilisant la méthode swap()
 		      if (board.swap2(index1,index2)) {
-		          displayBoard(board,primaryStage);
+		          displayBoard(board,primaryStage,initial);
 		      }      
 		  }
 		  errorLabel.setText("Temps d'exécution du solveur : " + executionTime + " millisecondes");
@@ -363,6 +383,5 @@ public class GameBoard extends Application {
 	            updateTimerLabel();
 	        });
 	        timeline.getKeyFrames().add(keyFrame);
-	 }
-	  
+	 }  
 }
