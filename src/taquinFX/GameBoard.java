@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
+
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.PauseTransition;
@@ -42,6 +43,11 @@ public class GameBoard extends Application {
  private Label movesLabel;
  private int elapsedTimeInSeconds = 0; // Temps écoulé en secondes
  private VBox game;
+ private Button previousButton;
+ private Button nextButton;
+ private int currentStep;
+ 
+ 
  // Constructeur de GameBoard
  public GameBoard(String levelSelection, String savesString) {
      super(); // Appel du constructeur de la superclasse Application
@@ -64,7 +70,8 @@ public class GameBoard extends Application {
 
 	    // Bouton pour lancer le solveur
 	    Button solverButton = new Button("Solveur du taquin");
-	    solverButton.setOnAction(event -> solver(primaryStage));
+	    solverButton.setId("solverButton");
+	    solverButton.setOnAction(event -> solverHandle(primaryStage));
 	    
         Button quitBtn = new Button("Quitter le jeu");
         quitBtn.setMinWidth(100);
@@ -87,6 +94,7 @@ public class GameBoard extends Application {
         returnToMapButton.setStyle("-fx-background-color: rgba(255, 255, 255, 0.5); -fx-background-radius: 15; -fx-font-size: 16px;");
         returnToMapButton.setOnAction(e -> {
         	// Extraire le nom du fichier
+        	
         	String fileName = savesString.substring(savesString.lastIndexOf("/") + 1);
             Map map = new Map(fileName.replace(".csv", ""));
             map.showMap(primaryStage);
@@ -130,16 +138,20 @@ public class GameBoard extends Application {
 	    		board = new Board("levels/" + levelSelection+".csv");
 		        if (board.isEZ()) {
 		            if(randomNumber == 0) {
-		                System.out.println("Mélange automatique");
+		               errorLabel.setText("Mélange automatique");
+		               errorLabel.setVisible(true);
 		                board.mixBoardAuto();
 		                while (!board.isSolvable()) {
 		                    board.mixBoardAuto();
 		                }
 		            } else {
-		                System.out.println("Mélange manuel");
+		            	errorLabel.setText("Mélange manuel");
+		            	errorLabel.setVisible(true);
 		                board.mixBoard(100);
 		            }
 		        } else {
+		        	errorLabel.setText("Mélange manuel");
+	            	errorLabel.setVisible(true);
 		            board.mixBoard(100);
 		        }
 		        count.incrementAndGet();
@@ -150,7 +162,6 @@ public class GameBoard extends Application {
 	                break;
 	            }
 	        }
-	    	errorLabel.setVisible(false);
 	        displayBoard(board, primaryStage, false); 
 	        timeline.play(); // Commence le minuteur 
 	    });
@@ -192,7 +203,6 @@ public class GameBoard extends Application {
 	 
 
 	 private void displayBoard(Board board, Stage primaryStage, boolean initial) {
-		 
 		 boardPane.getChildren().clear();
 		 for (javafx.scene.Node node : game.getChildren()) {
     		 if (node instanceof Button) {
@@ -235,6 +245,14 @@ public class GameBoard extends Application {
 		             });
 
 		             alert.showAndWait();
+	        	 }else if(game.lookup("#solverButton") != null){
+	        		 Button button = (Button) game.lookup("#solverButton");
+		             button.setDisable(true);
+	        	 }else if(game.lookup("#solverManu") != null) {
+	        		 Button buttonManu = (Button) game.lookup("#solverManu");
+		             buttonManu.setDisable(true);
+		             Button buttonAuto = (Button) game.lookup("#solverAuto");
+		             buttonAuto.setDisable(true);
 	        	 }
 	        	 for (javafx.scene.Node node : boardPane.getChildren()) {
 	                 if (node instanceof Button) {
@@ -242,8 +260,6 @@ public class GameBoard extends Application {
 	                     button.setDisable(true);
 	                 }
 	             }
-	                     Button button = (Button) game.getChildren().get(2);
-	                     button.setDisable(true);
 	 		}
 	 }
 	 private void handleButtonClick(int index1, Stage primaryStage, Board board) {
@@ -282,7 +298,7 @@ public class GameBoard extends Application {
 		            alert.setTitle("Choix de la case vide adjacente");
 		            alert.setHeaderText("Il y a plusieurs cases vides adjacentes.");
 		            alert.setContentText("Veuillez choisir une des cases vides suivantes :");
-
+		        
 		            alert.setX(primaryStage.getX());
 		            alert.setY(primaryStage.getY());
 		            String[] options = new String[adjacentEmptyBoxes.size()];
@@ -290,7 +306,7 @@ public class GameBoard extends Application {
 		                int[] emptyBox = adjacentEmptyBoxes.get(i);
 		                int rowEmpty = emptyBox[0];
 		                int colEmpty = emptyBox[1];
-
+		                
 		                int index = rowEmpty * board.getBoardSize() + colEmpty;
 		                options[i] = "Case " + (char) (65 + i);
 		                Button button = (Button) boardPane.getChildren().get(index);
@@ -322,50 +338,132 @@ public class GameBoard extends Application {
 		                    errorLabel.setVisible(true);
 		                }
 		            } else {
-		                errorLabel.setText("Aucun choix effectué. Veuillez réessayer.");
-		                errorLabel.setVisible(true);
+		            	errorLabel.setText("Aucun choix effectué. Veuillez réessayer.");
+		            	errorLabel.setVisible(true);
 		            }
 		        }
 		    }
-		            
+	 }
+	 private void solverHandle(Stage primaryStage) {
+		 Button solverAuto = new Button("Résolution Automatique");
+		 solverAuto.setId("#solverAuto");
+		 Button solverManu = new Button("Résolution Manuelle");
+		 solverAuto.setId("#solverManu");
+		 Button buttonToRemove = (Button) game.lookup("#solverButton");
+		 game.getChildren().add(0, solverAuto);
+		 game.getChildren().add(1, solverManu);
+		 game.getChildren().remove(buttonToRemove);
+		 solverAuto.setOnAction(event -> {
+			 solverAuto(primaryStage);
+		 }
+		 );
+		 solverManu.setOnAction(event -> {
+			 solverManu(primaryStage);
+		 }
+		 );
+	 }
+
+	 private void solverAuto(Stage primaryStage) {
+		    errorLabel.setText("Veuillez patienter, le solveur est en marche...\n");
+		    errorLabel.setVisible(true);
+		    long startTime = System.currentTimeMillis();
+
+		    List<String> solution = board.solve();
+    		long endTime = System.currentTimeMillis();
+	        long executionTime = endTime - startTime;
+		    Timeline timeline = new Timeline();
+		    for (int i = 0; i < solution.size(); i++) {
+		        String move = solution.get(i);
+		        String[] parts = move.split(" ");
+		        int index1 = Integer.parseInt(parts[1]);
+		        int index2 = Integer.parseInt(parts[2]);
+		        System.out.println("point 1 : ("+ index1/board.getBoardSize() + ","+index1%board.getBoardSize()+ ") Point 2 : ("+ index2/board.getBoardSize() + ","+index2%board.getBoardSize());
+
+		        
+		        KeyFrame keyFrame = new KeyFrame(Duration.seconds(i * 7), event -> {
+		            if (board.swap2(index1, index2)) {
+		                displayBoard(board, primaryStage, true);
+		            }
+		        });
+		        timeline.getKeyFrames().add(keyFrame);
+		    }
+
+		    timeline.setOnFinished(event -> {
+		        
+		        errorLabel.setText("Temps d'exécution du solveur : " + executionTime + " millisecondes");
+		        errorLabel.setVisible(true);
+		    });
+
+		    timeline.play();
+	 }
+	 
+
+	 private void solverManu(Stage primaryStage) {
+		 	currentStep = -1;
+		    errorLabel.setText("Veuillez patienter, le solveur est en marche...\n");
+		    errorLabel.setVisible(true);
+
+		    List<String> solution1 = board.solve();
+		    for (int i = 0; i < solution1.size(); i++) {
+		        String move = solution1.get(i);
+		        String[] parts = move.split(" ");
+		        int index1 = Integer.parseInt(parts[1]);
+		        int index2 = Integer.parseInt(parts[2]);
+		        System.out.println("point 1 : ("+ index1/board.getBoardSize() + ","+index1%board.getBoardSize()+ ") Point 2 : ("+ index2/board.getBoardSize() + ","+index2%board.getBoardSize());
+		    }
+
+		    createNavigationButtons(primaryStage, solution1);
+		    updateButtons(solution1);
+		}
+
+		private void createNavigationButtons(Stage primaryStage, List<String> solution) {
+		    previousButton = new Button("Étape précédente");
+		    previousButton.setOnAction(event -> {
+		        if (currentStep > 0) {
+		            currentStep--;
+		            performStep(solution);
+		            displayBoard(board, primaryStage, true);
+		            updateButtons(solution);
 		        }
+		    });
 
+		    nextButton = new Button("Étape suivante");
+		    nextButton.setOnAction(event -> {
+		        if (currentStep < solution.size() - 1) {
+		            currentStep++;
+		            performStep(solution);
+		            displayBoard(board, primaryStage, true);
+		            updateButtons(solution);
+		        }
+		    });
 
-	 private void solver(Stage primaryStage) {
-		  System.out.println("\nVeuillez patienter, le solveur est en marche...\n");
-		  long startTime = System.currentTimeMillis();
-		  // Appeler le solveur pour résoudre le taquin
-		  List<String> solution = this.board.solve();
-		  long endTime = System.currentTimeMillis();
-		  long executionTime = endTime - startTime;
-		  
-		  for (String move : solution) {
-		      String[] parts = move.split(" ");
+		    // Placez les boutons de navigation dans votre conteneur approprié
+		    // par exemple, si vous utilisez un VBox, vous pouvez les ajouter ainsi :
+		    game.getChildren().addAll(previousButton, nextButton);
+		}
 
-		      // Extraire le mouvement (première partie) pour l affichage si quelqun a la force de le faire
-		      //String direction = parts[0];
+		private void updateButtons(List<String> solution) {
+		    previousButton.setDisable(currentStep <= 0);
+		    nextButton.setDisable(currentStep >= solution.size() - 1);
+		}
 
-		      // Extraire les coordonnées de la case vide d'origine (deuxième partie)
-		      int index1 =  Integer.parseInt(parts[1]);
-
-		      // Extraire les coordonnées de la case vide cible (troisième partie)
-		      int index2 =  Integer.parseInt(parts[2]);
-		      // Effectuer le déplacement sur le plateau de jeu en utilisant la méthode swap()
-		      if (board.swap2(index1,index2)) {
-		          displayBoard(board,primaryStage,true);
-		          timeline.stop();
-		      }      
-		  }
-		  errorLabel.setText("Temps d'exécution du solveur : " + executionTime + " millisecondes");
-		  errorLabel.setVisible(true);
-	}
-	 private void updateTimerLabel() {
+		private void performStep(List<String> solution) {
+		    String move = solution.get(currentStep);
+		    System.out.println(move);
+		    String[] parts = move.split(" ");
+		    int index1 = Integer.parseInt(parts[1]);
+		    int index2 = Integer.parseInt(parts[2]);
+		    System.out.println("Point 1: ("+index1/board.getBoardSize()+","+index1%board.getBoardSize()+") Point 2 :("+index2/board.getBoardSize()+","+index2%board.getBoardSize()+")");
+		    System.out.println(board.swap2(index1, index2));
+		}
+		
+		private void updateTimerLabel() {
 	        int hours = elapsedTimeInSeconds / 3600;
 	        int minutes = (elapsedTimeInSeconds % 3600) / 60;
 	        int seconds = elapsedTimeInSeconds % 60;
 	        String time = String.format("%02d:%02d:%02d", hours, minutes, seconds);
 	        timerLabel.setText(time);
-	 }
+		}
 	 
 	 private void initTimer() {
 	        timerLabel = new Label("00:00:00");
