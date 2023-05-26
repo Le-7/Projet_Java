@@ -212,7 +212,7 @@ public class Menu extends Application{
         }
     }
     public static void updateScoreAndAccessibility(String SaveName,String Levelname,int newScore) {
-        File file = new File("../Saves/" + SaveName);
+        File file = new File(SaveName);
 
         // Lire les informations actuelles du fichier CSV
         List<String[]> levelInfo = readCSV(file);
