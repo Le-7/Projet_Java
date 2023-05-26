@@ -147,7 +147,13 @@ INTERFACE GRAPHIQUE :
         Par : Anissa
         Estimation : 5h
         Réel :
+        
+    - Musique de fond
+        Statut : FAIT
+        Par : Anissa
+        Estimation : 30min
+        Réel : 1h
          
         
         
-     
+    
