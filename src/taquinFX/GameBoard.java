@@ -42,7 +42,6 @@ public class GameBoard extends Application {
  private Timeline timeline; // Chronologie pour le timer
  private Label movesLabel;
  private int elapsedTimeInSeconds = 0; // Temps écoulé en secondes
- private boolean initial;
  private VBox game;
  // Constructeur de GameBoard
  public GameBoard(String levelSelection, String savesString) {
@@ -60,7 +59,6 @@ public class GameBoard extends Application {
 	 	board = new Board("levels/" + levelSelection+".csv"); // Initialiser le plateau avec le niveau sélectionné
 	    int maxCount = 1000000;// Maximum d'essais pour le mélange du plateau
 	    AtomicInteger count = new AtomicInteger(0);// Initialiser un compteur pour les tentatives de mélange
-	    initial = true;
 	    // Label pour afficher les erreurs
 	    errorLabel = new Label();
 	    errorLabel.setVisible(false);
@@ -122,10 +120,9 @@ public class GameBoard extends Application {
 	    Random random = new Random();
 	    int randomNumber = random.nextInt(2);
 	    
-	    displayBoard(board,primaryStage,initial);// Afficher le plateau
+	    displayBoard(board,primaryStage,true);// Afficher le plateau
 	    errorLabel.setText("En cours de mélange...");
 	  	errorLabel.setVisible(true);
-	    initial = false;
 	    // Pause pendant 5 secondes avant de mélanger 
 	    PauseTransition pause = new PauseTransition(Duration.seconds(5));
 	    pause.setOnFinished(event -> {
@@ -155,7 +152,7 @@ public class GameBoard extends Application {
 	            }
 	        }
 	    	errorLabel.setVisible(false);
-	        displayBoard(board, primaryStage, initial); 
+	        displayBoard(board, primaryStage, false); 
 	        timeline.play(); // Commence le minuteur 
 	    });
 	    pause.play();
@@ -229,7 +226,7 @@ public class GameBoard extends Application {
 		             Alert alert = new Alert(AlertType.INFORMATION);
 		             alert.setTitle("Félicitations !");
 		             alert.setHeaderText(null);
-		             alert.setContentText("Vous avez gagné en :"+elapsedTimeInSeconds+" secondes et en :"+score+" coups !");
+		             alert.setContentText("Vous avez gagné en "+elapsedTimeInSeconds+" secondes et en "+score+" coups !");
 		             alert.getDialogPane().getButtonTypes().clear();
 		             alert.getDialogPane().getButtonTypes().add(ButtonType.OK);
 		             alert.setOnCloseRequest(e -> {
@@ -246,12 +243,8 @@ public class GameBoard extends Application {
 	                     button.setDisable(true);
 	                 }
 	             }
-	        	 for (javafx.scene.Node node : game.getChildren()) {
-	        		 if (node instanceof Button) {
-	                     Button button = (Button) node;
+	                     Button button = (Button) game.getChildren().get(2);
 	                     button.setDisable(true);
-	                 }
-	        	 }
 	 		}
 	 }
 	 private void handleButtonClick(int index1, Stage primaryStage, Board board) {
@@ -277,7 +270,7 @@ public class GameBoard extends Application {
 		            int colNonEmpty = index1 % board.getBoardSize();
 		            if (board.swap(rowNonEmpty, colNonEmpty, rowEmpty, colEmpty)) {
 		                // Actualiser l'affichage après l'échange
-		                displayBoard(board, primaryStage,initial);
+		                displayBoard(board, primaryStage,false);
 		                score++;
 		                movesLabel.setText("Moves: "+score);
 		                errorLabel.setVisible(false); // Rendre errorLabel non visible
@@ -324,7 +317,7 @@ public class GameBoard extends Application {
 		                if (board.swap(rowNonEmpty, colNonEmpty, rowEmpty1, colEmpty1)) { // on fait l'échange
 		                	score++;
 			                movesLabel.setText("Moves: "+score);
-		                    displayBoard(board, primaryStage,initial); // Actualiser l'affichage après l'échange
+		                    displayBoard(board, primaryStage,false); // Actualiser l'affichage après l'échange
 		                } else {
 		                	errorLabel.setText("Mouvement invalide. Veuillez choisir une case vide adjacente.");
 	                        errorLabel.setVisible(true);
@@ -361,7 +354,8 @@ public class GameBoard extends Application {
 		      int index2 =  Integer.parseInt(parts[2]);
 		      // Effectuer le déplacement sur le plateau de jeu en utilisant la méthode swap()
 		      if (board.swap2(index1,index2)) {
-		          displayBoard(board,primaryStage,initial);
+		          displayBoard(board,primaryStage,true);
+		          timeline.stop();
 		      }      
 		  }
 		  errorLabel.setText("Temps d'exécution du solveur : " + executionTime + " millisecondes");
