@@ -220,6 +220,7 @@ public class Menu extends Application{
             for (int i = 0; i < levelInfo.size(); i++) {
                 String[] info = levelInfo.get(i);
                 String bestScore = info[2];        // Meilleur score du niveau (en tant que chaîne de caractères)
+		String bestTime = info[3]; 
                 
                 if (info[0].equals(Levelname) && Integer.parseInt(bestScore)==0) { //Initialiser le meilleur score que pour le niveau joué
                 	info[2] = String.valueOf(newScore);
@@ -228,7 +229,12 @@ public class Menu extends Application{
                 if (info[0].equals(Levelname) && (Integer.parseInt(bestScore) > newScore)) {
                     info[2] = String.valueOf(newScore);  // Convertir le nouveau score en chaîne de caractères et le mettre à jour
                 }
-
+		
+		  // Mettre à jour le meilleur temps si nécessaire
+                if (info[0].equals(Levelname) && (Integer.parseInt(bestTime) > newTime)) {
+                    info[3] = String.valueOf(newtime);  // Convertir le nouveau temps en chaîne de caractères et le mettre à jour
+                }
+		    
                 // Modifier l'accessibilité du niveau suivant
                 if (info[0].equals(Levelname) && i < levelInfo.size() - 1) { //on verifie si on est pas a la derniere ligne
                     String[] nextLevelInfo = levelInfo.get(i + 1);  // Obtenir les informations du niveau suivant
@@ -275,6 +281,25 @@ public class Menu extends Application{
 
                 if (level.equals(Levelname)) {
                     return Integer.parseInt(bestScore);
+                }
+            }
+        }
+
+        // Retourner -1 si le niveau n'a pas été trouvé ou s'il n'y a pas de meilleur score enregistré
+        return -1;
+    }
+	 public static int getBestTime(String SaveName, String Levelname) {
+        File file = new File(SaveName);
+
+        // Lire les informations actuelles du fichier CSV
+        List<String[]> levelInfo = readCSV(file);
+        if (levelInfo != null) {
+            for (String[] info : levelInfo) {
+                String level = info[0];
+                String bestTime = info[3];
+
+                if (level.equals(Levelname)) {
+                    return Integer.parseInt(bestTime);
                 }
             }
         }
