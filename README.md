@@ -31,6 +31,8 @@ OpenJDK 64-Bit Server VM (build 11.0.18+10-post-Ubuntu-0ubuntu120.04.1, mixed mo
 
 Lorsque vous lancer l'exécutable, vous êtes invité à choisir quelle sauvegarde et quel niveau vous souhaitez, puis vous verrez votre meilleur score et le niveau de taquin résolu puis mélangé. Le plateau mélangé sera votre point de départ. Si vous désirez jouer au jeu entrez dans un premier temps la ligne puis la colonne de la case que vous souhaitez échangé avec la case vide "@". En cas d'ambiguité, s'il existe plusieurs case vide adjacente à la case que vous avez choisi, le programme vous proposera de choisir entre les différentes possibilités. Si vous avez fait une erreur le programme le détectera et vous invitera à recommencer. Si vous souhaitez voir comment notre programme résoud le jeu de Taquin étape par étape, entrez 0 0 en tout début de partie. (Pour l'instant notre solver résoud certaines configurations de plateaux, mais ne vous inquiétez pas il pourra bientôt résoudre tous vos plateaux). Notre solver n'est pas optimal pour certains plateaux, il est donc possible qu'avec un mélange trop grands, il manque de mémoire.
 
+Pour la partie IHM, on lance le jeu à partir de menu, suite à cela, nous pouvons crééer une nouvelle partie ou reprendre la sauvergarde en cours, la map s'affiche et l'utilisateur peut jouer tranquillement. A tout moment, il peut revenir sur le menu, ou il peut quitter le jeu.
+
 ## 🤝 Contribution
 
 
@@ -51,12 +53,12 @@ Nous espérons que vous apprécierez notre jeu de taquin et n'hésitez pas à no
  - [X] differents niveaux (au moins 10) 
  - [X] chaque niveau : au moins une case vide (ou + selon difficulté)
  - [X] des niveaux ont des cases inexistantes ou indestructibles 
- - [ ] afficher le niveau resolu 
+ - [X] afficher le niveau resolu 
  - [ ] melange des cases : soit tout aleatoire soit qql case aleatoire (et afficher le type de melange)
  - [X] aucune case sur sa position de depart (meme si melangé aleatoirement) sinon afficher un message 
  - [ ] detecter si le niveau est jouable et afficher une information 
- - [ ] deplacer les cases une par une, le compteur sera incrémenté 
- - [ ] sauvegarder les nombres de coup a la fin d'un niveau pour afficher le meilleur score 
- - [ ] mettre un oeuvre un systeme de deblocage de niveau (finir niveau 1 pour passer au niveau 2) 
+ - [X] deplacer les cases une par une, le compteur sera incrémenté 
+ - [X] sauvegarder les nombres de coup a la fin d'un niveau pour afficher le meilleur score 
+ - [X] mettre un oeuvre un systeme de deblocage de niveau (finir niveau 1 pour passer au niveau 2) 
  - [ ] le joueur peut : demander de resoudre le niveau automatiquement et afficher chaque etape de la solution !!! niveau non debloqué !!!
  - [ ] resolution automatique : faire defiler les étapes automatiquement ou utiliser un bouton pour chaque etape (choisir la vitesse) 
