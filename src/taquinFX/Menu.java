@@ -211,7 +211,7 @@ public class Menu extends Application{
             e.printStackTrace();
         }
     }
-    public static void updateScoreAndAccessibility(String SaveName,String Levelname,int newScore) {
+    public static void updateScoreAndAccessibility(String SaveName,String Levelname,int newScore, int newTime) {
         File file = new File(SaveName);
 
         // Lire les informations actuelles du fichier CSV
@@ -220,7 +220,7 @@ public class Menu extends Application{
             for (int i = 0; i < levelInfo.size(); i++) {
                 String[] info = levelInfo.get(i);
                 String bestScore = info[2];        // Meilleur score du niveau (en tant que chaîne de caractères)
-		String bestTime = info[3]; 
+                String bestTime = info[3]; 
                 
                 if (info[0].equals(Levelname) && Integer.parseInt(bestScore)==0) { //Initialiser le meilleur score que pour le niveau joué
                 	info[2] = String.valueOf(newScore);
@@ -232,7 +232,7 @@ public class Menu extends Application{
 		
 		  // Mettre à jour le meilleur temps si nécessaire
                 if (info[0].equals(Levelname) && (Integer.parseInt(bestTime) > newTime)) {
-                    info[3] = String.valueOf(newtime);  // Convertir le nouveau temps en chaîne de caractères et le mettre à jour
+                    info[3] = String.valueOf(newTime);  // Convertir le nouveau temps en chaîne de caractères et le mettre à jour
                 }
 		    
                 // Modifier l'accessibilité du niveau suivant
