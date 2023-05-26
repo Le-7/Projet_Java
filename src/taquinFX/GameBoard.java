@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
-
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.PauseTransition;
@@ -127,7 +126,7 @@ public class GameBoard extends Application {
 	    PauseTransition pause = new PauseTransition(Duration.seconds(5));
 	    pause.setOnFinished(event -> {
 	        // Mélange le plateau
-	    	while(board.InitialPosition() || !board.solveWithinTime(50,solution)) {
+	    	while(board.InitialPosition() || !board.solveWithinTime(500,solution)) {
 	    		board = new Board("levels/" + levelSelection+".csv");
 		        if (board.isEZ()) {
 		            if(randomNumber == 0) {
@@ -138,10 +137,10 @@ public class GameBoard extends Application {
 		                }
 		            } else {
 		                System.out.println("Mélange manuel");
-		                board.mixBoard(40);
+		                board.mixBoard(100);
 		            }
 		        } else {
-		            board.mixBoard(40);
+		            board.mixBoard(100);
 		        }
 		        count.incrementAndGet();
 
@@ -283,7 +282,7 @@ public class GameBoard extends Application {
 		            alert.setTitle("Choix de la case vide adjacente");
 		            alert.setHeaderText("Il y a plusieurs cases vides adjacentes.");
 		            alert.setContentText("Veuillez choisir une des cases vides suivantes :");
-		        
+
 		            alert.setX(primaryStage.getX());
 		            alert.setY(primaryStage.getY());
 		            String[] options = new String[adjacentEmptyBoxes.size()];
@@ -291,11 +290,11 @@ public class GameBoard extends Application {
 		                int[] emptyBox = adjacentEmptyBoxes.get(i);
 		                int rowEmpty = emptyBox[0];
 		                int colEmpty = emptyBox[1];
-		                
+
 		                int index = rowEmpty * board.getBoardSize() + colEmpty;
-		                options[i] = "Case "+ (char)(65+i);
+		                options[i] = "Case " + (char) (65 + i);
 		                Button button = (Button) boardPane.getChildren().get(index);
-		                button.setText(""+(char)(i+65));
+		                button.setText("" + (char) (i + 65));
 		            }
 
 		            alert.getButtonTypes().clear();
@@ -307,31 +306,30 @@ public class GameBoard extends Application {
 		            Optional<ButtonType> result = alert.showAndWait();
 		            if (result.isPresent() && result.get() != ButtonType.CANCEL) {
 		                int choice = alert.getButtonTypes().indexOf(result.get());
-		                int[] emptyBox = emptyBoxes.get(choice);
+		                int[] emptyBox = adjacentEmptyBoxes.get(choice); // Utiliser adjacentEmptyBoxes au lieu de emptyBoxes
 		                int rowEmpty1 = emptyBox[0];
 		                int colEmpty1 = emptyBox[1];
 
 		                int rowNonEmpty = index1 / board.getBoardSize();
 		                int colNonEmpty = index1 % board.getBoardSize();
 
-		                if (board.swap(rowNonEmpty, colNonEmpty, rowEmpty1, colEmpty1)) { // on fait l'échange
-		                	score++;
-			                movesLabel.setText("Moves: "+score);
-		                    displayBoard(board, primaryStage,false); // Actualiser l'affichage après l'échange
+		                if (board.swap(rowNonEmpty, colNonEmpty, rowEmpty1, colEmpty1)) {
+		                    score++;
+		                    movesLabel.setText("Moves: " + score);
+		                    displayBoard(board, primaryStage, false);
 		                } else {
-		                	errorLabel.setText("Mouvement invalide. Veuillez choisir une case vide adjacente.");
-	                        errorLabel.setVisible(true);
+		                    errorLabel.setText("Mouvement invalide. Veuillez choisir une case vide adjacente.");
+		                    errorLabel.setVisible(true);
 		                }
 		            } else {
-		            	errorLabel.setText("Aucun choix effectué. Veuillez réessayer.");
-		            	errorLabel.setVisible(true);
+		                errorLabel.setText("Aucun choix effectué. Veuillez réessayer.");
+		                errorLabel.setVisible(true);
 		            }
-		        } else {
-		        	errorLabel.setText("Aucune case vide adjacente. Veuillez choisir une autre case non vide.");
-	                errorLabel.setVisible(true);
 		        }
 		    }
-		}
+		            
+		        }
+
 
 	 private void solver(Stage primaryStage) {
 		  System.out.println("\nVeuillez patienter, le solveur est en marche...\n");
