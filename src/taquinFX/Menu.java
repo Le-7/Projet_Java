@@ -222,8 +222,11 @@ public class Menu extends Application{
                 String bestScore = info[2];        // Meilleur score du niveau (en tant que chaîne de caractères)
                 String bestTime = info[3]; 
                 
-                if (info[0].equals(Levelname) && Integer.parseInt(bestScore)==0) { //Initialiser le meilleur score que pour le niveau joué
+                if (info[0].equals(Levelname) && Integer.parseInt(bestScore)==0) { //Initialiser le meilleur score que pour le niveau non joué
                 	info[2] = String.valueOf(newScore);
+                }
+		     if (info[0].equals(Levelname) && Integer.parseInt(bestTime)==0) { //Initialiser le meilleur temps que pour le niveau non joué
+                	info[3] = String.valueOf(newTime);
                 }
                 // Mettre à jour le meilleur score si nécessaire
                 if (info[0].equals(Levelname) && (Integer.parseInt(bestScore) > newScore)) {
