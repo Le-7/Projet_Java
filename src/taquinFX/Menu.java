@@ -319,6 +319,25 @@ public class Menu extends Application{
         // Retourner -1 si le niveau n'a pas été trouvé ou s'il n'y a pas de meilleur score enregistré
         return -1;
     }
+    public static int getBestTime(String SaveName, String Levelname) {
+		File file = new File(SaveName);
+
+		// Lire les informations actuelles du fichier CSV
+		List<String[]> levelInfo = readCSV(file);
+		if (levelInfo != null) {
+			for (String[] info : levelInfo) {
+				String level = info[0];
+				String bestTime = info[3];
+				if (level.equals(Levelname)) {
+					return Integer.parseInt(bestTime);
+				}
+			}
+		}
+
+		// Retourner -1 si le niveau n'a pas été trouvé ou s'il n'y a pas de meilleur
+		// score enregistré
+		return -1;
+	}
     public static void main(String[] args) {
 		launch(args);
 	}
