@@ -129,6 +129,13 @@ INTERFACE GRAPHIQUE :
         Estimation : 20h
         Réel :
         
+    - IHM du solver : 
+       Statut : fini
+       Par : Tout le monde
+       Estimation : 5h
+       Réel : 5h40
+       Difficultés rencontrées : faire défiler manuelement les étapes de la résolution du taquin       
+       
     - Level map
         Statut : fini
         Par : sara
@@ -153,7 +160,3 @@ INTERFACE GRAPHIQUE :
         Par : Anissa
         Estimation : 30min
         Réel : 1h
-         
-        
-        
-    
