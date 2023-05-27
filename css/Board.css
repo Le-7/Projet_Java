@@ -1,0 +1,121 @@
+/* Style global pour le conteneur principal */
+.root {
+    -fx-background-color: #F5F5F5;
+}
+
+/* Style pour les boutons */
+.button {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-background-color: #13b5f5;
+    -fx-text-fill: white;
+    -fx-border : 1px;  
+    -fx-border-color : black;
+    
+}
+
+/* Style pour les boutons lorsqu'ils sont survolés */
+.button:hover {
+    -fx-background-color: #109fd8;
+}
+
+/* Style pour les étiquettes */
+.label {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+}
+
+/* Style pour les panneaux de grille */
+.grid-pane {
+    -fx-padding: 10px;
+    -fx-background-color: white;
+}
+
+/* Style pour les cases vides du taquin */
+.button.empty {
+    -fx-background-color: lightblue;
+    -fx-border-width: 2px;
+    -fx-border-color: #13b5f5;
+}
+
+/* Style pour les cases non vides du taquin */
+.button.non-empty {
+    -fx-background-color: #E0E0E0;
+    -fx-border-width: 2px;
+    -fx-border-color: #13b5f5;
+    -fx-border : 1px;  
+    -fx-border-color : black;
+}
+
+/* Style pour le texte des cases */
+.button .text {
+    -fx-font-size: 20px;
+}
+
+/* Style pour les messages d'erreur */
+.label.error {
+    -fx-text-fill: red;
+    -fx-font-weight: bold;
+}
+
+/* Style pour les boutons de résolution */
+.button.solver {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-background-color: #13b5f5;
+    -fx-text-fill: white;
+}
+
+/* Style pour les boutons de résolution lorsqu'ils sont désactivés */
+.button.solver:disabled {
+    -fx-background-color: #76ccdb;;
+}
+
+/* Style pour le bouton de retour */
+.button.return {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-background-color: #FF5722;
+    -fx-text-fill: white;
+}
+
+/* Style pour le bouton de retour lorsqu'il est désactivé */
+.button.return:disabled {
+    -fx-background-color: #76ccdb;;
+}
+
+#quitBtn{
+    -fx-background-color: rgb(9, 89, 238); 
+    -fx-background-radius: 15;
+    -fx-font-size: 16px;
+}
+
+#quitBtn:hover{
+    -fx-background-color: rgb(7, 81, 218); 
+}
+
+#returnToMap{
+    -fx-background-color: rgb(9, 89, 238); 
+    -fx-background-radius: 15;
+    -fx-font-size: 16px;
+
+}
+
+#returnToMap:hover{
+    -fx-background-color: rgb(7, 81, 218); 
+}
+
+#infoLabel{
+    -fx-text-fill : blue;
+}
+
+#movesLabel{
+    -fx-text-fill : blue;
+}
+
+#timerLabel{
+    -fx-background-color: black;
+    -fx-text-fill: red;
+    -fx-font-size : 30px;
+
+}
