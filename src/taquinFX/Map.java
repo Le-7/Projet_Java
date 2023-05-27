@@ -83,8 +83,39 @@ public class Map {
             Button btn = createButton(String.valueOf(levels[i]), levels[i] + 1);
             placeBtn(btn, gridPane, cols[i], rows[i], primaryStage, String.valueOf(levels[i]));
         }
+// Création du bouton "Quitter le jeu"
+        Button quitBtn = createQuitButton(primaryStage);
+
+        // Configuration de VBox pour aligner le bouton en bas
+        VBox vbox = new VBox();
+        vbox.getChildren().add(quitBtn);
+        vbox.setAlignment(Pos.BOTTOM_CENTER);
+
+        // Ajout de VBox à GridPane
+        GridPane.setConstraints(vbox, 0, 5);
+        gridPane.getChildren().add(vbox);
 return scene;
     }
+
+ // Méthode pour créer le bouton "Quitter le jeu"
+    private Button createQuitButton(Stage primaryStage) {
+        Button quitBtn = new Button("←");
+        // Configuration du style du bouton
+        quitBtn.setMinWidth(60);
+        quitBtn.setMaxWidth(50);
+     // Configuration du style du bouton
+        quitBtn.setStyle(" -fx-background-radius: 15; -fx-font-size: 16px;");
+        // Configuration de l'action du bouton
+        quitBtn.setOnAction(e -> {
+        	  Menu menu = new Menu();
+        	  primaryStage.close();
+        	  Stage newStage = new Stage();
+              menu.showMenu(newStage);     
+        });
+
+        return quitBtn;
+    }
+    
 
     // Méthode pour créer un bouton avec le texte et le niveau correspondant
     private Button createButton(String text, int level) {
