@@ -23,6 +23,11 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 
+//Musique de fond
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -33,7 +38,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Menu extends Application{
-    private static final String IMAGE_PATH = "file:../images/menu.jpg";
+    private static final String IMAGE_PATH = "file:images/menu.jpg";
 
     // Déclaration des variables d'interface utilisateur
     ComboBox<String> comboBox = new ComboBox<>();
@@ -44,6 +49,16 @@ public class Menu extends Application{
     Label label1 = new Label("Nom de votre sauvegarde :");
     Label label2 = new Label("Reprendre la partie : ");
     
+    //Musique
+    String musicFile = "song/NoelSong.mp3";
+    Media sound = new Media(new File(musicFile).toURI().toString());
+    MediaPlayer mediaPlayer = new MediaPlayer(sound);
+    
+    String clickFile = "song/click2.mp3";
+    Media clickSound = new Media(new File(clickFile).toURI().toString());
+    MediaPlayer mediaPlayer2 = new MediaPlayer(clickSound);
+    
+    
     // Méthode principale pour démarrer l'affichage
     public void start(Stage primaryStage) {
         showMenu(primaryStage);
@@ -51,6 +66,15 @@ public class Menu extends Application{
     
     // Méthode pour afficher le menu
     public void showMenu(Stage primaryStage) {
+    	
+    	//Identifiants pour css
+    	button.setId("validerButton");
+    	mapButton.setId("mapButton");
+    	quitBtn.setId("quitButton");
+    	comboBox.setId("saveComboBox");
+    	textField.setId("textField");
+    	label1.setId("label1");
+    
         // Configuration de l'arrière-plan
         Image image = new Image(IMAGE_PATH);
         BackgroundImage backgroundImage = new BackgroundImage(
@@ -68,10 +92,11 @@ public class Menu extends Application{
 
         // Configuration du rectangle d'arrière-plan pour le menu
         Rectangle rectangle = new Rectangle();
+        rectangle.setId("myRectangle");
         rectangle.setFill(Color.rgb(0, 0, 0, 0.3)); // Couleur de remplissage
         rectangle.setWidth(600); // Largeur
         rectangle.setHeight(400); // Hauteur
-        rectangle.setStroke(Color.BLUE); // Couleur de l'outline
+        rectangle.setStroke(Color.WHITE); // Couleur de l'outline
         rectangle.setStrokeWidth(2); // Épaisseur de l'outline
         stackPane.getChildren().add(rectangle); // Ajout du rectangle au StackPane
 
@@ -84,19 +109,20 @@ public class Menu extends Application{
 
         // Configuration de la scène
         Scene scene = new Scene(stackPane, 968, 544);
+        scene.getStylesheets().add("file:css/TaquinStyle.css") ;
+
 
         // Configuration du label de bienvenue
         comboBox.getItems().addAll(getNames());
         Label welcomeLabel = new Label("Bienvenue sur notre jeu de Taquin");
         welcomeLabel.setFont(Font.font("Arial", FontWeight.BOLD, 24)); // Police et taille du texte
         welcomeLabel.setAlignment(Pos.CENTER); // Alignement du texte
-        welcomeLabel.setTextFill(Color.BLUE); // Couleur du texte
+        welcomeLabel.setTextFill(Color.WHITE); // Couleur du texte
 
         // Configuration du bouton "Valider"
-        button.setMinWidth(100); // Modifie la largeur minimum du bouton
-        button.setMaxWidth(200); // Modifie la largeur maximum du bouton
-        button.setStyle("-fx-background-color: rgba(255, 255, 255, 0.5); -fx-background-radius: 15; -fx-font-size: 16px;"); // Style CSS pour le bouton
         button.setOnAction(e -> {
+        	mediaPlayer2.stop();
+        	mediaPlayer2.play();
             String newName = textField.getText();
 
             if (newName.trim().isEmpty()) {
@@ -128,20 +154,31 @@ public class Menu extends Application{
         // Configuration du bouton "Quitter le jeu"
         quitBtn.setMinWidth(100);
         quitBtn.setMaxWidth(200);
-        quitBtn.setStyle("-fx-background-color: rgba(255, 255, 255, 0.5); -fx-background-radius: 15; -fx-font-size: 16px;");
+        //quitBtn.setStyle("-fx-background-color: rgba(255, 255, 255, 0.5); -fx-background-radius: 15; -fx-font-size: 16px;");
         quitBtn.setOnAction(e -> {
+        	mediaPlayer.stop();
             primaryStage.close(); // Fermer la fenêtre principale du jeu
         });
+        
+        
 
         // Configuration du bouton "Accéder à la carte"
         mapButton.setMinWidth(100); // Modifie la largeur minimum du bouton
         mapButton.setMaxWidth(200); // Modifie la largeur maximum du bouton
-        mapButton.setStyle("-fx-background-color: rgba(255, 255, 255, 0.5); -fx-background-radius: 15; -fx-font-size: 16px;"); // Style CSS pour le bouton
+        //mapButton.setStyle("-fx-background-color: rgba(255, 255, 255, 0.5); -fx-background-radius: 15; -fx-font-size: 16px;"); // Style CSS pour le bouton
         mapButton.setOnAction(e -> {
+        	mediaPlayer2.stop(); //on stop d'abord si jamais on a cliqué sur un autre bouton avant et que le player n'a pas eu le temps de s'arreter
+        	mediaPlayer2.play();
+        	
             String selectedSave = comboBox.getValue();
             if (selectedSave != null && !selectedSave.trim().isEmpty()) {
                 Map map = new Map(selectedSave);
                 map.showMap(primaryStage);
+                
+                //Musique répétée + lancée au moment de voir la map
+                
+                mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
+                mediaPlayer.play();
             } else {
                 // Affichage d'une alerte en cas d'erreur
                 Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -165,7 +202,7 @@ public class Menu extends Application{
 
     // Obtient la liste des noms de sauvegarde à partir des fichiers existants
     private List<String> getNames() {
-        String folder = "../Saves";  // Le dossier contenant les fichiers de sauvegarde
+        String folder = "Saves";  // Le dossier contenant les fichiers de sauvegarde
         List<String> savesNames = new ArrayList<String>();
         // Obtenir tous les fichiers CSV dans le dossier spécifié
         File folderFiles = new File(folder);
@@ -184,7 +221,7 @@ public class Menu extends Application{
 
     // Sauvegarde le nom de la partie
     private void saveName(String prenom) {
-        File file = new File("../Saves/" + prenom + ".csv");
+        File file = new File("Saves/" + prenom + ".csv");
         List<String[]> levelInfo = new ArrayList<>(); // Liste pour stocker les informations des niveaux
         if (!file.exists()) {
             // Ajoutez les niveaux et leurs données par défaut à la sauvegarde
@@ -211,8 +248,8 @@ public class Menu extends Application{
             e.printStackTrace();
         }
     }
-    public static void updateScoreAndAccessibility(String SaveName,String Levelname,int newScore, int newTime) {
-        File file = new File(SaveName);
+    public static void updateScoreAndAccessibility(String SaveName,String Levelname,int newScore) {
+        File file = new File("../Saves/" + SaveName);
 
         // Lire les informations actuelles du fichier CSV
         List<String[]> levelInfo = readCSV(file);
@@ -220,24 +257,15 @@ public class Menu extends Application{
             for (int i = 0; i < levelInfo.size(); i++) {
                 String[] info = levelInfo.get(i);
                 String bestScore = info[2];        // Meilleur score du niveau (en tant que chaîne de caractères)
-                String bestTime = info[3]; 
                 
-                if (info[0].equals(Levelname) && Integer.parseInt(bestScore)==0) { //Initialiser le meilleur score que pour le niveau non joué
+                if (info[0].equals(Levelname) && Integer.parseInt(bestScore)==0) { //Initialiser le meilleur score que pour le niveau joué
                 	info[2] = String.valueOf(newScore);
-                }
-		     if (info[0].equals(Levelname) && Integer.parseInt(bestTime)==0) { //Initialiser le meilleur temps que pour le niveau non joué
-                	info[3] = String.valueOf(newTime);
                 }
                 // Mettre à jour le meilleur score si nécessaire
                 if (info[0].equals(Levelname) && (Integer.parseInt(bestScore) > newScore)) {
                     info[2] = String.valueOf(newScore);  // Convertir le nouveau score en chaîne de caractères et le mettre à jour
                 }
-		
-		  // Mettre à jour le meilleur temps si nécessaire
-                if (info[0].equals(Levelname) && (Integer.parseInt(bestTime) > newTime)) {
-                    info[3] = String.valueOf(newTime);  // Convertir le nouveau temps en chaîne de caractères et le mettre à jour
-                }
-		    
+
                 // Modifier l'accessibilité du niveau suivant
                 if (info[0].equals(Levelname) && i < levelInfo.size() - 1) { //on verifie si on est pas a la derniere ligne
                     String[] nextLevelInfo = levelInfo.get(i + 1);  // Obtenir les informations du niveau suivant
@@ -259,7 +287,7 @@ public class Menu extends Application{
             String line;
             while ((line = reader.readLine()) != null) {
                 String[] data = line.split(",");
-                if (data.length == 4) {
+                if (data.length == 3) {
                     levelInfo.add(data);
                 }
             }
@@ -284,24 +312,6 @@ public class Menu extends Application{
 
                 if (level.equals(Levelname)) {
                     return Integer.parseInt(bestScore);
-                }
-            }
-        }
-
-        // Retourner -1 si le niveau n'a pas été trouvé ou s'il n'y a pas de meilleur score enregistré
-        return -1;
-    }
-	 public static int getBestTime(String SaveName, String Levelname) {
-        File file = new File(SaveName);
-
-        // Lire les informations actuelles du fichier CSV
-        List<String[]> levelInfo = readCSV(file);
-        if (levelInfo != null) {
-            for (String[] info : levelInfo) {
-                String level = info[0];
-                String bestTime = info[3];
-                if (level.equals(Levelname)) {
-                    return Integer.parseInt(bestTime);
                 }
             }
         }
