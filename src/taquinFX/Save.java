@@ -8,7 +8,7 @@ import java.util.Scanner;
 public class Save {
 
     public static String select(Scanner scanner) {
-        String folder = "Saves";
+        String folder = "../Saves";
 
         // Obtenez tous les fichiers CSV dans le dossier spécifié
         File folderFiles = new File(folder);
@@ -115,7 +115,7 @@ public class Save {
     }
     
     public static int getBestScore(String SaveName, String Levelname) {
-        File file = new File("Saves/" + SaveName);
+        File file = new File("../Saves/" + SaveName);
 
         // Lire les informations actuelles du fichier CSV
         List<String[]> levelInfo = readCSV(file);

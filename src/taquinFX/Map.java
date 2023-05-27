@@ -143,7 +143,7 @@ return scene;
             int level = Integer.parseInt(lvl);
        
             String levelFile = "lvl" + lvl;
-            boolean isAccessible = isLevelAccessible("Saves/"+saveString, levelFile);
+            boolean isAccessible = isLevelAccessible("../Saves/"+saveString, levelFile);
            
             
             if (isAccessible) {
