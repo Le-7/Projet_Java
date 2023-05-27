@@ -52,7 +52,7 @@ public class GameBoard extends Application {
 	public GameBoard(String levelSelection, String savesString) {
 		super(); // Appel du constructeur de la superclasse Application
 		this.levelSelection = levelSelection; // Initialisation de la sélection du niveau
-		this.savesString = "../Saves/" + savesString; // Initialisation du string pour les sauvegardes
+		this.savesString = "Saves/" + savesString; // Initialisation du string pour les sauvegardes
 	}
 
 	// Méthode principale pour démarrer l'affichage
@@ -61,7 +61,7 @@ public class GameBoard extends Application {
 	}
 
 	public Scene showGame(Stage primaryStage) {
-		board = new Board("../levels/" + levelSelection + ".csv"); // Initialiser le plateau avec le niveau sélectionné
+		board = new Board("levels/" + levelSelection + ".csv"); // Initialiser le plateau avec le niveau sélectionné
 		int maxCount = 1000000;// Maximum d'essais pour le mélange du plateau
 		AtomicInteger count = new AtomicInteger(0);// Initialiser un compteur pour les tentatives de mélange
 		// Label pour afficher les erreurs
@@ -107,8 +107,7 @@ public class GameBoard extends Application {
 		Button quitBtn = new Button("Quitter le jeu");
 		quitBtn.setMinWidth(100);
 		quitBtn.setMaxWidth(200);
-		quitBtn.setStyle(
-				"-fx-background-color: rgba(255, 255, 255, 0.5); -fx-background-radius: 15; -fx-font-size: 16px;");
+		quitBtn.setId("quitBtn");
 		quitBtn.setOnAction(e -> {
 			primaryStage.close();
 		});
@@ -119,14 +118,13 @@ public class GameBoard extends Application {
 		// Création de la grille pour afficher le plateau
 		boardPane = new GridPane();
 		boardPane.setAlignment(Pos.CENTER);
-		boardPane.setHgap(10);
-		boardPane.setVgap(10);
+		//boardPane.setHgap(10);  //espace cases
+		//boardPane.setVgap(10);
 
 		Button returnToMapButton = new Button("Retour à la carte");
-		returnToMapButton.setMinWidth(100);
-		returnToMapButton.setMaxWidth(200);
-		returnToMapButton.setStyle(
-				"-fx-background-color: rgba(255, 255, 255, 0.5); -fx-background-radius: 15; -fx-font-size: 16px;");
+		returnToMapButton.setMinWidth(200);
+		returnToMapButton.setMaxWidth(300);
+		returnToMapButton.setId("returnToMap");
 		returnToMapButton.setOnAction(e -> {
 			// Extraire le nom du fichier
 			String fileName = savesString.substring(savesString.lastIndexOf("/") + 1);
@@ -149,10 +147,12 @@ public class GameBoard extends Application {
 		HBox root = new HBox(); // Conteneur principal
 
 		// Création des labels pour les mouvements et le timer
-		movesLabel = new Label("Moves: " + score); // Afficher le meilleur score pour ce niveau
-		Label infoLabel = new Label("Votre meilleur score pour ce niveau est de : "
-				+ Menu.getBestScore(savesString, levelSelection) + "\n\nVotre meilleur temps pour ce niveau est de : "
+		movesLabel = new Label("Moves : " + score); // Afficher le meilleur score pour ce niveau
+		movesLabel.setId("movesLabel");
+		Label infoLabel = new Label("Meilleur score : "
+				+ Menu.getBestScore(savesString, levelSelection) + "\n\nMeilleur temps : "
 				+ Menu.getBestTime(savesString, levelSelection) + " secondes");
+		infoLabel.setId("infoLabel");
 		VBox textPane = new VBox(10);
 		textPane.setPadding(new Insets(10));
 		initTimer();
@@ -173,7 +173,7 @@ public class GameBoard extends Application {
 		pause.setOnFinished(event -> {
 			// Mélange le plateau
 			while (board.InitialPosition() || !board.solveWithinTime(500, solution)) {
-				board = new Board("../levels/" + levelSelection + ".csv");
+				board = new Board("levels/" + levelSelection + ".csv");
 				if (board.isEZ()) {
 					if (randomNumber == 0) {
 						errorLabel.setText("Mélange automatique");
@@ -205,6 +205,7 @@ public class GameBoard extends Application {
 		});
 		pause.play();
 		Scene scene = new Scene(root, 968, 544); // Créer une scène fixe
+		scene.getStylesheets().add("file:css/Board.css") ;
 		// Appliquer la scène à la fenêtre principale
 		primaryStage.setScene(scene);
 		primaryStage.show();
@@ -265,7 +266,7 @@ public class GameBoard extends Application {
 			boardPane.getChildren().add(button);
 		}
 		if (gameSolved(IDASolver.convertBoxArrayToShortArray(board.getGrid()),
-				"../levels/" + levelSelection + ".csv")) {
+				"levels/" + levelSelection + ".csv")) {
 			if (initial == false) {
 				timeline.stop();
 				Menu.updateScoreAndAccessibility(savesString, levelSelection, score, elapsedTimeInSeconds);
@@ -487,6 +488,7 @@ public class GameBoard extends Application {
 		int seconds = elapsedTimeInSeconds % 60;
 		String time = String.format("%02d:%02d:%02d", hours, minutes, seconds);
 		timerLabel.setText(time);
+		timerLabel.setId("timerLabel");
 	}
 
 	private void initTimer() {
