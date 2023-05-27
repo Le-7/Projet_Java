@@ -22,12 +22,9 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
-
 //Musique de fond
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
-
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -173,7 +170,9 @@ public class Menu extends Application{
             String selectedSave = comboBox.getValue();
             if (selectedSave != null && !selectedSave.trim().isEmpty()) {
                 Map map = new Map(selectedSave);
-                map.showMap(primaryStage);
+		primaryStage.close();
+                Stage newStage = new Stage();
+                map.showMap(newStage);
                 
                 //Musique répétée + lancée au moment de voir la map
                 
@@ -260,18 +259,15 @@ public class Menu extends Application{
 				String bestScore = info[2]; // Meilleur score du niveau (en tant que chaîne de caractères)
 				String bestTime = info[3];
 
-				if (info[0].equals(Levelname) && Integer.parseInt(bestScore) == 0) { // Initialiser le meilleur score
-																						// que pour le niveau non joué
+				if (info[0].equals(Levelname) && Integer.parseInt(bestScore) == 0) { // Initialiser le meilleur score																		// que pour le niveau non joué
 					info[2] = String.valueOf(newScore);
 				}
-				if (info[0].equals(Levelname) && Integer.parseInt(bestTime) == 0) { // Initialiser le meilleur temps que
-																					// pour le niveau non joué
+				if (info[0].equals(Levelname) && Integer.parseInt(bestTime) == 0) { // Initialiser le meilleur temps que																// pour le niveau non joué
 					info[3] = String.valueOf(newTime);
 				}
 				// Mettre à jour le meilleur score si nécessaire
 				if (info[0].equals(Levelname) && (Integer.parseInt(bestScore) > newScore)) {
-					info[2] = String.valueOf(newScore); // Convertir le nouveau score en chaîne de caractères et le
-														// mettre à jour
+					info[2] = String.valueOf(newScore); // Convertir le nouveau score en chaîne de caractères et le								// mettre à jour
 				}
 
 				// Mettre à jour le meilleur temps si nécessaire
