@@ -22,7 +22,7 @@ import java.util.List;
 public class Map {
 	private String saveString;
 	// Chemin vers l'image utilisée pour la carte
-    private static final String IMAGE_PATH = "file:images/map_java.jpg";
+    private static final String IMAGE_PATH = "file:../images/map_java.jpg";
 
     // Nombre de lignes et de colonnes pour le GridPane
     private static final int NUM_ROWS = 20;

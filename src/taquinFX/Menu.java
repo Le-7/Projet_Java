@@ -33,7 +33,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Menu extends Application{
-    private static final String IMAGE_PATH = "file:images/menu.jpg";
+    private static final String IMAGE_PATH = "file:../images/menu.jpg";
 
     // Déclaration des variables d'interface utilisateur
     ComboBox<String> comboBox = new ComboBox<>();

@@ -377,8 +377,6 @@ public class GameBoard extends Application {
 		        String[] parts = move.split(" ");
 		        int index1 = Integer.parseInt(parts[1]);
 		        int index2 = Integer.parseInt(parts[2]);
-		        System.out.println("point 1 : ("+ index1/board.getBoardSize() + ","+index1%board.getBoardSize()+ ") Point 2 : ("+ index2/board.getBoardSize() + ","+index2%board.getBoardSize());
-
 		        
 		        KeyFrame keyFrame = new KeyFrame(Duration.seconds(i * 7), event -> {
 		            if (board.swap2(index1, index2)) {
@@ -404,13 +402,6 @@ public class GameBoard extends Application {
 		    errorLabel.setVisible(true);
 
 		    List<String> solution1 = board.solve();
-		    for (int i = 0; i < solution1.size(); i++) {
-		        String move = solution1.get(i);
-		        String[] parts = move.split(" ");
-		        int index1 = Integer.parseInt(parts[1]);
-		        int index2 = Integer.parseInt(parts[2]);
-		        System.out.println("point 1 : ("+ index1/board.getBoardSize() + ","+index1%board.getBoardSize()+ ") Point 2 : ("+ index2/board.getBoardSize() + ","+index2%board.getBoardSize());
-		    }
 
 		    createNavigationButtons(primaryStage, solution1);
 		    updateButtons(solution1);
