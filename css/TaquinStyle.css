@@ -1,1 +1,72 @@
+/*rgba(162, 224, 62, 0.5)*/
 
+
+#validerButton {
+    -fx-background-color: rgb(255, 255, 255); 
+    -fx-background-radius: 15; 
+    -fx-font-size: 16px;
+    -fx-min-width: 100px;
+    -fx-max-width: 200px;
+}
+
+
+#mapButton{
+    -fx-background-color: white ; 
+    -fx-background-radius: 15; 
+    -fx-font-size: 16px;
+    -fx-min-width: 100px;
+    -fx-max-width: 200px;
+}
+
+
+
+
+#quitButton {
+    -fx-background-color: white; 
+    -fx-background-radius: 15; 
+    -fx-font-size: 16px;
+    -fx-min-width: 100px;
+    -fx-max-width: 200px;
+}
+
+
+
+#saveComboBox {
+    -fx-background-color: white; 
+    -fx-background-radius: 15; 
+    -fx-font-size: 16px;
+    -fx-min-width: 100px;
+    -fx-max-width: 200px;
+}
+
+#textField{
+    -fx-background-color: white;
+    -fx-min-width: 200px;
+    -fx-max-width: 300px;
+}
+
+#validerButton:hover,
+#mapButton:hover,
+#quitButton:hover {
+    -fx-scale-x: 1.1; /* Réduire l'échelle horizontale de 10% */
+    -fx-scale-y: 1.1; /* Réduire l'échelle verticale de 10% */
+    -fx-translate-y: -5px; /* Déplacer vers le haut de 5 pixels */
+    -fx-background-color: rgb(144, 253, 248); /* Modifier la couleur de l'arrière-plan */
+}
+
+
+#pathButton{
+   -fx-background-radius: 100px;
+    -fx-min-width: 60px; 
+    -fx-min-height: 60px;
+    -fx-max-width: 70px; 
+    -fx-background-color: rgba(211,211, 255, 0.9);
+
+}
+
+
+    #pathButton:hover{
+        -fx-background-color: rgba(255, 255, 255, 0.9);
+    }
+
+    
