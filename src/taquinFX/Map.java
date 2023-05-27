@@ -59,6 +59,7 @@ public class Map {
 
         // Création d'une scène pour afficher le StackPane
         Scene scene = new Scene(stackPane);
+	scene.getStylesheets().add("file:css/TaquinStyle.css") ;
 
         // Configuration de la scène principale
         primaryStage.setScene(scene);
@@ -88,13 +89,8 @@ return scene;
     // Méthode pour créer un bouton avec le texte et le niveau correspondant
     private Button createButton(String text, int level) {
         Button button = new Button(text);
+	button.setId("pathButton");
 
-        // Configuration du style du bouton
-        button.setStyle("-fx-background-radius: 100; "
-                + "-fx-min-width: 60; "
-                + "-fx-min-height: 60; "
-                + "-fx-max-width: 70; "
-                + "-fx-background-color: rgba(211,211, 255, 0.9)");
         return button;
     }
 
