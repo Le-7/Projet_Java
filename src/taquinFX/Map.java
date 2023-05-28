@@ -173,7 +173,7 @@ public class Map {
 
         int level = Integer.parseInt(lvl);
         String levelFile = "lvl" + lvl;
-        boolean isAccessible = isLevelAccessible("Saves/"+saveString, levelFile);
+        boolean isAccessible = isLevelAccessible("../Saves/"+saveString, levelFile);
 
      // Définition du style du bouton en fonction de l'accessibilité du niveau
         if (isAccessible) {
