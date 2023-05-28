@@ -35,7 +35,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Menu extends Application{
-    private static final String IMAGE_PATH = "file:../images/menu.jpg";
+    private static final String IMAGE_PATH = "file:images/menu.jpg";
 
     // Déclaration des variables d'interface utilisateur
     ComboBox<String> comboBox = new ComboBox<>();
@@ -106,7 +106,7 @@ public class Menu extends Application{
 
         // Configuration de la scène
         Scene scene = new Scene(stackPane, 968, 544);
-        scene.getStylesheets().add("file:../css/TaquinStyle.css") ;
+        scene.getStylesheets().add("file:css/TaquinStyle.css") ;
 
 
         // Configuration du label de bienvenue
@@ -133,6 +133,11 @@ public class Menu extends Application{
                 saveName(newName);
                 textField.clear();
                 comboBox.getItems().addAll(getNames());
+             // Ouvrir la fenêtre de la carte
+                Map map = new Map(newName);
+                primaryStage.close();
+                Stage newStage = new Stage();
+                map.showMap(newStage);
             }
         });
 
@@ -156,7 +161,6 @@ public class Menu extends Application{
         	mediaPlayer.stop();
             primaryStage.close(); // Fermer la fenêtre principale du jeu
         });
-        
         
 
         // Configuration du bouton "Accéder à la carte"
@@ -201,7 +205,7 @@ public class Menu extends Application{
 
     // Obtient la liste des noms de sauvegarde à partir des fichiers existants
     private List<String> getNames() {
-        String folder = "../Saves";  // Le dossier contenant les fichiers de sauvegarde
+        String folder = "Saves";  // Le dossier contenant les fichiers de sauvegarde
         List<String> savesNames = new ArrayList<String>();
         // Obtenir tous les fichiers CSV dans le dossier spécifié
         File folderFiles = new File(folder);
@@ -220,7 +224,7 @@ public class Menu extends Application{
 
     // Sauvegarde le nom de la partie
     private void saveName(String prenom) {
-        File file = new File("../Saves/" + prenom + ".csv");
+        File file = new File("Saves/" + prenom + ".csv");
         List<String[]> levelInfo = new ArrayList<>(); // Liste pour stocker les informations des niveaux
         if (!file.exists()) {
             // Ajoutez les niveaux et leurs données par défaut à la sauvegarde
