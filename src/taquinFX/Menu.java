@@ -138,6 +138,8 @@ public class Menu extends Application{
                 primaryStage.close();
                 Stage newStage = new Stage();
                 map.showMap(newStage);
+                mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
+                mediaPlayer.play();
             }
         });
 
