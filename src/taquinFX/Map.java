@@ -179,7 +179,7 @@ public class Map {
         if (isAccessible) {
             btn.setStyle("-fx-background-color: #ADD8E6;"); // Bleu clair
         } else {
-            btn.setStyle("-fx-background-color: #E74C3C; -fx-background-image: url('file:images/cadenas2.png'); -fx-background-repeat: no-repeat; -fx-background-position: center; -fx-background-size: 20px 20px;"); // Rouge avec image de cadenas
+            btn.setStyle("-fx-background-color: #E74C3C; -fx-background-image: url('file:../images/cadenas2.png'); -fx-background-repeat: no-repeat; -fx-background-position: center; -fx-background-size: 20px 20px;"); // Rouge avec image de cadenas
         }
 
 
