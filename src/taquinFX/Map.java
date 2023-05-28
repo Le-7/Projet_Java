@@ -166,31 +166,38 @@ public class Map {
 	}
 
 	// Méthode pour créer un bouton sur le GridPane à une position spécifique
-	public void placeBtn(Button btn, GridPane gridPane, int columns, int rows, Stage primaryStage, String lvl) {
-		AnchorPane anchorPane = new AnchorPane(btn);
-		GridPane.setConstraints(anchorPane, columns, rows);
-		gridPane.getChildren().add(anchorPane);
+    public void placeBtn(Button btn, GridPane gridPane, int columns, int rows, Stage primaryStage, String lvl) {
+        AnchorPane anchorPane = new AnchorPane(btn);
+        GridPane.setConstraints(anchorPane, columns, rows);
+        gridPane.getChildren().add(anchorPane);
 
-		// Configuration de l'action à effectuer lorsque le bouton est cliqué
-		btn.setOnAction(event -> {
-			int level = Integer.parseInt(lvl);
+        int level = Integer.parseInt(lvl);
+        String levelFile = "lvl" + lvl;
+        boolean isAccessible = isLevelAccessible("Saves/"+saveString, levelFile);
 
-			String levelFile = "lvl" + lvl;
-			boolean isAccessible = isLevelAccessible("../Saves/" + saveString, levelFile);
+     // Définition du style du bouton en fonction de l'accessibilité du niveau
+        if (isAccessible) {
+            btn.setStyle("-fx-background-color: #ADD8E6;"); // Bleu clair
+        } else {
+            btn.setStyle("-fx-background-color: #E74C3C; -fx-background-image: url('file:images/cadenas2.png'); -fx-background-repeat: no-repeat; -fx-background-position: center; -fx-background-size: 20px 20px;"); // Rouge avec image de cadenas
+        }
 
-			if (isAccessible) {
-				// Chargement du niveau si accessible
-				loadLevel(level, primaryStage);
-			} else {
-				// Affichage d'une erreur si le niveau n'est pas accessible
-				Alert alert = new Alert(AlertType.ERROR);
-				alert.setTitle("Erreur d'accès au niveau");
-				alert.setHeaderText(null);
-				alert.setContentText("Vous n'avez pas encore accès à ce niveau.");
-				alert.showAndWait();
-			}
-		});
-	}
+
+        // Configuration de l'action à effectuer lorsque le bouton est cliqué
+        btn.setOnAction(event -> {
+            if (isAccessible) {
+                // Chargement du niveau si accessible
+                loadLevel(level, primaryStage);
+            } else {
+                // Affichage d'une erreur si le niveau n'est pas accessible
+                Alert alert = new Alert(AlertType.ERROR);
+                alert.setTitle("Erreur d'accès au niveau");
+                alert.setHeaderText(null);
+                alert.setContentText("Vous n'avez pas encore accès à ce niveau.");
+                alert.showAndWait();
+            }
+        });
+    }
 
 	private static boolean isLevelAccessible(String saveFile, String levelFile) {
 		// Vérifier la sauvegarde pour voir si le niveau est accessible
