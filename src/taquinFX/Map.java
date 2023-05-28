@@ -11,6 +11,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
@@ -23,7 +24,7 @@ import java.util.List;
 public class Map {
 	private String saveString;
 	// Chemin vers l'image utilisée pour la carte
-    private static final String IMAGE_PATH = "file:../images/map_java.jpg";
+    private static final String IMAGE_PATH = "file:images/map_java.jpg";
 
     // Nombre de lignes et de colonnes pour le GridPane
     private static final int NUM_ROWS = 20;
@@ -32,16 +33,19 @@ public class Map {
     // Dimensions de la fenêtre principale
     private static final double WINDOW_WIDTH = 1700;
     private static final double WINDOW_HEIGHT = 600;
+    
+    private MediaPlayer mediaPlayer;
+
 
     // Méthode principale pour démarrer l'affichage
     public void start(Stage primaryStage) {
         showMap(primaryStage);
     }
-   
-    public Map(String saveString) {
-		super();
-		this.saveString = saveString+".csv";
-	}
+    public Map(String saveString, MediaPlayer mediaPlayer) {
+        this.saveString = saveString + ".csv";
+        this.mediaPlayer = mediaPlayer;
+    }
+
     // Méthode pour afficher la carte
     public Scene showMap(Stage primaryStage) {
         // Chargement de l'image de la carte
@@ -108,6 +112,10 @@ return scene;
         quitBtn.setStyle(" -fx-background-radius: 15; -fx-font-size: 16px;");
         // Configuration de l'action du bouton
         quitBtn.setOnAction(e -> {
+        		// Stop le MediaPlayer
+        	  if (mediaPlayer != null) {
+        		  mediaPlayer.stop();
+			  }
         	  Menu menu = new Menu();
         	  primaryStage.close();
         	  Stage newStage = new Stage();
@@ -155,7 +163,7 @@ return scene;
    
     // Méthode pour charger un niveau spécifique
     public void loadLevel(int level,Stage primaryStage) {
-    	GameBoard gameBoard = new GameBoard("lvl" + level,saveString);
+    	GameBoard gameBoard = new GameBoard("lvl" + level,saveString, mediaPlayer);
         gameBoard.showGame(primaryStage);
     }
 
@@ -171,7 +179,7 @@ return scene;
             int level = Integer.parseInt(lvl);
        
             String levelFile = "lvl" + lvl;
-            boolean isAccessible = isLevelAccessible("../Saves/"+saveString, levelFile);
+            boolean isAccessible = isLevelAccessible("Saves/"+saveString, levelFile);
            
             
             if (isAccessible) {

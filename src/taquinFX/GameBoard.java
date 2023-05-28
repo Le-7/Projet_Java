@@ -25,6 +25,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -46,13 +47,15 @@ public class GameBoard extends Application {
 	private Button previousButton;
 	private Button nextButton;
 	private int currentStep;
+	private MediaPlayer mediaPlayer;
 	
 
 	// Constructeur de GameBoard
-	public GameBoard(String levelSelection, String savesString) {
+	public GameBoard(String levelSelection, String savesString, MediaPlayer mediaPlayer) {
 		super(); // Appel du constructeur de la superclasse Application
 		this.levelSelection = levelSelection; // Initialisation de la sélection du niveau
-		this.savesString = "../Saves/" + savesString; // Initialisation du string pour les sauvegardes
+		this.savesString = "Saves/" + savesString; // Initialisation du string pour les sauvegardes
+		this.mediaPlayer = mediaPlayer;
 	}
 
 	// Méthode principale pour démarrer l'affichage
@@ -61,7 +64,7 @@ public class GameBoard extends Application {
 	}
 
 	public Scene showGame(Stage primaryStage) {
-		board = new Board("../levels/" + levelSelection + ".csv"); // Initialiser le plateau avec le niveau sélectionné
+		board = new Board("levels/" + levelSelection + ".csv"); // Initialiser le plateau avec le niveau sélectionné
 		int maxCount = 1000000;// Maximum d'essais pour le mélange du plateau
 		AtomicInteger count = new AtomicInteger(0);// Initialiser un compteur pour les tentatives de mélange
 		// Label pour afficher les erreurs
@@ -128,7 +131,7 @@ public class GameBoard extends Application {
 		returnToMapButton.setOnAction(e -> {
 			// Extraire le nom du fichier
 			String fileName = savesString.substring(savesString.lastIndexOf("/") + 1);
-			Map map = new Map(fileName.replace(".csv", ""));
+			Map map = new Map(fileName.replace(".csv", ""),mediaPlayer);
 			map.showMap(primaryStage);
 		});
 
@@ -173,7 +176,7 @@ public class GameBoard extends Application {
 		pause.setOnFinished(event -> {
 			// Mélange le plateau
 			while (board.InitialPosition() || !board.solveWithinTime(500, solution)) {
-				board = new Board("../levels/" + levelSelection + ".csv");
+				board = new Board("levels/" + levelSelection + ".csv");
 				if (board.isEZ()) {
 					if (randomNumber == 0) {
 						errorLabel.setText("Mélange automatique");
@@ -205,7 +208,7 @@ public class GameBoard extends Application {
 		});
 		pause.play();
 		Scene scene = new Scene(root, 968, 544); // Créer une scène fixe
-		scene.getStylesheets().add("file:../css/Board.css") ;
+		scene.getStylesheets().add("file:css/Board.css") ;
 		// Appliquer la scène à la fenêtre principale
 		primaryStage.setScene(scene);
 		primaryStage.show();
@@ -266,7 +269,7 @@ public class GameBoard extends Application {
 			boardPane.getChildren().add(button);
 		}
 		if (gameSolved(IDASolver.convertBoxArrayToShortArray(board.getGrid()),
-				"../levels/" + levelSelection + ".csv")) {
+				"levels/" + levelSelection + ".csv")) {
 			if (initial == false) {
 				timeline.stop();
 				Menu.updateScoreAndAccessibility(savesString, levelSelection, score, elapsedTimeInSeconds);
@@ -280,7 +283,7 @@ public class GameBoard extends Application {
 				alert.getDialogPane().getButtonTypes().add(ButtonType.OK);
 				alert.setOnCloseRequest(e -> {
 					String fileName = savesString.substring(savesString.lastIndexOf("/") + 1);
-					Map map = new Map(fileName.replace(".csv", ""));
+					Map map = new Map(fileName.replace(".csv", ""),mediaPlayer);
 					map.showMap(primaryStage);
 					;
 				});
@@ -319,7 +322,6 @@ public class GameBoard extends Application {
 				int colEmpty = adjacentEmptyBoxes.get(0)[1];
 
 				// Effectuer l'échange entre la case non vide et la case vide sélectionnée
-				// aléatoirement
 				int rowNonEmpty = index1 / board.getBoardSize();
 				int colNonEmpty = index1 % board.getBoardSize();
 				if (board.swap(rowNonEmpty, colNonEmpty, rowEmpty, colEmpty)) {
@@ -328,10 +330,7 @@ public class GameBoard extends Application {
 					score++;
 					movesLabel.setText("Moves: " + score);
 					errorLabel.setVisible(false); // Rendre errorLabel non visible
-				} else {
-					errorLabel.setText("Mouvement invalide. Veuillez choisir une autre case vide adjacente.");
-					errorLabel.setVisible(true);
-				}
+				} 
 			} else if (adjacentEmptyBoxes.size() > 1) {
 				Alert alert = new Alert(AlertType.INFORMATION);
 				alert.setTitle("Choix de la case vide adjacente");
@@ -381,6 +380,10 @@ public class GameBoard extends Application {
 					errorLabel.setText("Aucun choix effectué. Veuillez réessayer.");
 					errorLabel.setVisible(true);
 				}
+			}
+			else {
+				errorLabel.setText("Mouvement invalide. Veuillez choisir une case adjacente.");
+				errorLabel.setVisible(true);
 			}
 		}
 	}

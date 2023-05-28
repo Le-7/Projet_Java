@@ -214,12 +214,12 @@ public class Board {
 				return true;
 		    } else {
 		    	System.out.println("Échange invalide : les cases ne sont pas adjacentes.");
+		    	return false;
 		    } 
 		} else {
 			System.out.println("Échange invalide : les cases ne satisfont pas les règles.");
+			return false;
 		}
-		
-		return false;
     }
 	
 	public boolean swap2(int index1, int index2) {

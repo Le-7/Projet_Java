@@ -134,7 +134,7 @@ public class Menu extends Application{
                 textField.clear();
                 comboBox.getItems().addAll(getNames());
              // Ouvrir la fenêtre de la carte
-                Map map = new Map(newName);
+                Map map = new Map(newName,mediaPlayer);
                 primaryStage.close();
                 Stage newStage = new Stage();
                 map.showMap(newStage);
@@ -175,13 +175,12 @@ public class Menu extends Application{
         	
             String selectedSave = comboBox.getValue();
             if (selectedSave != null && !selectedSave.trim().isEmpty()) {
-                Map map = new Map(selectedSave);
+                Map map = new Map(selectedSave,mediaPlayer);
 		primaryStage.close();
                 Stage newStage = new Stage();
                 map.showMap(newStage);
                 
                 //Musique répétée + lancée au moment de voir la map
-                
                 mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
                 mediaPlayer.play();
             } else {
@@ -205,7 +204,7 @@ public class Menu extends Application{
         primaryStage.show();
     }
 
-    // Obtient la liste des noms de sauvegarde à partir des fichiers existants
+	// Obtient la liste des noms de sauvegarde à partir des fichiers existants
     private List<String> getNames() {
         String folder = "Saves";  // Le dossier contenant les fichiers de sauvegarde
         List<String> savesNames = new ArrayList<String>();
