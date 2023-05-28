@@ -8,10 +8,6 @@ Ce projet est un jeu de taquin implémenté en Java. Le jeu consiste en un plate
 
 Pour exécuter le jeu, vous aurez besoin des éléments suivants :
 
-### !!!! Nous avons tous recommencer pour l'instant la commande java -jar TaquinFX.jar suffit !!!! (Ne pas oublier de se placer dans le dossier release)
-
-
-
 Java 8 ou supérieur
 Pour exécuter le jeu, vous pouvez télécharger le fichier JAR exécutable à partir de la page des versions du projet sur GitHub. Une fois le fichier téléchargé, vous pouvez exécuter le jeu en ouvrant un terminal et en exécutant la commande suivante :
 
