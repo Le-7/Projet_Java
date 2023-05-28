@@ -1,0 +1,1 @@
+typeSearchIndex = [{"l":"All Classes","url":"allclasses-index.html"},{"p":"taquinFX","l":"Block"},{"p":"taquinFX","l":"Board"},{"p":"taquinFX","l":"Box"},{"p":"taquinFX","l":"Empty"},{"p":"taquinFX","l":"GameBoard"},{"p":"taquinFX","l":"IDASolver"},{"p":"taquinFX","l":"Map"},{"p":"taquinFX","l":"Menu"},{"p":"taquinFX","l":"Node"}]
