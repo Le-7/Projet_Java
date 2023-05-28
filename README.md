@@ -49,7 +49,7 @@ Si vous souhaitez contribuer à ce projet, vous pouvez soumettre des demandes de
 ## 📝 Licence
 
 
-Ce projet est sous aucune license pour le moment. Voir le fichier __LICENSE__ pour plus de détails.
+Ce projet est sous aucune license pour le moment. 
 
 Nous espérons que vous apprécierez notre jeu de taquin et n'hésitez pas à nous contacter si vous avez des questions ou des commentaires. 😊
 
