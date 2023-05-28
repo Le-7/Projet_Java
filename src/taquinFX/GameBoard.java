@@ -52,7 +52,7 @@ public class GameBoard extends Application {
 	public GameBoard(String levelSelection, String savesString) {
 		super(); // Appel du constructeur de la superclasse Application
 		this.levelSelection = levelSelection; // Initialisation de la sélection du niveau
-		this.savesString = "Saves/" + savesString; // Initialisation du string pour les sauvegardes
+		this.savesString = "../Saves/" + savesString; // Initialisation du string pour les sauvegardes
 	}
 
 	// Méthode principale pour démarrer l'affichage
@@ -61,7 +61,7 @@ public class GameBoard extends Application {
 	}
 
 	public Scene showGame(Stage primaryStage) {
-		board = new Board("levels/" + levelSelection + ".csv"); // Initialiser le plateau avec le niveau sélectionné
+		board = new Board("../levels/" + levelSelection + ".csv"); // Initialiser le plateau avec le niveau sélectionné
 		int maxCount = 1000000;// Maximum d'essais pour le mélange du plateau
 		AtomicInteger count = new AtomicInteger(0);// Initialiser un compteur pour les tentatives de mélange
 		// Label pour afficher les erreurs
@@ -173,7 +173,7 @@ public class GameBoard extends Application {
 		pause.setOnFinished(event -> {
 			// Mélange le plateau
 			while (board.InitialPosition() || !board.solveWithinTime(500, solution)) {
-				board = new Board("levels/" + levelSelection + ".csv");
+				board = new Board("../levels/" + levelSelection + ".csv");
 				if (board.isEZ()) {
 					if (randomNumber == 0) {
 						errorLabel.setText("Mélange automatique");
@@ -205,7 +205,7 @@ public class GameBoard extends Application {
 		});
 		pause.play();
 		Scene scene = new Scene(root, 968, 544); // Créer une scène fixe
-		scene.getStylesheets().add("file:css/Board.css") ;
+		scene.getStylesheets().add("file:../css/Board.css") ;
 		// Appliquer la scène à la fenêtre principale
 		primaryStage.setScene(scene);
 		primaryStage.show();
@@ -266,7 +266,7 @@ public class GameBoard extends Application {
 			boardPane.getChildren().add(button);
 		}
 		if (gameSolved(IDASolver.convertBoxArrayToShortArray(board.getGrid()),
-				"levels/" + levelSelection + ".csv")) {
+				"../levels/" + levelSelection + ".csv")) {
 			if (initial == false) {
 				timeline.stop();
 				Menu.updateScoreAndAccessibility(savesString, levelSelection, score, elapsedTimeInSeconds);
