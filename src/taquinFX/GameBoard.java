@@ -19,16 +19,11 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -56,7 +51,6 @@ public class GameBoard extends Application {
 	private Button nextButton;
 	private int currentStep;
 	private MediaPlayer mediaPlayer;
-	
 
 	// Constructeur de GameBoard
 	public GameBoard(String levelSelection, String savesString, MediaPlayer mediaPlayer) {
@@ -72,42 +66,39 @@ public class GameBoard extends Application {
 	}
 
 	public Scene showGame(Stage primaryStage) {
-			
+
 		board = new Board("levels/" + levelSelection + ".csv"); // Initialiser le plateau avec le niveau sélectionné
 		int maxCount = 1000000;// Maximum d'essais pour le mélange du plateau
 		AtomicInteger count = new AtomicInteger(0);// Initialiser un compteur pour les tentatives de mélange
 		// Label pour afficher les erreurs
 		errorLabel = new Label();
 		errorLabel.setVisible(false);
-		
-		Label level = new Label("Niveau "+ Integer.parseInt(levelSelection.substring(3)));
+
+		Label level = new Label("Niveau " + Integer.parseInt(levelSelection.substring(3)));
 		level.setId("#level");
-		
-		
+
 		// Bouton pour lancer le solveur automatique
 		Button solverManuButton = new Button("Solveur manuel");
 		solverManuButton.setId("solverManu");
-	    solverManuButton.setVisible(false);
-	    
-	   
+		solverManuButton.setVisible(false);
+
 		// Bouton pour lancer le solveur automatique
-	    Button solverAutoButton = new Button("Solveur automatique");
-	    solverAutoButton.setId("solverAuto");
-	    solverAutoButton.setVisible(false);
-	    
-	    
-	    solverAutoButton.setOnAction(event -> {
-	    	solverAuto(primaryStage);
-	    	solverAutoButton.setVisible(false);
-	    	solverManuButton.setVisible(false);
-	    });
-	    
-	    solverManuButton.setOnAction(event -> {
-	    	solverManu(primaryStage);
-	    	solverAutoButton.setVisible(false);
-	    	solverManuButton.setVisible(false);
-	    });
-	 
+		Button solverAutoButton = new Button("Solveur automatique");
+		solverAutoButton.setId("solverAuto");
+		solverAutoButton.setVisible(false);
+
+		solverAutoButton.setOnAction(event -> {
+			solverAuto(primaryStage);
+			solverAutoButton.setVisible(false);
+			solverManuButton.setVisible(false);
+		});
+
+		solverManuButton.setOnAction(event -> {
+			solverManu(primaryStage);
+			solverAutoButton.setVisible(false);
+			solverManuButton.setVisible(false);
+		});
+
 		// Bouton pour lancer le solveur
 		Button solverButton = new Button("Solveur du taquin");
 		solverButton.setId("solverButton");
@@ -118,7 +109,7 @@ public class GameBoard extends Application {
 			solverAutoButton.setVisible(true);
 			buttons.getChildren().remove(solverButton);
 		});
-		
+
 		Button quitBtn = new Button("Quitter le jeu");
 		quitBtn.setMinWidth(100);
 		quitBtn.setMaxWidth(200);
@@ -126,15 +117,14 @@ public class GameBoard extends Application {
 		quitBtn.setOnAction(e -> {
 			primaryStage.close();
 		});
-		
-		
+
 		primaryStage.setTitle("Taquin");// Titre de la fenêtre
 		// Création de la grille pour afficher le plateau
 		boardPane = new GridPane();
 		boardPane.setAlignment(Pos.CENTER);
-		
-		//boardPane.setHgap(10);  //espace cases
-		//boardPane.setVgap(10);
+
+		// boardPane.setHgap(10); //espace cases
+		// boardPane.setVgap(10);
 
 		Button returnToMapButton = new Button("Retour à la carte");
 		returnToMapButton.setMinWidth(200);
@@ -144,22 +134,22 @@ public class GameBoard extends Application {
 			primaryStage.close();
 			// Extraire le nom du fichier
 			String fileName = savesString.substring(savesString.lastIndexOf("/") + 1);
-			Map map = new Map(fileName.replace(".csv", ""),mediaPlayer);
+			Map map = new Map(fileName.replace(".csv", ""), mediaPlayer);
 			map.showMap(primaryStage);
 		});
-		
+
 		buttons = new VBox();
 		buttons.setAlignment(Pos.CENTER);
-		buttons.getChildren().addAll(solverButton,returnToMapButton,quitBtn);
+		buttons.getChildren().addAll(solverButton, returnToMapButton, quitBtn);
 		buttons.setSpacing(10);
 		buttons.setMinHeight(230);
 		buttons.setMaxHeight(230);
-		
+
 		buttonsRight = new VBox();
 		buttonsRight.setAlignment(Pos.CENTER);
-		buttonsRight.getChildren().addAll(solverAutoButton,solverManuButton);
+		buttonsRight.getChildren().addAll(solverAutoButton, solverManuButton);
 		buttonsRight.setSpacing(10);
-		
+
 		// Conteneur pour le jeu et le label d'erreur
 		game = new VBox();
 		game.setId("#game");
@@ -167,38 +157,34 @@ public class GameBoard extends Application {
 		game.setSpacing(10);
 		game.getChildren().add(errorLabel);
 		game.getChildren().add(boardPane);
-		
-		
+
 		BorderPane root = new BorderPane(); // Conteneur principal
 		// Création des labels pour les mouvements et le timer
 		movesLabel = new Label("Moves : " + score); // Afficher le meilleur score pour ce niveau
 		movesLabel.setId("movesLabel");
-		Label infoLabel = new Label("Meilleur score : "
-				+ Menu.getBestScore(savesString, levelSelection) + "\n\nMeilleur temps : "
-				+ Menu.getBestTime(savesString, levelSelection) + " secondes");
+		Label infoLabel = new Label("Meilleur score : " + Menu.getBestScore(savesString, levelSelection)
+				+ "\n\nMeilleur temps : " + Menu.getBestTime(savesString, levelSelection) + " secondes");
 		infoLabel.setId("infoLabel");
-		
-		
+
 		VBox textPane = new VBox(10);
 		textPane.setAlignment(Pos.CENTER_LEFT);
 		textPane.setPrefWidth(300);
 		textPane.setPrefHeight(700);
 		textPane.setPadding(new Insets(15));
 		initTimer();
-		
+
 		textPane.getChildren().addAll(timerLabel, movesLabel, infoLabel);
-		
+
 		root.setTop(level);
 		root.setLeft(textPane);
 		root.setCenter(game);
 		root.setBottom(buttons);
 		root.setRight(buttonsRight);
-		
-		
+
 		BorderPane.setAlignment(level, Pos.CENTER); // Centrage vertical et horizontal du label level
 		BorderPane.setMargin(level, new Insets(25)); // Modifier les valeurs de marge selon vos besoins
 		BorderPane.setMargin(buttonsRight, new Insets(25));
-		
+
 		List<String> solution = new ArrayList<>(); // Liste pour stocker la solution
 
 		// Générateur de nombres aléatoires pour le mélange du plateau
@@ -247,7 +233,7 @@ public class GameBoard extends Application {
 		Scene scene = new Scene(root, 500, 500); // Créer une scène fixe
 		primaryStage.setWidth(1200);
 		primaryStage.setHeight(700);
-		scene.getStylesheets().add("file:css/Board.css") ;
+		scene.getStylesheets().add("file:css/Board.css");
 		// Appliquer la scène à la fenêtre principale
 		primaryStage.setScene(scene);
 		primaryStage.show();
@@ -311,8 +297,7 @@ public class GameBoard extends Application {
 
 			boardPane.getChildren().add(button);
 		}
-		if (gameSolved(IDASolver.convertBoxArrayToShortArray(board.getGrid()),
-				"levels/" + levelSelection + ".csv")) {
+		if (gameSolved(IDASolver.convertBoxArrayToShortArray(board.getGrid()), "levels/" + levelSelection + ".csv")) {
 			if (initial == false) {
 				timeline.stop();
 				Menu.updateScoreAndAccessibility(savesString, levelSelection, score, elapsedTimeInSeconds);
@@ -326,7 +311,7 @@ public class GameBoard extends Application {
 				alert.getDialogPane().getButtonTypes().add(ButtonType.OK);
 				alert.setOnCloseRequest(e -> {
 					String fileName = savesString.substring(savesString.lastIndexOf("/") + 1);
-					Map map = new Map(fileName.replace(".csv", ""),mediaPlayer); 
+					Map map = new Map(fileName.replace(".csv", ""), mediaPlayer);
 					map.showMap(primaryStage);
 					;
 				});
@@ -336,7 +321,7 @@ public class GameBoard extends Application {
 				Button button = (Button) buttons.lookup("#solverButton");
 				button.setDisable(true);
 			}
-			
+
 			for (javafx.scene.Node node : boardPane.getChildren()) {
 				if (node instanceof Button) {
 					Button button = (Button) node;
@@ -374,7 +359,7 @@ public class GameBoard extends Application {
 					score++;
 					movesLabel.setText("Moves: " + score);
 					errorLabel.setVisible(false); // Rendre errorLabel non visible
-				} 
+				}
 			} else if (adjacentEmptyBoxes.size() > 1) {
 				Alert alert = new Alert(AlertType.INFORMATION);
 				alert.setTitle("Choix de la case vide adjacente");
@@ -424,7 +409,7 @@ public class GameBoard extends Application {
 					errorLabel.setText("Aucun choix effectué. Veuillez réessayer.");
 					errorLabel.setVisible(true);
 				}
-			}else {
+			} else {
 				errorLabel.setText("Mouvement invalide. Veuillez choisir une case adjacente.");
 				errorLabel.setVisible(true);
 			}
@@ -434,21 +419,20 @@ public class GameBoard extends Application {
 	private void solverAuto(Stage primaryStage) {
 		errorLabel.setText("Veuillez patienter, le solveur est en marche...\n");
 		errorLabel.setVisible(true);
-		
+
 		long startTime = System.currentTimeMillis();
-		
 
 		List<String> solution = board.solve();
 		long endTime = System.currentTimeMillis();
 		long executionTime = endTime - startTime;
 		Timeline timeline = new Timeline();
-		
+
 		for (int i = 0; i < solution.size(); i++) {
 			String move = solution.get(i);
 			String[] parts = move.split(" ");
 			int index1 = Integer.parseInt(parts[1]);
 			int index2 = Integer.parseInt(parts[2]);
-			
+
 			KeyFrame keyFrame = new KeyFrame(Duration.seconds(i * 3), event -> {
 				if (board.swap2(index1, index2)) {
 					displayBoard(board, primaryStage, true);
@@ -466,59 +450,59 @@ public class GameBoard extends Application {
 		timeline.play();
 	}
 
-
 	private void solverManu(Stage primaryStage) {
-	    currentStep = 0;
-	    errorLabel.setText("Veuillez patienter, le solveur est en marche...\n");
-	    errorLabel.setVisible(true);
+		currentStep = 0;
+		errorLabel.setText("Veuillez patienter, le solveur est en marche...\n");
+		errorLabel.setVisible(true);
 
-	    List<String> solution1 = board.solve();
+		List<String> solution1 = board.solve();
 
-	    createNavigationButtons(primaryStage, solution1);
-	    updateButtons(solution1);
+		createNavigationButtons(primaryStage, solution1);
+		updateButtons(solution1);
 	}
 
 	private void createNavigationButtons(Stage primaryStage, List<String> solution) {
-	    previousButton = new Button("Étape précédente");
+		previousButton = new Button("Étape précédente");
 
-	    previousButton.setOnAction(event -> {
-	        if (currentStep >= 0) {
-	            currentStep--;
-	            performStep(solution);
-	            
-	            displayBoard(board, primaryStage, true);
-	            desactivateTaquin();
-	            updateButtons(solution);
-	        }
-	    });
+		previousButton.setOnAction(event -> {
+			if (currentStep >= 0) {
+				currentStep--;
+				performStep(solution);
 
-	    nextButton = new Button("Étape suivante");
-	    nextButton.setOnAction(event -> {
-	        if (currentStep < solution.size()) {
-	            performStep(solution);
-	            currentStep++;
-	            displayBoard(board, primaryStage, true);
-	            desactivateTaquin();
-	            updateButtons(solution);
-	        }
-	    });
+				displayBoard(board, primaryStage, true);
+				desactivateTaquin();
+				updateButtons(solution);
+			}
+		});
 
-	    game.getChildren().addAll(previousButton, nextButton);
+		nextButton = new Button("Étape suivante");
+		nextButton.setOnAction(event -> {
+			if (currentStep < solution.size()) {
+				performStep(solution);
+				currentStep++;
+				displayBoard(board, primaryStage, true);
+				desactivateTaquin();
+				updateButtons(solution);
+			}
+		});
+
+		game.getChildren().addAll(previousButton, nextButton);
 	}
 
 	private void updateButtons(List<String> solution) {
-	    previousButton.setDisable(currentStep <= 0);
-	    nextButton.setDisable(currentStep >= solution.size());
+		previousButton.setDisable(currentStep <= 0);
+		nextButton.setDisable(currentStep >= solution.size());
 	}
 
 	private void performStep(List<String> solution) {
 		System.out.println(currentStep);
-	    String move = solution.get(currentStep);
-	    String[] parts = move.split(" ");
-	    int index1 = Integer.parseInt(parts[1]);
-	    int index2 = Integer.parseInt(parts[2]);
-	    board.swap2(index1, index2);
+		String move = solution.get(currentStep);
+		String[] parts = move.split(" ");
+		int index1 = Integer.parseInt(parts[1]);
+		int index2 = Integer.parseInt(parts[2]);
+		board.swap2(index1, index2);
 	}
+
 	private void desactivateTaquin() {
 		for (javafx.scene.Node node : boardPane.getChildren()) {
 			if (node instanceof Button) {
@@ -527,7 +511,7 @@ public class GameBoard extends Application {
 			}
 		}
 	}
-	
+
 	private void updateTimerLabel() {
 		int hours = elapsedTimeInSeconds / 3600;
 		int minutes = (elapsedTimeInSeconds % 3600) / 60;
