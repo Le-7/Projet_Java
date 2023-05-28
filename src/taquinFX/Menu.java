@@ -280,7 +280,6 @@ public class Menu extends Application{
 					info[3] = String.valueOf(newTime); // Convertir le nouveau temps en chaîne de caractères et le
 														// mettre à jour
 				}
-
 				// Modifier l'accessibilité du niveau suivant
 				if (info[0].equals(Levelname) && i < levelInfo.size() - 1) { // on verifie si on est pas a la derniere
 																				// ligne
@@ -288,74 +287,81 @@ public class Menu extends Application{
 					nextLevelInfo[1] = String.valueOf(true); // Mettre à jour l'accessibilité du niveau suivant
 				}
 			}
-
 			// Écrire les nouvelles informations dans le fichier CSV
 			writeCSV(file, levelInfo);
 		}
 	}
 
+ // Cette méthode lit un fichier CSV et renvoie les données sous forme de liste de tableaux de chaînes de caractères.
     private static List<String[]> readCSV(File file) {
-        List<String[]> levelInfo = new ArrayList<>();
+        List<String[]> levelInfo = new ArrayList<>();  // Liste pour stocker les informations du fichier CSV.
 
+        // Bloc try-with-resources pour assurer la fermeture du BufferedReader.
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             String line;
+            // Boucle pour lire chaque ligne du fichier CSV.
             while ((line = reader.readLine()) != null) {
+                // Découpage de la ligne en utilisant la virgule comme séparateur.
                 String[] data = line.split(",");
+                // Vérification que la ligne contient bien 4 éléments avant de l'ajouter à la liste.
                 if (data.length == 4) {
                     levelInfo.add(data);
                 }
             }
         } catch (IOException e) {
+            // Gestion des exceptions liées à la lecture du fichier.
             System.out.println("Erreur lors de la lecture du fichier CSV : " + file.getName());
             e.printStackTrace();
         }
 
+        // Renvoi de la liste des données du fichier CSV.
         return levelInfo;
     }
 
-    
+    // Cette méthode renvoie le meilleur score pour un niveau spécifique en le lisant depuis un fichier CSV.
     public static int getBestScore(String SaveName, String Levelname) {
-        File file = new File(SaveName);
+        File file = new File(SaveName);  // Création de l'objet File correspondant au fichier CSV.
 
-        // Lire les informations actuelles du fichier CSV
+        // Lecture des données du fichier CSV.
         List<String[]> levelInfo = readCSV(file);
         if (levelInfo != null) {
+            // Boucle pour examiner chaque entrée dans les données du niveau.
             for (String[] info : levelInfo) {
-                String level = info[0];
-                String bestScore = info[2];
+                String level = info[0];  // Nom du niveau.
+                String bestScore = info[2];  // Meilleur score pour le niveau.
 
+                // Si le niveau correspond au niveau demandé, renvoi du meilleur score pour ce niveau.
                 if (level.equals(Levelname)) {
                     return Integer.parseInt(bestScore);
                 }
             }
         }
-
-        // Retourner -1 si le niveau n'a pas été trouvé ou s'il n'y a pas de meilleur score enregistré
-        return -1;
+        return -1;  // Renvoi de -1 si le niveau n'a pas été trouvé ou s'il n'y a pas de meilleur score enregistré.
     }
-    
+    // Cette méthode renvoie le meilleur temps pour un niveau spécifique en le lisant depuis un fichier CSV.
     public static int getBestTime(String SaveName, String Levelname) {
-		File file = new File(SaveName);
+        File file = new File(SaveName);  // Création de l'objet File correspondant au fichier CSV.
 
-		// Lire les informations actuelles du fichier CSV
-		List<String[]> levelInfo = readCSV(file);
-		if (levelInfo != null) {
-			for (String[] info : levelInfo) {
-				String level = info[0];
-				String bestTime = info[3];
-				if (level.equals(Levelname)) {
-					return Integer.parseInt(bestTime);
-				}
-			}
-		}
+        // Lecture des données du fichier CSV.
+        List<String[]> levelInfo = readCSV(file);
+        if (levelInfo != null) {
+            // Boucle pour examiner chaque entrée dans les données du niveau.
+            for (String[] info : levelInfo) {
+                String level = info[0];  // Nom du niveau.
+                String bestTime = info[3];  // Meilleur temps pour le niveau.
 
-		// Retourner -1 si le niveau n'a pas été trouvé ou s'il n'y a pas de meilleur
-		// score enregistré
-		return -1;
-	}
-    
+                // Si le niveau correspond au niveau demandé, renvoi du meilleur temps pour ce niveau.
+                if (level.equals(Levelname)) {
+                    return Integer.parseInt(bestTime);
+                }
+            }
+        }
+        return -1;// Renvoi de -1 si le niveau n'a pas été trouvé ou s'il n'y a pas de meilleur temps enregistré.
+    }
+
+
+    // Méthode principale pour lancer l'application.
     public static void main(String[] args) {
-		launch(args);
-	}
-
+        launch(args);
+    }
 }
