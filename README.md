@@ -48,6 +48,8 @@ Une fois terminé un pop-up apparaît et affiche le score du joueur et met à jo
 
 Si vous souhaitez contribuer à ce projet, vous pouvez soumettre des demandes de pull sur GitHub. Nous sommes toujours à la recherche de nouvelles fonctionnalités et de corrections de bugs pour améliorer notre jeu de taquin.
 
+La documentation (en français) est disponible dans le dossier __/doc__ en ouvrant __index.html__ .
+
 ## 📝 Licence
 
 
