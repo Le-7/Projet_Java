@@ -19,11 +19,16 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -310,6 +315,7 @@ public class GameBoard extends Application {
 				alert.getDialogPane().getButtonTypes().clear();
 				alert.getDialogPane().getButtonTypes().add(ButtonType.OK);
 				alert.setOnCloseRequest(e -> {
+					primaryStage.close();
 					String fileName = savesString.substring(savesString.lastIndexOf("/") + 1);
 					Map map = new Map(fileName.replace(".csv", ""), mediaPlayer);
 					map.showMap(primaryStage);
