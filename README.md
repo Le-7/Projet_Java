@@ -25,7 +25,21 @@ OpenJDK 64-Bit Server VM (build 11.0.18+10-post-Ubuntu-0ubuntu120.04.1, mixed mo
 
 ## 🎮 Utilisation
 
-Lorsque l'exécutable est lancé, l'utilisateur arrive sur un menu où il peut soit se créer une nouvelle sauvegarde, en rentrant par exemple son prénom, soit continué sur une sauvegarde qui existe déjà. Si vous n'avez pas choisi de sauvegarde, un message apparaîtra vous demandant d'en choisir une. Suite au choix de la sauvegarde, vous aurez accès à notre carte où se trouvent les différents niveaux prodigués par nos soins. Si un niveau ne vous ai pas accessible parce que vous n'avez pas débloqué ceux d'avant alors un message vous l'indiquera. Lorsque que l'utilisateur choisit un niveau auquel il peut avoir accès, il pourra voir ses précédents meilleurs scores et meilleurs temps et il verra le nombre de coups actuel et son temps de la partie qu'il est en train de jouer. Pendant 5 secondes, le taquin résolu apparaîtra. Pour déplacer une case, il suffit de cliquer sur la case "classique" (contenant une valeur) que la personne souhaite échanger avec la case vide. Si la case choisit à plusieurs cases vides adjacentes alors un pop-up apparaîtra pour qu'il puisse choisir la case vide avec laquelle il souhaite échanger la case "classique". Une fois terminé un pop-up apparaît et affiche le score du joueur et met à jour sa sauvegarde. Si le joueur souhaite utiliser le solver, il aura le choix entre une version automatique où les coups défileront à une certaine allure, et une autre option où le joueur pourra faire défiler lui-même les étapes, et même revenir en arrière.
+Lorsque l'exécutable est lancé, l'utilisateur arrive sur un menu où il peut soit se créer une nouvelle sauvegarde, en rentrant par exemple son prénom, soit continué sur une sauvegarde qui existe déjà.
+
+Si vous n'avez pas choisi de sauvegarde, un message apparaîtra vous demandant d'en choisir une. 
+
+Suite au choix de la sauvegarde, vous aurez accès à notre carte où se trouvent les différents niveaux prodigués par nos soins. 
+Si un niveau ne vous ai pas accessible parce que vous n'avez pas débloqué ceux d'avant alors un message vous l'indiquera.
+
+
+Lorsque que l'utilisateur choisit un niveau auquel il peut avoir accès, il pourra voir ses précédents meilleurs scores et meilleurs temps et il verra le nombre de coups actuel et son temps de la partie qu'il est en train de jouer.
+
+Pendant 5 secondes, le taquin résolu apparaîtra.
+
+Pour déplacer une case, il suffit de cliquer sur la case "classique" (contenant une valeur) que la personne souhaite échanger avec la case vide. Si la case choisit à plusieurs cases vides adjacentes alors un pop-up apparaîtra pour qu'il puisse choisir la case vide avec laquelle il souhaite échanger la case "classique".
+
+Une fois terminé un pop-up apparaît et affiche le score du joueur et met à jour sa sauvegarde. Si le joueur souhaite utiliser le solver, il aura le choix entre une version automatique où les coups défileront à une certaine allure, et une autre option où le joueur pourra faire défiler lui-même les étapes, et même revenir en arrière.
 
 ## 🤝 Contribution
 
