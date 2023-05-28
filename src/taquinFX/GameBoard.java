@@ -19,24 +19,30 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import javafx.scene.media.MediaPlayer;
 
 //Classe principale GameBoard qui hérite de l'Application JavaFX
 public class GameBoard extends Application {
 	// Variables de classe
+	private static final String IMAGE_PATH = "file:images/noel1.jpg";
 	private String levelSelection; // Sélection du niveau
 	private String savesString; // String pour les sauvegardes
 	private GridPane boardPane; // Panneau pour le plateau de jeu
 	private Board board; // Le plateau de jeu
-	private static final int TILE_SIZE = 50; // Taille d'une tuile
+	private static final int TILE_SIZE = 55; // Taille d'une tuile
 	private Label errorLabel; // Label pour afficher les erreurs
 	int score = 0; // Score actuel
 	private Label timerLabel; // Label pour le timer
@@ -44,6 +50,8 @@ public class GameBoard extends Application {
 	private Label movesLabel;
 	private int elapsedTimeInSeconds = 0; // Temps écoulé en secondes
 	private VBox game;
+	private VBox buttons;
+	private VBox buttonsRight;
 	private Button previousButton;
 	private Button nextButton;
 	private int currentStep;
@@ -64,12 +72,17 @@ public class GameBoard extends Application {
 	}
 
 	public Scene showGame(Stage primaryStage) {
+			
 		board = new Board("levels/" + levelSelection + ".csv"); // Initialiser le plateau avec le niveau sélectionné
 		int maxCount = 1000000;// Maximum d'essais pour le mélange du plateau
 		AtomicInteger count = new AtomicInteger(0);// Initialiser un compteur pour les tentatives de mélange
 		// Label pour afficher les erreurs
 		errorLabel = new Label();
 		errorLabel.setVisible(false);
+		
+		Label level = new Label("Niveau "+ Integer.parseInt(levelSelection.substring(3)));
+		level.setId("#level");
+		
 		
 		// Bouton pour lancer le solveur automatique
 		Button solverManuButton = new Button("Solveur manuel");
@@ -85,26 +98,25 @@ public class GameBoard extends Application {
 	    
 	    solverAutoButton.setOnAction(event -> {
 	    	solverAuto(primaryStage);
-	    	game.getChildren().remove(solverAutoButton);
-	    	game.getChildren().remove(solverManuButton);
-	    	solverAutoButton.setDisable(true);
+	    	solverAutoButton.setVisible(false);
+	    	solverManuButton.setVisible(false);
 	    });
 	    
 	    solverManuButton.setOnAction(event -> {
 	    	solverManu(primaryStage);
-	    	game.getChildren().remove(solverAutoButton);
-	    	game.getChildren().remove(solverManuButton);
-	    	solverManuButton.setDisable(true);
+	    	solverAutoButton.setVisible(false);
+	    	solverManuButton.setVisible(false);
 	    });
 	 
 		// Bouton pour lancer le solveur
 		Button solverButton = new Button("Solveur du taquin");
 		solverButton.setId("solverButton");
 		solverButton.setOnAction(event -> {
+			timeline.stop();
 			desactivateTaquin();
 			solverManuButton.setVisible(true);
 			solverAutoButton.setVisible(true);
-			game.getChildren().remove(solverButton);
+			buttons.getChildren().remove(solverButton);
 		});
 		
 		Button quitBtn = new Button("Quitter le jeu");
@@ -116,11 +128,11 @@ public class GameBoard extends Application {
 		});
 		
 		
-		
 		primaryStage.setTitle("Taquin");// Titre de la fenêtre
 		// Création de la grille pour afficher le plateau
 		boardPane = new GridPane();
 		boardPane.setAlignment(Pos.CENTER);
+		
 		//boardPane.setHgap(10);  //espace cases
 		//boardPane.setVgap(10);
 
@@ -129,26 +141,35 @@ public class GameBoard extends Application {
 		returnToMapButton.setMaxWidth(300);
 		returnToMapButton.setId("returnToMap");
 		returnToMapButton.setOnAction(e -> {
+			primaryStage.close();
 			// Extraire le nom du fichier
 			String fileName = savesString.substring(savesString.lastIndexOf("/") + 1);
 			Map map = new Map(fileName.replace(".csv", ""),mediaPlayer);
 			map.showMap(primaryStage);
 		});
-
+		
+		buttons = new VBox();
+		buttons.setAlignment(Pos.CENTER);
+		buttons.getChildren().addAll(solverButton,returnToMapButton,quitBtn);
+		buttons.setSpacing(10);
+		buttons.setMinHeight(230);
+		buttons.setMaxHeight(230);
+		
+		buttonsRight = new VBox();
+		buttonsRight.setAlignment(Pos.CENTER);
+		buttonsRight.getChildren().addAll(solverAutoButton,solverManuButton);
+		buttonsRight.setSpacing(10);
+		
 		// Conteneur pour le jeu et le label d'erreur
 		game = new VBox();
+		game.setId("#game");
 		game.setAlignment(Pos.CENTER);
 		game.setSpacing(10);
 		game.getChildren().add(errorLabel);
 		game.getChildren().add(boardPane);
-		game.getChildren().add(solverAutoButton);
-		game.getChildren().add(solverManuButton);
-		game.getChildren().add(solverButton);
-		game.getChildren().add(quitBtn);
-		game.getChildren().add(returnToMapButton);
-
-		HBox root = new HBox(); // Conteneur principal
-
+		
+		
+		BorderPane root = new BorderPane(); // Conteneur principal
 		// Création des labels pour les mouvements et le timer
 		movesLabel = new Label("Moves : " + score); // Afficher le meilleur score pour ce niveau
 		movesLabel.setId("movesLabel");
@@ -156,12 +177,28 @@ public class GameBoard extends Application {
 				+ Menu.getBestScore(savesString, levelSelection) + "\n\nMeilleur temps : "
 				+ Menu.getBestTime(savesString, levelSelection) + " secondes");
 		infoLabel.setId("infoLabel");
+		
+		
 		VBox textPane = new VBox(10);
-		textPane.setPadding(new Insets(10));
+		textPane.setAlignment(Pos.CENTER_LEFT);
+		textPane.setPrefWidth(300);
+		textPane.setPrefHeight(700);
+		textPane.setPadding(new Insets(15));
 		initTimer();
+		
 		textPane.getChildren().addAll(timerLabel, movesLabel, infoLabel);
-		root.getChildren().addAll(textPane, game);
-
+		
+		root.setTop(level);
+		root.setLeft(textPane);
+		root.setCenter(game);
+		root.setBottom(buttons);
+		root.setRight(buttonsRight);
+		
+		
+		BorderPane.setAlignment(level, Pos.CENTER); // Centrage vertical et horizontal du label level
+		BorderPane.setMargin(level, new Insets(25)); // Modifier les valeurs de marge selon vos besoins
+		BorderPane.setMargin(buttonsRight, new Insets(25));
+		
 		List<String> solution = new ArrayList<>(); // Liste pour stocker la solution
 
 		// Générateur de nombres aléatoires pour le mélange du plateau
@@ -207,7 +244,9 @@ public class GameBoard extends Application {
 			timeline.play(); // Commence le minuteur
 		});
 		pause.play();
-		Scene scene = new Scene(root, 968, 544); // Créer une scène fixe
+		Scene scene = new Scene(root, 500, 500); // Créer une scène fixe
+		primaryStage.setWidth(1200);
+		primaryStage.setHeight(700);
 		scene.getStylesheets().add("file:css/Board.css") ;
 		// Appliquer la scène à la fenêtre principale
 		primaryStage.setScene(scene);
@@ -251,6 +290,10 @@ public class GameBoard extends Application {
 				button.setDisable(false);
 			}
 		}
+		if (buttons.lookup("#solverButton") != null) {
+			Button solverButton = (Button) buttons.lookup("#solverButton");
+			solverButton.setDisable(false);
+		}
 		for (int i = 0; i < board.getBoardSize() * board.getBoardSize(); i++) {
 			final int currentIndex = i;
 			Button button = new Button(board.getGrid()[i].getDisplay());
@@ -283,14 +326,14 @@ public class GameBoard extends Application {
 				alert.getDialogPane().getButtonTypes().add(ButtonType.OK);
 				alert.setOnCloseRequest(e -> {
 					String fileName = savesString.substring(savesString.lastIndexOf("/") + 1);
-					Map map = new Map(fileName.replace(".csv", ""),mediaPlayer);
+					Map map = new Map(fileName.replace(".csv", ""),mediaPlayer); 
 					map.showMap(primaryStage);
 					;
 				});
 
 				alert.showAndWait();
-			} else if (game.lookup("#solverButton") != null) {
-				Button button = (Button) game.lookup("#solverButton");
+			} else if (buttons.lookup("#solverButton") != null) {
+				Button button = (Button) buttons.lookup("#solverButton");
 				button.setDisable(true);
 			}
 			
@@ -322,6 +365,7 @@ public class GameBoard extends Application {
 				int colEmpty = adjacentEmptyBoxes.get(0)[1];
 
 				// Effectuer l'échange entre la case non vide et la case vide sélectionnée
+				// aléatoirement
 				int rowNonEmpty = index1 / board.getBoardSize();
 				int colNonEmpty = index1 % board.getBoardSize();
 				if (board.swap(rowNonEmpty, colNonEmpty, rowEmpty, colEmpty)) {
@@ -380,8 +424,7 @@ public class GameBoard extends Application {
 					errorLabel.setText("Aucun choix effectué. Veuillez réessayer.");
 					errorLabel.setVisible(true);
 				}
-			}
-			else {
+			}else {
 				errorLabel.setText("Mouvement invalide. Veuillez choisir une case adjacente.");
 				errorLabel.setVisible(true);
 			}
@@ -406,7 +449,7 @@ public class GameBoard extends Application {
 			int index1 = Integer.parseInt(parts[1]);
 			int index2 = Integer.parseInt(parts[2]);
 			
-			KeyFrame keyFrame = new KeyFrame(Duration.seconds(i * 4), event -> {
+			KeyFrame keyFrame = new KeyFrame(Duration.seconds(i * 3), event -> {
 				if (board.swap2(index1, index2)) {
 					displayBoard(board, primaryStage, true);
 					desactivateTaquin();
