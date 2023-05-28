@@ -29,50 +29,45 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import javafx.scene.media.MediaPlayer;
 
-//Classe principale GameBoard qui hérite de l'Application JavaFX
-public class GameBoard extends Application {
-	// Variables de classe
-	private static final String IMAGE_PATH = "file:images/noel1.jpg";
-	private String levelSelection; // Sélection du niveau
-	private String savesString; // String pour les sauvegardes
-	private GridPane boardPane; // Panneau pour le plateau de jeu
-	private Board board; // Le plateau de jeu
-	private static final int TILE_SIZE = 55; // Taille d'une tuile
-	private Label errorLabel; // Label pour afficher les erreurs
-	int score = 0; // Score actuel
-	private Label timerLabel; // Label pour le timer
-	private Timeline timeline; // Chronologie pour le timer
-	private Label movesLabel;
-	private int elapsedTimeInSeconds = 0; // Temps écoulé en secondes
-	private VBox game;
-	private VBox buttons;
-	private VBox buttonsRight;
-	private Button previousButton;
-	private Button nextButton;
-	private int currentStep;
-	private MediaPlayer mediaPlayer;
+public class GameBoard extends Application { // Définit la classe GameBoard qui hérite de la classe Application de JavaFX
 
-	// Constructeur de GameBoard
-	public GameBoard(String levelSelection, String savesString, MediaPlayer mediaPlayer) {
-		super(); // Appel du constructeur de la superclasse Application
-		this.levelSelection = levelSelection; // Initialisation de la sélection du niveau
-		this.savesString = "Saves/" + savesString; // Initialisation du string pour les sauvegardes
-		this.mediaPlayer = mediaPlayer;
+	private String levelSelection; // Variable pour stocker la sélection du niveau par l'utilisateur
+	private String savesString; // Variable pour stocker le chemin des sauvegardes
+	private GridPane boardPane; // Définit un panneau qui contiendra le plateau de jeu
+	private Board board; // Définit le plateau de jeu lui-même
+	private static final int TILE_SIZE = 55; // Définit la taille de chaque tuile sur le plateau
+	private Label errorLabel; // Variable pour stocker un label qui affichera les messages d'erreur
+	int score = 0; // Variable pour stocker le score actuel du joueur
+	private Label timerLabel; // Variable pour stocker un label qui affichera le timer
+	private Timeline timeline; // Variable pour stocker la ligne du temps pour le timer
+	private Label movesLabel; // Variable pour stocker un label qui affichera les mouvements effectués
+	private int elapsedTimeInSeconds = 0; // Variable pour stocker le temps écoulé en secondes
+	private VBox game; // Définit une boîte verticale qui contiendra le jeu
+	private VBox buttons; // Définit une boîte verticale qui contiendra les boutons
+	private VBox buttonsRight; // Définit une boîte verticale qui contiendra les boutons à droite
+	private Button previousButton; // Définit le bouton 'précédent'
+	private Button nextButton; // Définit le bouton 'suivant'
+	private int currentStep; // Variable pour stocker l'étape actuelle
+	private MediaPlayer mediaPlayer; // Variable pour stocker le lecteur multimédia
+
+	public GameBoard(String levelSelection, String savesString, MediaPlayer mediaPlayer) { // Constructeur de la classe
+		super(); // Appelle le constructeur de la classe parente
+		this.levelSelection = levelSelection; // Initialise la sélection de niveau
+		this.savesString = "Saves/" + savesString; // Initialise le chemin de sauvegarde
+		this.mediaPlayer = mediaPlayer; // Initialise le lecteur multimédia
 	}
 
-	// Méthode principale pour démarrer l'affichage
-	public void start(Stage primaryStage) {
-		showGame(primaryStage); // Afficher le jeu
+	public void start(Stage primaryStage) { // Méthode pour démarrer l'affichage
+		showGame(primaryStage); // Appelle la méthode showGame pour afficher le jeu
 	}
 
-	public Scene showGame(Stage primaryStage) {
+	public Scene showGame(Stage primaryStage) { // Méthode pour afficher le jeu
 
-		board = new Board("levels/" + levelSelection + ".csv"); // Initialiser le plateau avec le niveau sélectionné
-		int maxCount = 1000000;// Maximum d'essais pour le mélange du plateau
-		AtomicInteger count = new AtomicInteger(0);// Initialiser un compteur pour les tentatives de mélange
-		// Label pour afficher les erreurs
-		errorLabel = new Label();
-		errorLabel.setVisible(false);
+		board = new Board("levels/" + levelSelection + ".csv"); // Initialise le plateau de jeu avec le niveau sélectionné
+		int maxCount = 1000000; // Nombre maximum d'essais pour mélanger le plateau
+		AtomicInteger count = new AtomicInteger(0); // Initialise un compteur pour les essais de mélange
+		errorLabel = new Label(); // Initialise le label d'erreur
+		errorLabel.setVisible(false); // Rend le label d'erreur invisible
 
 		Label level = new Label("Niveau " + Integer.parseInt(levelSelection.substring(3)));
 		level.setId("#level");
@@ -240,19 +235,19 @@ public class GameBoard extends Application {
 
 		return scene;
 	}
-
+//verifie si le jeu est résolu 
 	public static boolean gameSolved(short[] grid, String Csv_path) {
 		try {
-			BufferedReader reader = new BufferedReader(new FileReader(Csv_path));
+			BufferedReader reader = new BufferedReader(new FileReader(Csv_path));//crée un lecteur de fichier
 			String line;
 			int i = 0;
-			int boardSize = (int) Math.sqrt(grid.length);
+			int boardSize = (int) Math.sqrt(grid.length);//calcule la taill de la grille de jeu
 
-			while ((line = reader.readLine()) != null) {
-				String[] values = line.split(",");
+			while ((line = reader.readLine()) != null) { //parcourir le fichier par ligne 
+				String[] values = line.split(",");//separer chaque ligne par ligne 
 
-				for (int j = 0; j < values.length; j++) {
-					if (grid[i * boardSize + j] != Integer.parseInt(values[j])) {
+				for (int j = 0; j < values.length; j++) { //parcout chaque valeur de la ligne
+					if (grid[i * boardSize + j] != Integer.parseInt(values[j])) { //verifie si la valeur actuelle corresponds a la valeur de la grille de jeu 
 						reader.close();
 						return false;
 					}
@@ -268,268 +263,317 @@ public class GameBoard extends Application {
 		return true;
 	}
 
+	//cette fonction affiche le plateau de jeu
 	private void displayBoard(Board board, Stage primaryStage, boolean initial) {
-		boardPane.getChildren().clear();
-		for (javafx.scene.Node node : game.getChildren()) {
-			if (node instanceof Button) {
-				Button button = (Button) node;
-				button.setDisable(false);
-			}
-		}
-		if (buttons.lookup("#solverButton") != null) {
-			Button solverButton = (Button) buttons.lookup("#solverButton");
-			solverButton.setDisable(false);
-		}
-		for (int i = 0; i < board.getBoardSize() * board.getBoardSize(); i++) {
-			final int currentIndex = i;
-			Button button = new Button(board.getGrid()[i].getDisplay());
-			button.setPrefSize(TILE_SIZE, TILE_SIZE);
-			button.setOnAction(event -> handleButtonClick(currentIndex, primaryStage, board));
-			if (board.getGrid()[i] instanceof Empty) {
-				button.setText("");
-				button.setStyle("-fx-background-color : Lightblue;");
-			}
-			if (board.getGrid()[i] instanceof Block) {
-				button.setVisible(false);
-			}
-			GridPane.setRowIndex(button, i / board.getBoardSize());
-			GridPane.setColumnIndex(button, i % board.getBoardSize());
+	    boardPane.getChildren().clear(); // Nettoie le contenu actuel du plateau de jeu
+	    for (javafx.scene.Node node : game.getChildren()) { // Parcourt tous les éléments de la scène de jeu
+	        // Active tous les boutons
+	        if (node instanceof Button) {
+	            Button button = (Button) node;
+	            button.setDisable(false);
+	        }
+	    }
+	    // Active le bouton de résolution, s'il existe
+	    if (buttons.lookup("#solverButton") != null) {
+	        Button solverButton = (Button) buttons.lookup("#solverButton");
+	        solverButton.setDisable(false);
+	    }
 
-			boardPane.getChildren().add(button);
-		}
-		if (gameSolved(IDASolver.convertBoxArrayToShortArray(board.getGrid()), "levels/" + levelSelection + ".csv")) {
-			if (initial == false) {
-				timeline.stop();
-				Menu.updateScoreAndAccessibility(savesString, levelSelection, score, elapsedTimeInSeconds);
-				// Affichage de l'alerte
-				Alert alert = new Alert(AlertType.INFORMATION);
-				alert.setTitle("Félicitations !");
-				alert.setHeaderText(null);
-				alert.setContentText(
-						"Vous avez gagné en " + elapsedTimeInSeconds + " secondes et en " + score + " coups !");
-				alert.getDialogPane().getButtonTypes().clear();
-				alert.getDialogPane().getButtonTypes().add(ButtonType.OK);
-				alert.setOnCloseRequest(e -> {
-					primaryStage.close();
-					String fileName = savesString.substring(savesString.lastIndexOf("/") + 1);
-					Map map = new Map(fileName.replace(".csv", ""), mediaPlayer);
-					map.showMap(primaryStage);
-					;
-				});
+	    // Parcourt toutes les cases de la grille
+	    for (int i = 0; i < board.getBoardSize() * board.getBoardSize(); i++) {
+	        final int currentIndex = i;
 
-				alert.showAndWait();
-			} else if (buttons.lookup("#solverButton") != null) {
-				Button button = (Button) buttons.lookup("#solverButton");
-				button.setDisable(true);
-			}
+	        // Crée un nouveau bouton pour chaque case
+	        Button button = new Button(board.getGrid()[i].getDisplay());
+	        button.setPrefSize(TILE_SIZE, TILE_SIZE);
 
-			for (javafx.scene.Node node : boardPane.getChildren()) {
-				if (node instanceof Button) {
-					Button button = (Button) node;
-					button.setDisable(true);
-				}
-			}
-		}
+	        // Associe un gestionnaire d'événement pour le clic sur le bouton
+	        button.setOnAction(event -> handleButtonClick(currentIndex, primaryStage, board));
+
+	        // Si la case est vide, met le texte du bouton à vide et change la couleur de fond
+	        if (board.getGrid()[i] instanceof Empty) {
+	            button.setText("");
+	            button.setStyle("-fx-background-color : Lightblue;");
+	        }
+
+	        // Si la case est un bloc, rend le bouton invisible
+	        if (board.getGrid()[i] instanceof Block) {
+	            button.setVisible(false);
+	        }
+	        // Place le bouton dans la grille
+	        GridPane.setRowIndex(button, i / board.getBoardSize());
+	        GridPane.setColumnIndex(button, i % board.getBoardSize());
+
+	        // Ajoute le bouton à la scène
+	        boardPane.getChildren().add(button);
+	    }
+
+	    // Vérifie si le jeu est résolu
+	    if (gameSolved(IDASolver.convertBoxArrayToShortArray(board.getGrid()), "levels/" + levelSelection + ".csv")) {
+	        if (initial == false) {
+	            timeline.stop();
+	            Menu.updateScoreAndAccessibility(savesString, levelSelection, score, elapsedTimeInSeconds);
+
+	            // Affiche une alerte pour annoncer la victoire
+	            Alert alert = new Alert(AlertType.INFORMATION);
+	            alert.setTitle("Félicitations !");
+	            alert.setHeaderText(null);
+	            alert.setContentText("Vous avez gagné en " + elapsedTimeInSeconds + " secondes et en " + score + " coups !");
+	            alert.getDialogPane().getButtonTypes().clear();
+	            alert.getDialogPane().getButtonTypes().add(ButtonType.OK);
+	            alert.setOnCloseRequest(e -> {
+	            	primaryStage.close();
+	                String fileName = savesString.substring(savesString.lastIndexOf("/") + 1);
+	                Map map = new Map(fileName.replace(".csv", ""), mediaPlayer);
+	                map.showMap(primaryStage);
+	                ;
+	            });
+
+	            alert.showAndWait();
+	        } else if (buttons.lookup("#solverButton") != null) {
+	            // Désactive le bouton de résolution
+	            Button button = (Button) buttons.lookup("#solverButton");
+	            button.setDisable(true);
+	        }
+	        // Désactive tous les boutons du plateau de jeu
+	        for (javafx.scene.Node node : boardPane.getChildren()) {
+	            if (node instanceof Button) {
+	                Button button = (Button) node;
+	                button.setDisable(true);
+	            }
+	        }
+	    }
 	}
-
+	// Cette fonction gère les clics sur les boutons
 	private void handleButtonClick(int index1, Stage primaryStage, Board board) {
-		if (!(board.getGrid()[index1] instanceof Empty)) {
-			// Case non vide
-			List<int[]> emptyBoxes = board.findEmptyBoxes(); // on récupère les cases vides
-			List<int[]> adjacentEmptyBoxes = new ArrayList<>();
+	    // Vérifie si la case sur laquelle on a cliqué est vide
+	    if (!(board.getGrid()[index1] instanceof Empty)) {
+	        // Si la case n'est pas vide :
+	        List<int[]> emptyBoxes = board.findEmptyBoxes(); // On récupère les cases vides
+	        List<int[]> adjacentEmptyBoxes = new ArrayList<>();
 
-			for (int[] emptyBox : emptyBoxes) {
-				int rowEmpty = emptyBox[0];
-				int colEmpty = emptyBox[1];
-				int index2 = rowEmpty * board.getBoardSize() + colEmpty;
-				if (board.isAdjacent(index1, index2)) {
-					adjacentEmptyBoxes.add(emptyBox); // si la case rentrée est adjacente à une case vide on l'ajoute
-				}
-			}
-			if (adjacentEmptyBoxes.size() == 1) {
-				int rowEmpty = adjacentEmptyBoxes.get(0)[0];
-				int colEmpty = adjacentEmptyBoxes.get(0)[1];
+	        for (int[] emptyBox : emptyBoxes) {
+	            int rowEmpty = emptyBox[0];
+	            int colEmpty = emptyBox[1];
+	            int index2 = rowEmpty * board.getBoardSize() + colEmpty;
 
-				// Effectuer l'échange entre la case non vide et la case vide sélectionnée
-				// aléatoirement
-				int rowNonEmpty = index1 / board.getBoardSize();
-				int colNonEmpty = index1 % board.getBoardSize();
-				if (board.swap(rowNonEmpty, colNonEmpty, rowEmpty, colEmpty)) {
-					// Actualiser l'affichage après l'échange
-					displayBoard(board, primaryStage, false);
-					score++;
-					movesLabel.setText("Moves: " + score);
-					errorLabel.setVisible(false); // Rendre errorLabel non visible
-				}
-			} else if (adjacentEmptyBoxes.size() > 1) {
-				Alert alert = new Alert(AlertType.INFORMATION);
-				alert.setTitle("Choix de la case vide adjacente");
-				alert.setHeaderText("Il y a plusieurs cases vides adjacentes.");
-				alert.setContentText("Veuillez choisir une des cases vides suivantes :");
+	            // Si la case rentrée est adjacente à une case vide, on l'ajoute à la liste
+	            if (board.isAdjacent(index1, index2)) {
+	                adjacentEmptyBoxes.add(emptyBox); 
+	            }
+	        }
+	        // Si la case non vide est adjacente à une seule case vide
+	        if (adjacentEmptyBoxes.size() == 1) {
+	            int rowEmpty = adjacentEmptyBoxes.get(0)[0];
+	            int colEmpty = adjacentEmptyBoxes.get(0)[1];
 
-				alert.setX(primaryStage.getX());
-				alert.setY(primaryStage.getY());
-				String[] options = new String[adjacentEmptyBoxes.size()];
-				for (int i = 0; i < adjacentEmptyBoxes.size(); i++) {
-					int[] emptyBox = adjacentEmptyBoxes.get(i);
-					int rowEmpty = emptyBox[0];
-					int colEmpty = emptyBox[1];
+	            // Effectuer l'échange entre la case non vide et la case vide sélectionnée
+	            int rowNonEmpty = index1 / board.getBoardSize();
+	            int colNonEmpty = index1 % board.getBoardSize();
+	            if (board.swap(rowNonEmpty, colNonEmpty, rowEmpty, colEmpty)) {
+	                // Actualiser l'affichage après l'échange
+	                displayBoard(board, primaryStage, false);
+	                score++;
+	                movesLabel.setText("Moves: " + score);
+	                errorLabel.setVisible(false); // Rendre errorLabel non visible
+	            }
+	        } 
+	        // Si la case non vide est adjacente à plus d'une case vide
+	        else if (adjacentEmptyBoxes.size() > 1) {
+	            // Créer une fenêtre d'alerte pour permettre à l'utilisateur de choisir la case vide à échanger
+	            Alert alert = new Alert(AlertType.INFORMATION);
+	            alert.setTitle("Choix de la case vide adjacente");
+	            alert.setHeaderText("Il y a plusieurs cases vides adjacentes.");
+	            alert.setContentText("Veuillez choisir une des cases vides suivantes :");
+	            alert.setX(primaryStage.getX());
+	            alert.setY(primaryStage.getY());
 
-					int index = rowEmpty * board.getBoardSize() + colEmpty;
-					options[i] = "Case " + (char) (65 + i);
-					Button button = (Button) boardPane.getChildren().get(index);
-					button.setText("" + (char) (i + 65));
-				}
+	            // Créer des options pour l'alerte en fonction des cases vides adjacentes
+	            String[] options = new String[adjacentEmptyBoxes.size()];
+	            for (int i = 0; i < adjacentEmptyBoxes.size(); i++) {
+	                int[] emptyBox = adjacentEmptyBoxes.get(i);
+	                int rowEmpty = emptyBox[0];
+	                int colEmpty = emptyBox[1];
 
-				alert.getButtonTypes().clear();
-				for (String option : options) {
-					alert.getButtonTypes().add(new ButtonType(option));
-				}
-				alert.getButtonTypes().add(ButtonType.CANCEL);
+	                int index = rowEmpty * board.getBoardSize() + colEmpty;
+	                options[i] = "Case " + (char) (65 + i);
+	                Button button = (Button) boardPane.getChildren().get(index);
+	                button.setText("" + (char) (i + 65));
+	            }
+	            // Ajouter les options à l'alerte et afficher l'alerte
+	            alert.getButtonTypes().clear();
+	            for (String option : options) {
+	                alert.getButtonTypes().add(new ButtonType(option));
+	            }
+	            alert.getButtonTypes().add(ButtonType.CANCEL);
+	            Optional<ButtonType> result = alert.showAndWait();
 
-				Optional<ButtonType> result = alert.showAndWait();
-				if (result.isPresent() && result.get() != ButtonType.CANCEL) {
-					int choice = alert.getButtonTypes().indexOf(result.get());
-					int[] emptyBox = adjacentEmptyBoxes.get(choice); // Utiliser adjacentEmptyBoxes au lieu de
-																		// emptyBoxes
-					int rowEmpty1 = emptyBox[0];
-					int colEmpty1 = emptyBox[1];
+	            // Effectuer l'échange selon le choix de l'utilisateur et mettre à jour l'affichage
+	            if (result.isPresent() && result.get() != ButtonType.CANCEL) {
+	                int choice = alert.getButtonTypes().indexOf(result.get());
+	                int[] emptyBox = adjacentEmptyBoxes.get(choice); 
+	                int rowEmpty1 = emptyBox[0];
+	                int colEmpty1 = emptyBox[1];
 
-					int rowNonEmpty = index1 / board.getBoardSize();
-					int colNonEmpty = index1 % board.getBoardSize();
+	                int rowNonEmpty = index1 / board.getBoardSize();
+	                int colNonEmpty = index1 % board.getBoardSize();
 
-					if (board.swap(rowNonEmpty, colNonEmpty, rowEmpty1, colEmpty1)) {
-						score++;
-						movesLabel.setText("Moves: " + score);
-						displayBoard(board, primaryStage, false);
-					} else {
-						errorLabel.setText("Mouvement invalide. Veuillez choisir une case vide adjacente.");
-						errorLabel.setVisible(true);
-					}
-				} else {
-					errorLabel.setText("Aucun choix effectué. Veuillez réessayer.");
-					errorLabel.setVisible(true);
-				}
-			} else {
-				errorLabel.setText("Mouvement invalide. Veuillez choisir une case adjacente.");
-				errorLabel.setVisible(true);
-			}
-		}
+	                if (board.swap(rowNonEmpty, colNonEmpty, rowEmpty1, colEmpty1)) {
+	                    score++;
+	                    movesLabel.setText("Moves: " + score);
+	                    displayBoard(board, primaryStage, false);
+	                } else {
+	                    errorLabel.setText("Mouvement invalide. Veuillez choisir une case vide adjacente.");
+	                    errorLabel.setVisible(true);
+	                }
+	            } else {
+	                errorLabel.setText("Aucun choix effectué. Veuillez réessayer.");
+	                errorLabel.setVisible(true);
+	            }
+	        } else {
+	            errorLabel.setText("Mouvement invalide. Veuillez choisir une case adjacente.");
+	            errorLabel.setVisible(true);
+	        }
+	    }
 	}
-
+	
 	private void solverAuto(Stage primaryStage) {
-		errorLabel.setText("Veuillez patienter, le solveur est en marche...\n");
-		errorLabel.setVisible(true);
+	    // Affiche un message pour indiquer que le solveur est en train de travailler
+	    errorLabel.setText("Veuillez patienter, le solveur est en marche...\n");
+	    errorLabel.setVisible(true);
+	    
+	    long startTime = System.currentTimeMillis();// Enregistre le temps de début
+	    List<String> solution = board.solve();  // Résout le plateau de jeu et obtient la solution
 
-		long startTime = System.currentTimeMillis();
+	    // Enregistre le temps de fin et calcule le temps d'exécution
+	    long endTime = System.currentTimeMillis();
+	    long executionTime = endTime - startTime;
 
-		List<String> solution = board.solve();
-		long endTime = System.currentTimeMillis();
-		long executionTime = endTime - startTime;
-		Timeline timeline = new Timeline();
+	    // Crée une nouvelle Timeline pour animer la solution
+	    Timeline timeline = new Timeline();
 
-		for (int i = 0; i < solution.size(); i++) {
-			String move = solution.get(i);
-			String[] parts = move.split(" ");
-			int index1 = Integer.parseInt(parts[1]);
-			int index2 = Integer.parseInt(parts[2]);
+	    // Parcourt tous les mouvements de la solution
+	    for (int i = 0; i < solution.size(); i++) {
+	        String move = solution.get(i);
+	        String[] parts = move.split(" ");
+	        int index1 = Integer.parseInt(parts[1]);
+	        int index2 = Integer.parseInt(parts[2]);
 
-			KeyFrame keyFrame = new KeyFrame(Duration.seconds(i * 3), event -> {
-				if (board.swap2(index1, index2)) {
-					displayBoard(board, primaryStage, true);
-					desactivateTaquin();
-				}
-			});
-			timeline.getKeyFrames().add(keyFrame);
-		}
+	        // Crée un nouveau KeyFrame pour chaque mouvement
+	        KeyFrame keyFrame = new KeyFrame(Duration.seconds(i * 3), event -> {
+	            // Echange les deux cases
+	            if (board.swap2(index1, index2)) {
+	                // Affiche le nouveau plateau de jeu
+	                displayBoard(board, primaryStage, true);
+	                // Désactive le taquin pendant la résolution
+	                desactivateTaquin();
+	            }
+	        });
+	        timeline.getKeyFrames().add(keyFrame); // Ajoute le KeyFrame à la Timeline
+	    }
 
-		timeline.setOnFinished(event -> {
-			errorLabel.setText("Temps d'exécution du solveur : " + executionTime + " millisecondes");
-			errorLabel.setVisible(true);
-		});
-
-		timeline.play();
+	    // Affiche le temps d'exécution une fois la Timeline terminée
+	    timeline.setOnFinished(event -> {
+	        errorLabel.setText("Temps d'exécution du solveur : " + executionTime + " millisecondes");
+	        errorLabel.setVisible(true);
+	    });
+	    timeline.play();// Lance l'animation
 	}
-
+	
 	private void solverManu(Stage primaryStage) {
-		currentStep = 0;
-		errorLabel.setText("Veuillez patienter, le solveur est en marche...\n");
-		errorLabel.setVisible(true);
-
-		List<String> solution1 = board.solve();
-
-		createNavigationButtons(primaryStage, solution1);
-		updateButtons(solution1);
+	    currentStep = 0; // Réinitialise l'étape actuelle à 0
+	    // Affiche un message pour indiquer que le solveur est en train de travailler
+	    errorLabel.setText("Veuillez patienter, le solveur est en marche...\n");
+	    errorLabel.setVisible(true);
+	    List<String> solution1 = board.solve();// Résout le plateau de jeu et obtient la solution
+	    createNavigationButtons(primaryStage, solution1); // Crée les boutons de navigation
+	    updateButtons(solution1); // Met à jour les boutons
 	}
 
 	private void createNavigationButtons(Stage primaryStage, List<String> solution) {
-		previousButton = new Button("Étape précédente");
+	    previousButton = new Button("Étape précédente"); // Crée le bouton pour revenir à l'étape précédente
+	    // Ajoute une action au bouton pour effectuer l'étape précédente
+	    previousButton.setOnAction(event -> {
+	        if (currentStep >= 0) {
+	            currentStep--;
+	            performStep(solution);
 
-		previousButton.setOnAction(event -> {
-			if (currentStep >= 0) {
-				currentStep--;
-				performStep(solution);
+	            // Affiche le nouveau plateau de jeu et désactive le taquin
+	            displayBoard(board, primaryStage, true);
+	            desactivateTaquin();
 
-				displayBoard(board, primaryStage, true);
-				desactivateTaquin();
-				updateButtons(solution);
-			}
-		});
+	            // Met à jour les boutons
+	            updateButtons(solution);
+	        }
+	    });
+	    nextButton = new Button("Étape suivante");// Crée le bouton pour aller à l'étape suivante
 
-		nextButton = new Button("Étape suivante");
-		nextButton.setOnAction(event -> {
-			if (currentStep < solution.size()) {
-				performStep(solution);
-				currentStep++;
-				displayBoard(board, primaryStage, true);
-				desactivateTaquin();
-				updateButtons(solution);
-			}
-		});
+	    // Ajoute une action au bouton pour effectuer l'étape suivante
+	    nextButton.setOnAction(event -> {
+	        if (currentStep < solution.size()) {
+	            performStep(solution);
+	            currentStep++;
 
-		game.getChildren().addAll(previousButton, nextButton);
+	            // Affiche le nouveau plateau de jeu et désactive le taquin
+	            displayBoard(board, primaryStage, true);
+	            desactivateTaquin();
+	            updateButtons(solution); // Met à jour les boutons
+	        }
+	    });
+	    game.getChildren().addAll(previousButton, nextButton); // Ajoute les boutons au jeu
 	}
 
 	private void updateButtons(List<String> solution) {
-		previousButton.setDisable(currentStep <= 0);
-		nextButton.setDisable(currentStep >= solution.size());
+	    // Désactive le bouton précédent si l'on est à la première étape
+	    // Et le bouton suivant si l'on est à la dernière étape
+	    previousButton.setDisable(currentStep <= 0);
+	    nextButton.setDisable(currentStep >= solution.size());
 	}
 
 	private void performStep(List<String> solution) {
-		System.out.println(currentStep);
-		String move = solution.get(currentStep);
-		String[] parts = move.split(" ");
-		int index1 = Integer.parseInt(parts[1]);
-		int index2 = Integer.parseInt(parts[2]);
-		board.swap2(index1, index2);
+	    System.out.println(currentStep); // Affiche l'étape actuelle dans la console
+
+	    // Récupère le mouvement correspondant à l'étape actuelle
+	    String move = solution.get(currentStep);
+	    String[] parts = move.split(" ");
+	    int index1 = Integer.parseInt(parts[1]);
+	    int index2 = Integer.parseInt(parts[2]);
+	    board.swap2(index1, index2);  // Effectue le mouvement
 	}
 
 	private void desactivateTaquin() {
-		for (javafx.scene.Node node : boardPane.getChildren()) {
-			if (node instanceof Button) {
-				Button button = (Button) node;
-				button.setDisable(true);
-			}
-		}
+	    // Désactive tous les boutons du taquin
+	    for (javafx.scene.Node node : boardPane.getChildren()) {
+	        if (node instanceof Button) {
+	            Button button = (Button) node;
+	            button.setDisable(true);
+	        }
+	    }
 	}
-
 	private void updateTimerLabel() {
-		int hours = elapsedTimeInSeconds / 3600;
-		int minutes = (elapsedTimeInSeconds % 3600) / 60;
-		int seconds = elapsedTimeInSeconds % 60;
-		String time = String.format("%02d:%02d:%02d", hours, minutes, seconds);
-		timerLabel.setText(time);
-		timerLabel.setId("timerLabel");
-	}
+	    // Convertit le temps écoulé en heures, minutes et secondes
+	    int hours = elapsedTimeInSeconds / 3600;
+	    int minutes = (elapsedTimeInSeconds % 3600) / 60;
+	    int seconds = elapsedTimeInSeconds % 60;
 
+	    // Met à jour le label du timer avec le nouveau temps
+	    String time = String.format("%02d:%02d:%02d", hours, minutes, seconds);
+	    timerLabel.setText(time);
+	    timerLabel.setId("timerLabel");
+	}
+	
 	private void initTimer() {
-		timerLabel = new Label("00:00:00");
-		timeline = new Timeline();
-		timeline.setCycleCount(Animation.INDEFINITE);
-		KeyFrame keyFrame = new KeyFrame(Duration.seconds(1), event -> {
-			elapsedTimeInSeconds++;
-			updateTimerLabel();
-		});
-		timeline.getKeyFrames().add(keyFrame);
+	    timerLabel = new Label("00:00:00"); // Initialise le label du timer avec un temps de 00:00:00
+
+	    // Crée une nouvelle Timeline pour le timer
+	    timeline = new Timeline();
+	    timeline.setCycleCount(Animation.INDEFINITE);
+
+	    // Ajoute un KeyFrame à la Timeline pour incrémenter le temps toutes les secondes
+	    KeyFrame keyFrame = new KeyFrame(Duration.seconds(1), event -> {
+	        elapsedTimeInSeconds++;
+	        updateTimerLabel();
+	    });
+	    timeline.getKeyFrames().add(keyFrame);
 	}
 }
