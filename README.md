@@ -29,7 +29,7 @@ Lorsque l'exécutable est lancé, l'utilisateur arrive sur un menu où il peut s
 
 Si vous n'avez pas choisi de sauvegarde, un message apparaîtra vous demandant d'en choisir une. 
 
-Suite au choix de la sauvegarde, vous aurez accès à notre carte où se trouvent les différents niveaux prodigués par nos soins. 
+Suite au choix de la sauvegarde, vous aurez accès à notre carte où se trouvent les différents niveaux concoctés par nos soins. 
 Si un niveau ne vous ai pas accessible parce que vous n'avez pas débloqué ceux d'avant alors un message vous l'indiquera.
 
 
