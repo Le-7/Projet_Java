@@ -170,6 +170,7 @@ public class GameBoard extends Application { // Définit la classe GameBoard qui
 		Label infoLabel = new Label("Meilleur score : " + Menu.getBestScore(savesString, levelSelection)
 				+ "\n\nMeilleur temps : " + Menu.getBestTime(savesString, levelSelection) + " secondes");
 		infoLabel.setId("infoLabel");
+		infoLabel.setWrapText(true);
 
 		VBox textPane = new VBox(10);
 		textPane.setAlignment(Pos.CENTER_LEFT);
