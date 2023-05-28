@@ -1,7 +1,7 @@
 # 🧩 Jeu de Taquin en Java 🧩 
 
 
-Ce projet est un jeu de taquin implémenté en Java. Le jeu consiste en un plateau de tuiles numérotées, qui doivent être déplacées pour les remettre dans l'ordre correct. Le jeu comporte plusieurs niveaux de difficulté et peut être personnalisé avec des images personnalisées.
+Ce projet est un jeu de taquin implémenté en Java. Le jeu consiste en un plateau de tuiles numérotées, qui doivent être déplacées pour les remettre dans l'ordre correct. Le jeu comporte plusieurs niveaux de difficulté.
 
 ## 🚀 Installation
 
