@@ -76,6 +76,7 @@ public class GameBoard extends Application { // Définit la classe GameBoard qui
 		int maxCount = 1000000; // Nombre maximum d'essais pour mélanger le plateau
 		AtomicInteger count = new AtomicInteger(0); // Initialise un compteur pour les essais de mélange
 		errorLabel = new Label(); // Initialise le label d'erreur
+		errorLabel.setWrapText(true);
 		errorLabel.setVisible(false); // Rend le label d'erreur invisible
 
 		Label level = new Label("Niveau " + Integer.parseInt(levelSelection.substring(3)));
