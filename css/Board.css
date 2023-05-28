@@ -1,17 +1,17 @@
 /* Style global pour le conteneur principal */
 .root {
-    -fx-background-color: #F5F5F5;
+    -fx-background-color : white;
 }
 
 /* Style pour les boutons */
 .button {
-    -fx-font-size: 14px;
+    -fx-font-size: 15px;
     -fx-font-weight: bold;
     -fx-background-color: #13b5f5;
     -fx-text-fill: white;
     -fx-border : 1px;  
     -fx-border-color : black;
-    
+    -fx-padding : 5px;
 }
 
 /* Style pour les boutons lorsqu'ils sont survolés */
@@ -64,11 +64,14 @@
     -fx-font-weight: bold;
     -fx-background-color: #13b5f5;
     -fx-text-fill: white;
+    -fx-border-color : none;
+    -fx-background-radius: 15;
 }
 
 /* Style pour les boutons de résolution lorsqu'ils sont désactivés */
 .button.solver:disabled {
-    -fx-background-color: #76ccdb;;
+    -fx-background-color: #76ccdb;
+    -fx-border-color : none;
 }
 
 /* Style pour le bouton de retour */
@@ -81,28 +84,32 @@
 
 /* Style pour le bouton de retour lorsqu'il est désactivé */
 .button.return:disabled {
-    -fx-background-color: #76ccdb;;
+    -fx-background-color: #76ccdb;
 }
 
 #quitBtn{
     -fx-background-color: rgb(9, 89, 238); 
     -fx-background-radius: 15;
     -fx-font-size: 16px;
+    -fx-border-color : none;
 }
 
 #quitBtn:hover{
     -fx-background-color: rgb(7, 81, 218); 
+    -fx-border-color : none;
+    -fx-margin-bottom: 10px; /* Ajoute une marge de 10 pixels en bas du bouton */
 }
 
 #returnToMap{
     -fx-background-color: rgb(9, 89, 238); 
     -fx-background-radius: 15;
     -fx-font-size: 16px;
-
+    -fx-border-color : none;
 }
 
 #returnToMap:hover{
     -fx-background-color: rgb(7, 81, 218); 
+    -fx-border-color : none;
 }
 
 #infoLabel{
